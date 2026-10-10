@@ -1,0 +1,12 @@
+# Use this ONLY if your hosting does not let you point the domain at backend/public.
+# Upload the whole backend folder into public_html, then save this file as
+# public_html/.htaccess  – every request is forwarded into /public.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+# Block direct access to sensitive files
+<FilesMatch "^(\.env|composer\.(json|lock)|artisan)$">
+    Require all denied
+</FilesMatch>
