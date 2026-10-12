@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { api, uploadImage } from '../../lib/api'
 import { Field, PageHead, Pager, Toggle, useResource, fmtDate } from './common'
 import Icon from '../../components/Icon'
+import RichEditor from '../../components/RichEditor'
 
 const EMPTY = { title: '', slug: '', excerpt: '', content: '', cover_image: '', category: '', tags: '', meta_title: '', meta_description: '', status: 'draft', published_at: '', is_featured: false }
 const slugify = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 120)
@@ -15,51 +16,11 @@ const toLocalInput = (iso) => {
 function PostEditor({ initial, categories, onClose, onSaved }) {
   const [p, setP] = useState({ ...EMPTY, ...initial, published_at: toLocalInput(initial?.published_at) })
   const [slugTouched, setSlugTouched] = useState(!!initial?.id)
-  const [preview, setPreview] = useState(false)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState({ type: '', text: '' })
-  const area = useRef(null)
-  const imgInput = useRef(null)
   const coverInput = useRef(null)
   const set = (k) => (v) => setP((x) => ({ ...x, [k]: v?.target ? v.target.value : v }))
 
-  // wrap selection / insert snippet in the HTML textarea
-  const insert = (before, after = '', placeholder = '') => {
-    const el = area.current
-    if (!el) return
-    const { selectionStart: s, selectionEnd: e, value } = el
-    const sel = value.slice(s, e) || placeholder
-    const next = value.slice(0, s) + before + sel + after + value.slice(e)
-    setP((x) => ({ ...x, content: next }))
-    requestAnimationFrame(() => {
-      el.focus()
-      el.selectionStart = s + before.length
-      el.selectionEnd = s + before.length + sel.length
-    })
-  }
-
-  const tools = [
-    ['H2', () => insert('<h2>', '</h2>\n', 'Section title')],
-    ['H3', () => insert('<h3>', '</h3>\n', 'Sub heading')],
-    ['P', () => insert('<p>', '</p>\n', 'Paragraph text')],
-    ['B', () => insert('<strong>', '</strong>', 'bold')],
-    ['I', () => insert('<em>', '</em>', 'italic')],
-    ['Link', () => { const url = window.prompt('Link URL (e.g. /team-picker or https://…)'); if (url) insert(`<a href="${url}">`, '</a>', 'link text') }],
-    ['• List', () => insert('<ul>\n  <li>', '</li>\n  <li>Item</li>\n</ul>\n', 'Item')],
-    ['1. List', () => insert('<ol>\n  <li>', '</li>\n  <li>Step</li>\n</ol>\n', 'Step')],
-    ['Quote', () => insert('<blockquote>', '</blockquote>\n', 'Quote')],
-    ['Image', () => imgInput.current?.click()],
-  ]
-
-  const uploadInline = async (file) => {
-    if (!file) return
-    try {
-      const url = await uploadImage(file)
-      insert(`<img src="${url}" alt="`, '" loading="lazy">\n', file.name.replace(/\.[^.]+$/, ''))
-    } catch (e) {
-      setMsg({ type: 'error', text: e.message })
-    }
-  }
   const uploadCover = async (file) => {
     if (!file) return
     try {
@@ -89,8 +50,6 @@ function PostEditor({ initial, categories, onClose, onSaved }) {
     }
   }
 
-  const words = (p.content || '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
-
   return (
     <>
       <PageHead title={p.id ? 'Edit post' : 'New post'}>
@@ -111,18 +70,7 @@ function PostEditor({ initial, categories, onClose, onSaved }) {
           <Field label="Excerpt (shown on the blog list and under the title)">
             <textarea className="input" rows={2} maxLength={500} value={p.excerpt || ''} onChange={set('excerpt')} />
           </Field>
-          <div className="pe-toolbar">
-            {tools.map(([label, fn]) => <button key={label} type="button" className="pe-tool" onClick={fn} disabled={preview}>{label}</button>)}
-            <span className="grow" />
-            <span className="muted small">{words} words · ~{Math.max(1, Math.ceil(words / 200))} min read</span>
-            <button type="button" className="btn btn-soft small" onClick={() => setPreview((v) => !v)}>{preview ? 'Edit HTML' : 'Preview'}</button>
-            <input ref={imgInput} type="file" accept="image/*" hidden onChange={(e) => { uploadInline(e.target.files?.[0]); e.target.value = '' }} />
-          </div>
-          {preview ? (
-            <div className="pe-preview prose" dangerouslySetInnerHTML={{ __html: p.content || '<p class="muted">Nothing to preview yet.</p>' }} />
-          ) : (
-            <textarea ref={area} className="input mono pe-content" rows={24} value={p.content || ''} onChange={set('content')} placeholder={'<p>Start writing…</p>\n\n<h2>Section title</h2>\n<p>…</p>'} />
-          )}
+          <RichEditor value={p.content || ''} onChange={(html) => setP((x) => ({ ...x, content: html }))} onError={(m) => setMsg({ type: 'error', text: m })} />
         </div>
 
         <aside className="pe-side">
