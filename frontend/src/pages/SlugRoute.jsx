@@ -5,6 +5,7 @@ import { api } from '../lib/api'
 import { wheelFromConfig } from '../lib/defaults'
 import Workspace from '../components/Workspace'
 import InfoCards from '../components/InfoCards'
+import ToolContent from '../components/ToolContent'
 import NotFound from './NotFound'
 
 const SHARE_RE = /^[a-z0-9]{3}-[a-z0-9]{3}$/i
@@ -62,8 +63,7 @@ export default function SlugRoute() {
   const tool = state.tool
   return (
     <Workspace heading={tool ? <h1 className="tool-heading">{tool.emoji} {tool.heading || tool.name}</h1> : null}>
-      {tool?.content && <article className="tool-content card prose" dangerouslySetInnerHTML={{ __html: tool.content }} />}
-      <InfoCards />
+      {tool ? <ToolContent html={tool.content} heading={tool.meta_title?.split('|')[0].trim() || tool.heading} currentSlug={tool.slug} /> : <InfoCards />}
     </Workspace>
   )
 }

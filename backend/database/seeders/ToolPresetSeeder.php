@@ -57,20 +57,24 @@ class ToolPresetSeeder extends Seeder
                 ['1', '2', '3', '4', '5', '6'], ['spinTime' => 4]],
         ];
 
+        // Rewritten page content lives in database/seeders/content/*.php
+        $pages = array_merge(require __DIR__.'/content/tools_a.php', require __DIR__.'/content/tools_b.php');
+
         foreach ($tools as $i => [$slug, $name, $emoji, $intro, $entries, $settings]) {
             $config = WheelConfig::sanitize([
                 'title' => $name,
                 'entries' => array_map(fn ($e) => is_array($e) ? $e : ['text' => $e], $entries),
                 'settings' => $settings + ['showTitle' => true],
             ]);
+            $page = $pages[$slug] ?? [];
             ToolPreset::updateOrCreate(['slug' => $slug], [
                 'name' => $name,
-                'heading' => $name,
+                'heading' => $page['heading'] ?? $name,
                 'emoji' => $emoji,
-                'meta_title' => "{$name} – Spin Online Free | PickerPlay",
-                'meta_description' => mb_substr($intro, 0, 155),
+                'meta_title' => $page['meta_title'] ?? "{$name} – Spin Online Free | PickerPlay",
+                'meta_description' => $page['meta_description'] ?? mb_substr($intro, 0, 155),
                 'config' => $config,
-                'content' => $this->content($name, $intro, count($entries)),
+                'content' => $page['content'] ?? $this->content($name, $intro, count($entries)),
                 'is_active' => true,
                 'show_in_menu' => true,
                 'sort_order' => ($i + 1) * 10,

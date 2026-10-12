@@ -1,0 +1,27 @@
+/* Themed content for picker pages (intro + cards) */
+.pc-wrap { background: var(--surface-2); border-top: 1px solid var(--border); }
+.pc-intro { max-width: 980px; margin: 0 auto; padding: 34px 16px 6px; text-align: center; }
+.pc-intro h2 { margin: 0 0 12px; font-size: clamp(26px, 3.4vw, 38px); font-weight: 500; color: var(--primary); line-height: 1.2; }
+html.dark .pc-intro h2 { color: #b3a9ff; }
+.pc-intro-body p { font-size: 16.5px; line-height: 1.75; color: var(--text-2); margin: 0 0 10px; }
+.pc-intro-body p.lead { font-size: 20px; font-weight: 600; color: var(--text); }
+.pc-grid { border-top: 0; background: transparent; }
+.pc-card .pc-body { font-size: 15px; line-height: 1.65; }
+.pc-card .pc-body p { margin: 0 0 10px; }
+.pc-card .pc-body p.muted { color: var(--text-2); }
+.pc-card .pc-body ul { list-style: none; padding-left: 0; margin: 0 0 10px; }
+.pc-card .pc-body ul li { position: relative; padding-left: 26px; margin-bottom: 7px; }
+.pc-card .pc-body ul li::before { content: '✔'; position: absolute; left: 2px; color: var(--accent, #7cc22c); font-weight: 700; }
+.pc-card .pc-body ol { padding-left: 0; margin: 0 0 10px; list-style: none; counter-reset: step; }
+.pc-card .pc-body ol li { position: relative; padding-left: 36px; margin-bottom: 9px; counter-increment: step; }
+.pc-card .pc-body ol li::before { content: counter(step); position: absolute; left: 0; top: 1px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 12.5px; font-weight: 700; background: var(--primary); color: #fff; }
+.pc-card .pc-body strong { color: var(--text); }
+.pc-card .pc-body a { font-weight: 500; }
+.pc-card .pc-body kbd { background: var(--surface-3); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 3px; padding: 0 5px; font-size: 12.5px; }
+.pc-card .pc-body details { border-bottom: 1px solid var(--border); padding: 9px 0; }
+.pc-card .pc-body details:last-child { border-bottom: 0; }
+.pc-card .pc-body summary { cursor: pointer; font-weight: 500; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+.pc-card .pc-body summary::-webkit-details-marker { display: none; }
+.pc-card .pc-body summary::after { content: '+'; color: var(--primary); font-weight: 700; font-size: 18px; line-height: 1; }
+.pc-card .pc-body details[open] summary::after { content: '–'; }
+.pc-card .pc-body details p { margin: 6px 0 0; color: var(--text-2); }
