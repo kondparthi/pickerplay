@@ -1,5 +1,6 @@
-import { lazy, Suspense } from 'react'
-import { Route, Routes, useParams } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { api } from './lib/api'
 import Home from './pages/Home'
 import SlugRoute from './pages/SlugRoute'
 import Gallery from './pages/Gallery'
@@ -21,7 +22,19 @@ function EmbedRoute() {
   return <Embed code={code} />
 }
 
+// First-party, cookie-free page-view counter (skips admin/account and Do-Not-Track browsers).
+function usePageTracking() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    if (/^\/(admin|account|reset-password)/.test(pathname)) return
+    if (navigator.doNotTrack === '1' || window.doNotTrack === '1') return
+    const t = setTimeout(() => api.post('/track', { path: pathname }).catch(() => {}), 400)
+    return () => clearTimeout(t)
+  }, [pathname])
+}
+
 export default function App() {
+  usePageTracking()
   return (
     <>
       <Routes>

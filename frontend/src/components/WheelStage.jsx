@@ -26,7 +26,7 @@ export default function WheelStage() {
       closeDialog()
       const started = playable.map((i) => refs.current[i]?.spin())
       const secs = Math.max(...playable.map((i) => Number(wheels[i].settings.spinTime) || 10))
-      api.post('/stats/spin', { seconds: secs, wheels: playable.length }).catch(() => {})
+      api.post('/stats/spin', { seconds: secs, wheels: playable.length, path: window.location.pathname }).catch(() => {})
 
       const outcome = await Promise.all(started)
       const items = outcome

@@ -27,12 +27,20 @@ class StatsController extends Controller
         $data = $request->validate([
             'seconds' => ['nullable', 'numeric', 'min:0', 'max:120'],
             'wheels' => ['nullable', 'integer', 'min:1', 'max:20'],
+            'path' => ['nullable', 'string', 'max:300'],
         ]);
         $year = date('Y');
         $count = (int) ($data['wheels'] ?? 1);
         Stat::bump("spins_{$year}", $count);
         Stat::bump('spins_total', $count);
         Stat::bump("seconds_{$year}", (int) round(($data['seconds'] ?? 10) * $count));
+        if (! \App\Services\Analytics::isBot($request)) {
+            try {
+                \App\Services\Analytics::spin($data['path'] ?? '/', $count);
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
 
         return response()->json(['ok' => true]);
     }

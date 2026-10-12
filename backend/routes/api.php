@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/bootstrap', [Api\BootstrapController::class, 'show']);
 Route::get('/stats', [Api\StatsController::class, 'show']);
 Route::post('/stats/spin', [Api\StatsController::class, 'spin'])->middleware('throttle:stats');
+Route::post('/track', [Api\TrackController::class, 'view'])->middleware('throttle:stats');
 Route::get('/gallery', [Api\GalleryController::class, 'index']);
 Route::get('/shares/{code}', [Api\ShareController::class, 'show'])->where('code', '[a-z0-9]{3}-[a-z0-9]{3}');
 Route::post('/shares', [Api\ShareController::class, 'store'])->middleware('throttle:writes');
@@ -72,6 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
 */
 Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/dashboard', [Admin\DashboardController::class, 'index']);
+    Route::get('/analytics', [Admin\AnalyticsController::class, 'index']);
 
     Route::get('/settings', [Admin\SettingsController::class, 'index']);
     Route::put('/settings', [Admin\SettingsController::class, 'update']);

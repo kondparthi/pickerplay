@@ -40,7 +40,7 @@ export default function Embed({ code }) {
     playAfter(s.afterSound, s.afterVolume ?? 50)
     if (s.confetti) confetti({ particleCount: 120, spread: 90, origin: { y: 0.5 }, colors: activePalette(s) })
     setWinner(r)
-    api.post('/stats/spin', { seconds: s.spinTime }).catch(() => {})
+    api.post('/stats/spin', { seconds: s.spinTime, path: window.location.pathname }).catch(() => {})
     window.parent?.postMessage({ type: 'pickerplay:winner', code, winner: { text: r.entry.text, image: r.entry.image || null } }, '*')
   }
 

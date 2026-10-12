@@ -34,6 +34,7 @@ class DashboardController extends Controller
             'top_wheels' => Wheel::where('kind', 'shared')->orderByDesc('views')->limit(8)
                 ->get(['share_code', 'title', 'views', 'visibility', 'created_at']),
             'recent_activity' => AuditLog::latest('created_at')->limit(15)->get(),
+            'analytics' => \App\Services\Analytics::report(14),
         ]);
     }
 }

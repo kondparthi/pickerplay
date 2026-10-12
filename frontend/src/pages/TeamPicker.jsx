@@ -9,6 +9,7 @@ import { contrastText, THEMES } from '../lib/colors'
 import { playAfter, tick, unlockAudio } from '../lib/audio'
 import { store, downloadJson } from '../lib/storage'
 import { Link } from 'react-router-dom'
+import { api } from '../lib/api'
 import '../team.css'
 
 function Card({ title, children }) {
@@ -194,6 +195,7 @@ export default function TeamPicker() {
     const pool = usable < total ? shuffle(people).slice(0, usable) : people
     const result = makeTeams(pool, count, { balance, leader })
     setTeams(result)
+    api.post('/stats/spin', { seconds: animate ? 3 : 1, path: '/team-picker' }).catch(() => {})
     const top = boardRef.current?.getBoundingClientRect().top ?? 0
     if (top < 0 || top > window.innerHeight * 0.6) {
       window.scrollTo({ top: Math.max(0, window.scrollY + top - 76), behavior: 'auto' })

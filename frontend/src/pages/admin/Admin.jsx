@@ -14,10 +14,11 @@ import PostsPage from './PostsPage'
 import UsersPage from './UsersPage'
 import FeedbackPage from './FeedbackPage'
 import ActivityPage from './ActivityPage'
+import AnalyticsPage from './AnalyticsPage'
 import '../../admin.css'
 
 const NAV_GROUPS = [
-  { title: 'Overview', items: [['', 'dashboard', 'Dashboard']] },
+  { title: 'Overview', items: [['', 'dashboard', 'Dashboard'], ['analytics', 'chart', 'Analytics']] },
   { title: 'Content', items: [['posts', 'book', 'Blog posts'], ['tools', 'grid', 'Picker tools'], ['pages', 'file', 'Pages'], ['wheels', 'dice', 'Wheels']] },
   { title: 'Community', items: [['users', 'users', 'Users'], ['feedback', 'inbox', 'Feedback']] },
   { title: 'System', items: [['settings', 'palette', 'Branding & settings'], ['activity', 'history', 'Activity log']] },
@@ -207,6 +208,7 @@ export default function Admin() {
         <main className="admin-main">
           <Routes>
             <Route index element={<Dashboard />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route path="wheels" element={<WheelsPage />} />
             <Route path="tools" element={<ToolsPage />} />

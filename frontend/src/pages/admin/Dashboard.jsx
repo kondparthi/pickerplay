@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useApp } from '../../store/AppStore'
 import { useResource } from './common'
 import Icon from '../../components/Icon'
+import { Delta, GameBars, TrendChart } from './charts'
 
 const TILES = [
   ['spins_year', 'Spins this year', 'dice', '#5546c9'],
@@ -40,6 +41,9 @@ export default function Dashboard() {
   const total14 = days.reduce((a, b) => a + b.count, 0)
   const top = d.top_wheels || []
   const topMax = Math.max(1, ...top.map((w) => w.views))
+  const an = d.analytics || {}
+  const at = an.totals || {}
+  const anGames = [...(an.games || [])].sort((a, b) => b.visitors - a.visitors || b.views - a.views)
 
   return (
     <>
@@ -65,6 +69,32 @@ export default function Dashboard() {
             <div className="db-label">{label}</div>
           </div>
         ))}
+      </section>
+
+      <section className="db-grid">
+        <div className="card an-card">
+          <div className="db-card-head">
+            <div><h3>Site visitors</h3><span className="muted small">Last 14 days</span></div>
+            <div className="db-kv">
+              <div><b>{(at.visitors ?? 0).toLocaleString()}</b><span>visitors <Delta now={at.visitors} prev={at.prev_visitors} /></span></div>
+              <div><b>{(at.views ?? 0).toLocaleString()}</b><span>views <Delta now={at.views} prev={at.prev_views} /></span></div>
+            </div>
+          </div>
+          <TrendChart data={an.series || []} height={300} />
+        </div>
+        <div className="card an-card">
+          <div className="db-card-head">
+            <div><h3>Game-wise visitors</h3><span className="muted small">Top games · last 14 days</span></div>
+            <Link to="/admin/analytics" className="db-more">Analytics <Icon name="arrowright" size={14} /></Link>
+          </div>
+          <GameBars games={anGames} metric="visitors" limit={7} />
+          {anGames.length > 7 && (
+            <div className="db-least">
+              <span className="muted small">Least visited:</span>
+              {anGames.slice(-3).reverse().map((g) => <span key={g.path} className="an-pill zero">{g.emoji} {g.label} · {g.visitors}</span>)}
+            </div>
+          )}
+        </div>
       </section>
 
       <section className="db-grid">
