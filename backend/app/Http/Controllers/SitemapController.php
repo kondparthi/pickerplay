@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\Post;
 use App\Models\ToolPreset;
 use App\Models\Wheel;
 use Illuminate\Http\Response;
@@ -17,6 +18,10 @@ class SitemapController extends Controller
             $urls = [[$base.'/', now(), '1.0'], [$base.'/team-picker', now(), '0.9'], [$base.'/gallery', now(), '0.7']];
             foreach (ToolPreset::where('is_active', true)->orderBy('sort_order')->get() as $t) {
                 $urls[] = [$base.'/'.$t->slug, $t->updated_at, '0.9'];
+            }
+            $urls[] = [$base.'/blog', now(), '0.7'];
+            foreach (Post::live()->orderByDesc('published_at')->limit(2000)->get(['slug', 'updated_at']) as $post) {
+                $urls[] = [$base.'/blog/'.$post->slug, $post->updated_at, '0.6'];
             }
             foreach (Page::where('is_published', true)->get() as $p) {
                 $urls[] = [$base.'/page/'.$p->slug, $p->updated_at, '0.4'];

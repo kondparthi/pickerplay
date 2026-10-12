@@ -25,7 +25,7 @@ export function Brand() {
 // Pages that show the wheel workspace. On every other page the wheel buttons
 // first navigate to the wheel, so the toolbar is identical everywhere.
 const NON_WHEEL = ['/team-picker', '/gallery', '/account', '/reset-password']
-const isWheelPage = (p) => !NON_WHEEL.includes(p) && !p.startsWith('/page/') && !p.startsWith('/admin') && !p.startsWith('/embed/')
+const isWheelPage = (p) => !NON_WHEEL.includes(p) && !p.startsWith('/blog') && !p.startsWith('/page/') && !p.startsWith('/admin') && !p.startsWith('/embed/')
 
 // eslint-disable-next-line no-unused-vars
 export default function Toolbar({ minimal = false }) {
@@ -103,6 +103,10 @@ export default function Toolbar({ minimal = false }) {
         <button className={`tb-btn ${pathname === '/gallery' ? 'is-current' : ''}`} onClick={go(() => nav('/gallery'))}>
           <Icon name="search" />
           <span>{t('Gallery')}</span>
+        </button>
+        <button className={`tb-btn ${pathname.startsWith('/blog') ? 'is-current' : ''}`} onClick={go(() => nav('/blog'))}>
+          <Icon name="book" />
+          <span>{t('Blog')}</span>
         </button>
         <button className="tb-btn tb-icon-only" onClick={go(wheel(toggleFullscreen))} title={t('Fullscreen')} aria-label={t('Fullscreen')}>
           <Icon name={fullscreen ? 'minimize' : 'maximize'} />

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\Post;
 use App\Models\ToolPreset;
 use App\Models\Wheel;
 use App\Services\SiteSettings;
@@ -60,6 +61,21 @@ class SpaController extends Controller
                 $meta['robots'] = ($wheel->visibility === 'public' && ! $m[1]) ? 'index,follow' : 'noindex,follow';
             } else {
                 $status = 404;
+            }
+        } elseif ($path === 'blog') {
+            $meta['title'] = "Blog – Tips, Ideas & Guides | {$site}";
+            $meta['description'] = "Ideas, guides and tips for using random pickers, spinning wheels and team generators in class, at work, at parties and on stream.";
+        } elseif (preg_match('#^blog/([a-z0-9_-]+)$#i', $path, $m)) {
+            $post = Post::live()->where('slug', $m[1])->first();
+            if ($post) {
+                $meta['title'] = ($post->meta_title ?: $post->title)." | {$site}";
+                $meta['description'] = $post->meta_description ?: ($post->excerpt ?: Str::limit(strip_tags((string) $post->content), 155));
+                if ($post->cover_image) {
+                    $meta['image'] = $this->abs($post->cover_image, $base);
+                }
+            } else {
+                $status = 404;
+                $meta['robots'] = 'noindex';
             }
         } elseif ($path === 'team-picker') {
             $meta['title'] = "Team Picker – Random Team Generator | {$site}";

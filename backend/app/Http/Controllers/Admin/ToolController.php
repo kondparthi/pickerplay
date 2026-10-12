@@ -15,7 +15,7 @@ use Illuminate\Validation\Rule;
 class ToolController extends Controller
 {
     /** Paths the SPA already uses — a tool slug must not collide with them. */
-    public const RESERVED = ['admin', 'api', 'gallery', 'account', 'page', 'embed', 'reset-password', 'uploads', 'brand', 'spa', 'sitemap', 'robots', 'up', 'storage', 'team-picker'];
+    public const RESERVED = ['admin', 'api', 'gallery', 'account', 'page', 'embed', 'reset-password', 'uploads', 'brand', 'spa', 'sitemap', 'robots', 'up', 'storage', 'team-picker', 'blog'];
 
     public function index(): JsonResponse
     {

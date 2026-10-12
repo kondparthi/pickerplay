@@ -23,6 +23,8 @@ Route::post('/feedback', [Api\FeedbackController::class, 'store'])->middleware('
 Route::get('/pages/{slug}', [Api\PageController::class, 'show']);
 Route::get('/tools', [Api\ToolController::class, 'index']);
 Route::get('/tools/{slug}', [Api\ToolController::class, 'show']);
+Route::get('/posts', [Api\PostController::class, 'index']);
+Route::get('/posts/{slug}', [Api\PostController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +92,12 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
 
     Route::apiResource('pages', Admin\PageController::class)->except('show')->parameters(['pages' => 'id']);
     Route::apiResource('tools', Admin\ToolController::class)->except('show')->parameters(['tools' => 'id']);
+
+    Route::get('/posts', [Admin\PostController::class, 'index']);
+    Route::post('/posts', [Admin\PostController::class, 'store']);
+    Route::get('/posts/{id}', [Admin\PostController::class, 'show'])->whereNumber('id');
+    Route::put('/posts/{id}', [Admin\PostController::class, 'update'])->whereNumber('id');
+    Route::delete('/posts/{id}', [Admin\PostController::class, 'destroy'])->whereNumber('id');
 
     Route::get('/audit-logs', [Admin\AuditLogController::class, 'index']);
 });

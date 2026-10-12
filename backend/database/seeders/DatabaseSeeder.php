@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PageSeeder::class,
             ToolPresetSeeder::class,
             GallerySeeder::class,
+            BlogSeeder::class,
         ]);
     }
 }

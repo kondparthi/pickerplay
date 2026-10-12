@@ -6,6 +6,7 @@ import SettingsPage from './SettingsPage'
 import WheelsPage from './WheelsPage'
 import ToolsPage from './ToolsPage'
 import PagesPage from './PagesPage'
+import PostsPage from './PostsPage'
 import UsersPage from './UsersPage'
 import FeedbackPage from './FeedbackPage'
 import ActivityPage from './ActivityPage'
@@ -16,6 +17,7 @@ const NAV = [
   ['settings', 'palette', 'Branding & settings'],
   ['wheels', 'dice', 'Wheels'],
   ['tools', 'grid', 'Picker tools'],
+  ['posts', 'book', 'Blog posts'],
   ['pages', 'file', 'Pages'],
   ['users', 'users', 'Users'],
   ['feedback', 'inbox', 'Feedback'],
@@ -64,6 +66,7 @@ export default function Admin() {
           <Route path="settings" element={<SettingsPage />} />
           <Route path="wheels" element={<WheelsPage />} />
           <Route path="tools" element={<ToolsPage />} />
+          <Route path="posts" element={<PostsPage />} />
           <Route path="pages" element={<PagesPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="feedback" element={<FeedbackPage />} />

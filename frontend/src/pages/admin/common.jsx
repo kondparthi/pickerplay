@@ -52,4 +52,4 @@ export function Toggle({ checked, onChange, label }) {
   )
 }
 
-export const fmtDate = (s) => (s ? new Date(s).toLocaleString() : '—')
+export const fmtDate = (s) => (s ? new Date(s).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : '—')

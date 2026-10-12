@@ -19,7 +19,7 @@ export default function Footer() {
       )}
       <div className="footer-links">
         {pages.map((p) => (
-          <Link key={p.slug} to={`/page/${p.slug}`}>
+          <Link key={p.slug} to={p.slug === 'blog' ? '/blog' : `/page/${p.slug}`}>
             <Icon name={p.icon || 'file'} size={16} /> <span>{t(p.title)}</span>
           </Link>
         ))}
