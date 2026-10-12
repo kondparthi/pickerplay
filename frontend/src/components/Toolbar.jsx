@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useApp } from '../store/AppStore'
 import { LANGUAGES } from '../i18n'
 import Icon from './Icon'
@@ -25,6 +25,7 @@ export default function Toolbar({ minimal = false }) {
   const app = useApp()
   const { t, openDialog, user, boot, lang, activeWheel, fullscreen, setFullscreen, logout, resetToDefault } = app
   const nav = useNavigate()
+  const { pathname } = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const locked = activeWheel?.locked
   const langName = LANGUAGES.find((l) => l.code === lang)?.name || 'English'
@@ -90,6 +91,7 @@ export default function Toolbar({ minimal = false }) {
             )}
             items={[
               { label: t('Wheel spinner'), icon: <span className="emoji">🎡</span>, onClick: go(() => nav('/')) },
+              { label: t('Team Picker'), icon: <span className="emoji">👥</span>, onClick: go(() => nav('/team-picker')) },
               ...tools.map((tool) => ({
                 label: tool.name,
                 icon: <span className="emoji">{tool.emoji || '🎯'}</span>,
@@ -98,6 +100,10 @@ export default function Toolbar({ minimal = false }) {
             ]}
           />
         )}
+        <button className={`tb-btn ${pathname === '/team-picker' ? 'is-current' : ''}`} onClick={go(() => nav('/team-picker'))}>
+          <Icon name="users" />
+          <span>{t('Team Picker')}</span>
+        </button>
         {actions.map((a) => (
           <button key={a.key} className="tb-btn" onClick={go(a.onClick)} disabled={a.disabled} title={a.label}>
             <Icon name={a.icon} />

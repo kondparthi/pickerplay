@@ -8,6 +8,7 @@ import PageView from './pages/PageView'
 import Account from './pages/Account'
 import ResetPassword from './pages/ResetPassword'
 import NotFound from './pages/NotFound'
+import TeamPicker from './pages/TeamPicker'
 import Dialogs from './components/Dialogs'
 import Toasts from './components/Toasts'
 
@@ -24,6 +25,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/team-picker" element={<TeamPicker />} />
         <Route path="/embed/:code" element={<EmbedRoute />} />
         <Route path="/page/:slug" element={<PageView />} />
         <Route path="/account" element={<Account />} />

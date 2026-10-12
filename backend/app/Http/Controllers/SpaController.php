@@ -61,6 +61,9 @@ class SpaController extends Controller
             } else {
                 $status = 404;
             }
+        } elseif ($path === 'team-picker') {
+            $meta['title'] = "Team Picker – Random Team Generator | {$site}";
+            $meta['description'] = 'Split names into random, fair teams or groups in one click. Pick team leaders, balance by gender or skill, copy or download the result. Free.';
         } elseif ($path !== '' && preg_match('#^[a-z0-9_-]+$#i', $path)
             && ! in_array($path, ['gallery', 'account', 'admin', 'reset-password'], true)) {
             $tool = ToolPreset::where('slug', $path)->where('is_active', true)->first();

@@ -14,7 +14,7 @@ class SitemapController extends Controller
     {
         $xml = Cache::remember('pickerplay.sitemap', 3600, function () {
             $base = rtrim(config('app.url'), '/');
-            $urls = [[$base.'/', now(), '1.0'], [$base.'/gallery', now(), '0.7']];
+            $urls = [[$base.'/', now(), '1.0'], [$base.'/team-picker', now(), '0.9'], [$base.'/gallery', now(), '0.7']];
             foreach (ToolPreset::where('is_active', true)->orderBy('sort_order')->get() as $t) {
                 $urls[] = [$base.'/'.$t->slug, $t->updated_at, '0.9'];
             }
