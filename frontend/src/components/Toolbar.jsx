@@ -4,6 +4,7 @@ import { useApp } from '../store/AppStore'
 import { LANGUAGES } from '../i18n'
 import Icon from './Icon'
 import Menu from './Menu'
+import MegaMenu from './MegaMenu'
 
 export function Brand() {
   const { site } = useApp()
@@ -78,28 +79,7 @@ export default function Toolbar({ minimal = false }) {
         <Icon name={mobileOpen ? 'x' : 'menu'} size={22} />
       </button>
       <nav className={`toolbar ${mobileOpen ? 'open' : ''}`}>
-        {tools.length > 0 && (
-          <Menu
-            align="left"
-            className="tools-menu"
-            button={({ toggle }) => (
-              <button className="tb-btn" onClick={toggle}>
-                <Icon name="grid" />
-                <span>{t('Pickers')}</span>
-                <Icon name="down" size={14} />
-              </button>
-            )}
-            items={[
-              { label: t('Wheel spinner'), icon: <span className="emoji">🎡</span>, onClick: go(() => nav('/')) },
-              { label: t('Team Picker'), icon: <span className="emoji">👥</span>, onClick: go(() => nav('/team-picker')) },
-              ...tools.map((tool) => ({
-                label: tool.name,
-                icon: <span className="emoji">{tool.emoji || '🎯'}</span>,
-                onClick: go(() => nav('/' + tool.slug)),
-              })),
-            ]}
-          />
-        )}
+        <MegaMenu onNavigate={() => setMobileOpen(false)} />
         <button className={`tb-btn ${pathname === '/team-picker' ? 'is-current' : ''}`} onClick={go(() => nav('/team-picker'))}>
           <Icon name="users" />
           <span>{t('Team Picker')}</span>
