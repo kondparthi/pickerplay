@@ -8,7 +8,100 @@ import { randomInt, shuffle } from '../lib/random'
 import { contrastText, THEMES } from '../lib/colors'
 import { playAfter, tick, unlockAudio } from '../lib/audio'
 import { store, downloadJson } from '../lib/storage'
+import { Link } from 'react-router-dom'
 import '../team.css'
+
+function Card({ title, children }) {
+  const { site } = useApp()
+  return (
+    <article className="info-card card">
+      <h2>
+        {site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" />}
+        {title}
+      </h2>
+      {children}
+    </article>
+  )
+}
+
+/** SEO content for /team-picker, in the same card style as the home page. */
+function TeamContent() {
+  const { t, site, boot } = useApp()
+  const name = site.site_name
+  const tools = boot.tools || []
+  return (
+    <>
+      <section className="tp-intro">
+        <h2>{t('Team Picker – Random Team Generator')} | {name}</h2>
+        <p className="tp-lead">{t('Tired of “that’s not fair!” and 10 minutes wasted picking teams?')}</p>
+        <p>{t('Paste your list of names and split it into fair, random teams in one click. No sign-up, no ads in the way, 100% free. Also known as a random group generator, team randomizer or team picker wheel, it is the fastest way to make unbiased teams for games, classrooms, work projects and events.')}</p>
+      </section>
+      <section className="info-grid tp-info">
+        <Card title={t('How to split a list of names into teams')}>
+          <ol>
+            <li>{t('Paste or type your names in the box, one per line.')}</li>
+            <li>{t('Choose the number of teams, or switch to “Members per team”.')}</li>
+            <li>{t('Tick “Pick a team leader” if each group needs a captain.')}</li>
+            <li>{t('Press Start generating and watch the names drop into the teams.')}</li>
+            <li>{t('Copy the result or download it as CSV.')}</li>
+          </ol>
+          <p className="muted">{t('Every name is shuffled with a secure random generator, so nobody can game the draw.')}</p>
+        </Card>
+
+        <Card title={t('Pick a team leader')}>
+          <p>{t('Turn on “Pick a team leader” and the tool randomly chooses a leader, captain or spokesperson for every group as soon as the teams are made. The leader is marked with a 👑 and listed first.')}</p>
+        </Card>
+
+        <Card title={t('Team Picker is best for')}>
+          <ul className="tp-checks">
+            <li><b>{t('Teachers')}:</b> {t('classroom groups, presenters and line leaders')}</li>
+            <li><b>{t('Coaches')}:</b> {t('fair sides for practice and a random captain')}</li>
+            <li><b>{t('Offices')}:</b> {t('team-building, hackathons and project squads')}</li>
+            <li><b>{t('Workshops')}:</b> {t('breakout rooms and a spokesperson per table')}</li>
+            <li><b>{t('Games & parties')}:</b> {t('quiz teams, pairs and who goes first')}</li>
+            <li><b>{t('Tournaments')}:</b> {t('random draws for brackets and pools')}</li>
+          </ul>
+        </Card>
+
+        <Card title={t('Balance teams fairly')}>
+          <p>{t('Want an even mix of boys and girls, or beginners and experts? Add a label after a comma and tick “Balance teams by label”.')}</p>
+          <pre className="tp-example">Asha, girl{'\n'}Ravi, boy{'\n'}Meena, girl{'\n'}Arjun, boy</pre>
+          <p className="muted">{t('Each label is spread evenly across all teams, and team sizes never differ by more than one person.')}</p>
+        </Card>
+
+        <Card title={t('Export and share results instantly')}>
+          <ul>
+            <li>{t('Copy the teams and paste them into WhatsApp, email, docs or slides.')}</li>
+            <li>{t('Download as CSV for Excel / Google Sheets, or JSON for apps.')}</li>
+            <li>{t('Use Full width to show the teams on a projector or TV.')}</li>
+          </ul>
+        </Card>
+
+        <Card title={t('Is the team picker fair?')}>
+          <p>{t('Yes. Names are shuffled with your browser’s cryptographically secure random generator (crypto.getRandomValues), not Math.random(). Which teams receive the extra person when names don’t divide evenly is random too.')}</p>
+          <p className="muted">{t('Your list stays in your browser – nothing is uploaded.')}</p>
+        </Card>
+
+        <Card title={t('Frequently asked questions')}>
+          <details><summary>{t('How many names can I add?')}</summary><p>{t('Thousands. The tool works instantly even for a whole school year group.')}</p></details>
+          <details><summary>{t('Can I make random pairs?')}</summary><p>{t('Yes – switch to “Members per team” and set it to 2.')}</p></details>
+          <details><summary>{t('Can I use only some of the names?')}</summary><p>{t('Yes – set “Use only” to pick a random subset, e.g. 10 players out of 25.')}</p></details>
+          <details><summary>{t('Can I rename the teams?')}</summary><p>{t('Tick “Custom team names” and type one name per line, e.g. Red, Blue, Green.')}</p></details>
+        </Card>
+
+        <Card title={t('Prefer a spinning wheel?')}>
+          <p>{t('Use the classic wheel to pick one winner at a time, or try one of our other pickers.')}</p>
+          <div className="tool-chips">
+            <Link to="/" className="tool-chip"><span>🎡</span> {t('Wheel spinner')}</Link>
+            {tools.slice(0, 10).map((tool) => (
+              <Link key={tool.slug} to={`/${tool.slug}`} className="tool-chip"><span>{tool.emoji}</span> {tool.name}</Link>
+            ))}
+          </div>
+        </Card>
+      </section>
+    </>
+  )
+}
 
 const KEY = 'pp.teampicker.v1'
 const DEFAULT_NAMES = 'Anthony\nBernard\nCherry\nDiana\nEthan\nFarah\nGeorge\nHina'
@@ -185,12 +278,29 @@ export default function TeamPicker() {
             </div>
 
             {!teams ? (
-              <div className="tp-empty">
-                <Icon name="users" size={56} />
-                <h2>{t('Teams board')}</h2>
-                <p className="muted">{t('Enter names on the right, choose the number of teams and press Start generating.')}</p>
-                <p className="muted small">{total} {t('names')} → {count} {t('teams')} · ~{Math.ceil((usable || 0) / count)} {t('per team')}</p>
-              </div>
+              <>
+                <div className="tp-grid tp-preview">
+                  {Array.from({ length: Math.min(count, 12) }, (_, ti) => {
+                    const color = TEAM_COLORS[ti % TEAM_COLORS.length]
+                    const slots = Math.min(Math.ceil((usable || 0) / count) || 1, 6)
+                    return (
+                      <article key={ti} className="tp-team card" style={{ '--team': color }}>
+                        <header style={{ background: color, color: contrastText(color) }}>
+                          <span>{nameOf(ti)}</span>
+                          <span className="tp-count">0/{Math.floor(usable / count) + (ti < usable % count ? 1 : 0)}</span>
+                        </header>
+                        <ol>
+                          {Array.from({ length: slots }, (_, r) => (
+                            <li key={r} className="tp-slot"><span className="tp-num">{r + 1}</span><span className="tp-ghost" /></li>
+                          ))}
+                        </ol>
+                      </article>
+                    )
+                  })}
+                </div>
+                {count > 12 && <p className="muted small">+{count - 12} {t('more teams')}</p>}
+                <p className="muted small tp-hint"><Icon name="users" size={15} /> {total} {t('names')} → {count} {t('teams')} · {t('press Start generating to fill the teams')}</p>
+              </>
             ) : (
               <div className={`tp-grid ${running ? 'is-running' : ''}`}>
                 {teams.map((team, ti) => {
@@ -267,17 +377,7 @@ export default function TeamPicker() {
         </section>
       </main>
 
-      <section className="tool-content card prose">
-        <h2>{t('How to use the Team Picker')}</h2>
-        <ol>
-          <li>{t('Type or paste the names, one per line.')}</li>
-          <li>{t('Choose how many teams you want, or how many people per team.')}</li>
-          <li>{t('Optionally pick a leader for each team or balance teams by a label such as gender or skill level.')}</li>
-          <li>{t('Press Start generating. Copy the result or download it as CSV.')}</li>
-        </ol>
-        <h2>{t('Is it fair?')}</h2>
-        <p>{t('Names are shuffled with your browser’s cryptographically secure random generator. Team sizes never differ by more than one person, and which teams get the extra person is random too.')}</p>
-      </section>
+      <TeamContent />
       <Footer />
     </div>
   )

@@ -43,3 +43,26 @@ html.dark .tp-empty { background: rgba(255,255,255,.04); }
   .panel.tp-panel { order: -1; }
   .tp-board-head h1 { font-size: 26px; }
 }
+
+/* empty preview cards */
+.tp-preview .tp-team { animation: none; }
+.tp-slot .tp-ghost { flex: 1; height: 12px; border-radius: 6px; background: repeating-linear-gradient(90deg, var(--surface-3) 0 60%, transparent 60% 100%); opacity: .8; }
+.tp-slot { border-bottom-style: dashed !important; }
+.tp-hint { display: flex; align-items: center; gap: 6px; margin: 0; }
+
+/* content */
+.tp-intro { max-width: 980px; margin: 0 auto; padding: 32px 16px 8px; text-align: center; }
+.tp-intro h2 { margin: 0 0 10px; font-size: clamp(26px, 3.4vw, 38px); color: var(--primary); font-weight: 500; }
+html.dark .tp-intro h2 { color: #b3a9ff; }
+.tp-lead { font-size: 19px; font-weight: 600; margin: 0 0 8px; }
+.tp-intro p { font-size: 16px; line-height: 1.7; color: var(--text-2); }
+.tp-info { border-top: 0; background: transparent; }
+.tp-info ol, .tp-info ul { padding-left: 20px; }
+.tp-info li { margin-bottom: 6px; }
+.tp-checks { list-style: none; padding-left: 0 !important; }
+.tp-checks li { position: relative; padding-left: 26px; }
+.tp-checks li::before { content: '✔'; position: absolute; left: 0; color: var(--accent, #7cc22c); font-weight: 700; }
+.tp-example { background: var(--surface-3); border-radius: 6px; padding: 10px 12px; font-size: 13px; margin: 8px 0; white-space: pre; }
+.tp-info details { border-bottom: 1px solid var(--border); padding: 8px 0; }
+.tp-info details summary { cursor: pointer; font-weight: 500; }
+.tp-info details p { margin: 6px 0 0; color: var(--text-2); }
