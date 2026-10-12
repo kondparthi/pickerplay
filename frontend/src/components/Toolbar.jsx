@@ -22,13 +22,25 @@ export function Brand() {
   )
 }
 
+// Pages that show the wheel workspace. On every other page the wheel buttons
+// first navigate to the wheel, so the toolbar is identical everywhere.
+const NON_WHEEL = ['/team-picker', '/gallery', '/account', '/reset-password']
+const isWheelPage = (p) => !NON_WHEEL.includes(p) && !p.startsWith('/page/') && !p.startsWith('/admin') && !p.startsWith('/embed/')
+
+// eslint-disable-next-line no-unused-vars
 export default function Toolbar({ minimal = false }) {
   const app = useApp()
   const { t, openDialog, user, boot, lang, activeWheel, fullscreen, setFullscreen, logout, resetToDefault } = app
   const nav = useNavigate()
   const { pathname } = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const locked = activeWheel?.locked
+  const onWheel = isWheelPage(pathname)
+  const locked = onWheel && activeWheel?.locked
+  // run a wheel action; if we're not on a wheel page, open the wheel first
+  const wheel = (fn) => () => {
+    if (!onWheel) nav('/')
+    fn()
+  }
   const langName = LANGUAGES.find((l) => l.code === lang)?.name || 'English'
 
   const toggleFullscreen = () => {
@@ -47,20 +59,18 @@ export default function Toolbar({ minimal = false }) {
     fn()
   }
 
-  const actions = minimal
-    ? []
-    : [
-        { key: 'customize', icon: 'palette', label: t('Customize'), onClick: () => openDialog('customize'), disabled: locked },
-        { key: 'new', icon: 'new', label: t('New'), onClick: () => resetToDefault(t('Loaded default names and options')) },
-        { key: 'open', icon: 'open', label: t('Open'), onClick: () => openDialog('open') },
-        { key: 'save', icon: 'save', label: t('Save'), onClick: () => openDialog('save'), disabled: locked },
-        { key: 'share', icon: 'share', label: t('Share'), onClick: () => openDialog('share'), disabled: locked },
-      ]
+  const actions = [
+    { key: 'customize', icon: 'palette', label: t('Customize'), onClick: wheel(() => openDialog('customize')), disabled: locked },
+    { key: 'new', icon: 'new', label: t('New'), onClick: wheel(() => resetToDefault(t('Loaded default names and options'))) },
+    { key: 'open', icon: 'open', label: t('Open'), onClick: () => openDialog('open') },
+    { key: 'save', icon: 'save', label: t('Save'), onClick: wheel(() => openDialog('save')), disabled: locked },
+    { key: 'share', icon: 'share', label: t('Share'), onClick: wheel(() => openDialog('share')), disabled: locked },
+  ]
 
   const moreItems = [
     { label: t('Feedback'), icon: <Icon name="feedback" />, onClick: () => openDialog('feedback') },
     { label: t('FAQ'), icon: <Icon name="help" />, onClick: () => nav('/page/faq') },
-    !minimal && { label: t('Import Google spreadsheet'), icon: <Icon name="sheet" />, onClick: () => openDialog('importSheet') },
+    { label: t('Import Google spreadsheet'), icon: <Icon name="sheet" />, onClick: wheel(() => openDialog('importSheet')) },
     { divider: true },
     user
       ? { label: t('My account'), icon: <Icon name="user" />, onClick: () => nav('/account') }
@@ -90,16 +100,14 @@ export default function Toolbar({ minimal = false }) {
             <span>{a.label}</span>
           </button>
         ))}
-        <button className="tb-btn" onClick={go(() => nav('/gallery'))}>
+        <button className={`tb-btn ${pathname === '/gallery' ? 'is-current' : ''}`} onClick={go(() => nav('/gallery'))}>
           <Icon name="search" />
           <span>{t('Gallery')}</span>
         </button>
-        {!minimal && (
-          <button className="tb-btn tb-icon-only" onClick={go(toggleFullscreen)} title={t('Fullscreen')} aria-label={t('Fullscreen')}>
-            <Icon name={fullscreen ? 'minimize' : 'maximize'} />
-            <span className="mobile-label">{t('Fullscreen')}</span>
-          </button>
-        )}
+        <button className="tb-btn tb-icon-only" onClick={go(wheel(toggleFullscreen))} title={t('Fullscreen')} aria-label={t('Fullscreen')}>
+          <Icon name={fullscreen ? 'minimize' : 'maximize'} />
+          <span className="mobile-label">{t('Fullscreen')}</span>
+        </button>
         <Menu
           button={({ toggle, open }) => (
             <button className={`tb-btn ${open ? 'active' : ''}`} onClick={toggle}>
