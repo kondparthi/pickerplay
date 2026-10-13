@@ -20,7 +20,7 @@ export const SOUNDS_AFTER = [
 
 // PickerPlay brand wheel (logo): green, pink, yellow, purple, blue – 5 slices
 export const BRAND_COLORS = '#9cd60c,#ff3269,#fee20a,#7c5afe,#31c0ff'
-export const DEFAULT_NAMES = 'Emma\nLiam\nOlivia\nNoah\nAva'
+export const DEFAULT_NAMES = 'Emma\nLiam\nOlivia\nNoah\nAva\nEthan'
 
 export function defaultSettings(site = {}) {
   const colors = (site.default_colors || BRAND_COLORS)

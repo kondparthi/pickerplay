@@ -11,6 +11,7 @@ export const useT = () => useContext(AppCtx).t
 
 const WS_KEY = 'pp.workspace.v1'
 const BACKUP_KEY = 'pp.workspace.backup'
+const HOME_KEY = 'pp.workspace.home' // the visitor's own Random Name wheel, kept while they browse picker games
 const PREFS_KEY = 'pp.prefs'
 
 const FALLBACK_SETTINGS = {
@@ -44,7 +45,7 @@ function initialBoot() {
 function loadWorkspace(site) {
   const saved = store.get(WS_KEY)
   if (saved && Array.isArray(saved.wheels) && saved.wheels.length) {
-    return { wheels: saved.wheels, active: Math.min(saved.active || 0, saved.wheels.length - 1), results: saved.results || [] }
+    return { wheels: saved.wheels, active: Math.min(saved.active || 0, saved.wheels.length - 1), results: saved.results || [], source: saved.source || '' }
   }
   return { wheels: [newWheel(site)], active: 0, results: [] }
 }
@@ -52,7 +53,7 @@ function loadWorkspace(site) {
 export function AppProvider({ children }) {
   const [boot, setBoot] = useState(initialBoot)
   const site = boot.settings
-  const [prefs, setPrefsState] = useState(() => ({ dark: false, reduceMotion: false, idleSpin: true, lang: '', ...store.get(PREFS_KEY, {}) }))
+  const [prefs, setPrefsState] = useState(() => ({ dark: true, reduceMotion: false, idleSpin: true, lang: '', ...store.get(PREFS_KEY, {}) }))
   const [user, setUser] = useState(null)
   const [authChecked, setAuthChecked] = useState(!getToken())
   const [ws, setWs] = useState(() => loadWorkspace(site))
@@ -157,7 +158,7 @@ export function AppProvider({ children }) {
   useEffect(() => {
     clearTimeout(saveTimer.current)
     saveTimer.current = setTimeout(() => {
-      store.set(WS_KEY, { wheels: ws.wheels, active: ws.active, results: ws.results.slice(0, 300) })
+      store.set(WS_KEY, { wheels: ws.wheels, active: ws.active, results: ws.results.slice(0, 300), source: ws.source || '' })
     }, 350)
   }, [ws])
 
@@ -202,13 +203,28 @@ export function AppProvider({ children }) {
         }),
       addResults: (items) => setWs((s) => ({ ...s, results: [...items, ...s.results].slice(0, 1000) })),
       setResults: (results) => setWs((s) => ({ ...s, results })),
-      /** Replace everything (shared link, tool preset, open file) with undo support. */
-      loadWheels: (wheels, message) => {
+      /**
+       * Replace everything (shared link, tool preset, open file) with undo support.
+       * source: '' = the visitor's own wheel (home), 'tool:<slug>' / 'share:<code>' = temporary.
+       */
+      loadWheels: (wheels, message, source = '') => {
         backup()
-        setWs({ wheels, active: 0, results: [] })
+        setWs((cur) => {
+          if (!cur.source && source) store.set(HOME_KEY, { wheels: cur.wheels, active: cur.active, results: cur.results.slice(0, 300) })
+          return { wheels, active: 0, results: [], source }
+        })
         if (message) toast(message, { action: { label: 'Undo', run: restoreBackup } })
       },
       replaceWheelsSilently: (wheels) => setWs({ wheels, active: 0, results: [] }),
+      /** Home page = Random Name wheel: bring back the visitor's own wheel after a picker game / shared wheel. */
+      showHomeWheel: () => setWs((cur) => {
+        if (!cur.source) return cur
+        const home = store.get(HOME_KEY)
+        if (home && Array.isArray(home.wheels) && home.wheels.length) {
+          return { wheels: home.wheels, active: Math.min(home.active || 0, home.wheels.length - 1), results: home.results || [], source: '' }
+        }
+        return { wheels: [newWheel(site)], active: 0, results: [], source: '' }
+      }),
       resetToDefault: (message) => {
         backup()
         setWs({ wheels: [newWheel(site)], active: 0, results: [] })

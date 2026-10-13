@@ -80,6 +80,16 @@ return [
             'spinTime' => 6,
         ],
     ],
+    'yes-no-wheel' => [
+        'entries' => $repeat([['text' => 'Yes'], ['text' => 'No']], 3),
+        'settings' => [
+            'colors' => [['color' => '#43a047', 'enabled' => true], ['color' => '#e53935', 'enabled' => true]],
+            'showRemove' => false,
+            'boldText' => true,
+            'textScale' => 1.3,
+            'spinTime' => 5,
+        ],
+    ],
     'coin-flip-wheel' => [
         'entries' => $repeat([['text' => 'Heads'], ['text' => 'Tails']], 5),
         'settings' => [

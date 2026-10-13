@@ -36,7 +36,7 @@ export default function SlugRoute() {
             locked: !d.can_copy,
           })
           if (!d.show_title) w.settings.showTitle = false
-          loadWheels([w], t('Loaded shared wheel'))
+          loadWheels([w], t('Loaded shared wheel'), `share:${d.code}`)
           document.title = `${d.title || t('Shared wheel')} | ${site.site_name}`
           setState({ status: 'ok', tool: null })
         })
@@ -47,7 +47,7 @@ export default function SlugRoute() {
         .then((r) => {
           if (!alive) return
           const tool = r.data
-          loadWheels([wheelFromConfig({ ...tool.config, title: '' }, site)])
+          loadWheels([wheelFromConfig({ ...tool.config, title: '' }, site)], undefined, `tool:${tool.slug}`)
           document.title = tool.meta_title || `${tool.name} | ${site.site_name}`
           setState({ status: 'ok', tool })
         })

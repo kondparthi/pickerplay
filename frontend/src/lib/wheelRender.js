@@ -212,11 +212,6 @@ export function renderWheel(segs, settings, diameter, opts = {}) {
         }
         ctx.fillStyle = textColor
         ctx.fillText(label, textRight, 0)
-        // dice convention: underline a lone 6 or 9 so they can't be confused when the wheel turns
-        if (label === '6' || label === '9') {
-          const lw = ctx.measureText(label).width
-          ctx.fillRect(textRight - lw, fs * 0.42, lw, Math.max(2, fs * 0.08))
-        }
       }
     }
     ctx.restore()

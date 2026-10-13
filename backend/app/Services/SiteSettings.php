@@ -35,7 +35,7 @@ class SiteSettings
         'contact_email' => ['support@pickerplay.com', true],
         'version' => ['1.0.0', true],
         // Wheel defaults for brand-new visitors
-        'default_entries' => ["Emma\nLiam\nOlivia\nNoah\nAva", true],
+        'default_entries' => ["Emma\nLiam\nOlivia\nNoah\nAva\nEthan", true],
         'default_colors' => ['#9cd60c,#ff3269,#fee20a,#7c5afe,#31c0ff', true],
         'default_spin_time' => ['10', true],
         'default_popup_message' => ['We have a winner!', true],
