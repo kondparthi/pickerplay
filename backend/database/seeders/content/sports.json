@@ -1,0 +1,376 @@
+{
+ "nba-team-picker": [
+  {
+   "text": "Atlanta Hawks",
+   "color": "#e03a3e"
+  },
+  {
+   "text": "Boston Celtics",
+   "color": "#007a33"
+  },
+  {
+   "text": "Brooklyn Nets",
+   "color": "#000000"
+  },
+  {
+   "text": "Charlotte Hornets",
+   "color": "#00788c"
+  },
+  {
+   "text": "Chicago Bulls",
+   "color": "#ce1141"
+  },
+  {
+   "text": "Cleveland Cavaliers",
+   "color": "#860038"
+  },
+  {
+   "text": "Dallas Mavericks",
+   "color": "#00538c"
+  },
+  {
+   "text": "Denver Nuggets",
+   "color": "#0e2240"
+  },
+  {
+   "text": "Detroit Pistons",
+   "color": "#1d42ba"
+  },
+  {
+   "text": "Golden State Warriors",
+   "color": "#ffc72c"
+  },
+  {
+   "text": "Houston Rockets",
+   "color": "#ce1141"
+  },
+  {
+   "text": "Indiana Pacers",
+   "color": "#fdbb30"
+  },
+  {
+   "text": "LA Clippers",
+   "color": "#c8102e"
+  },
+  {
+   "text": "Los Angeles Lakers",
+   "color": "#552583"
+  },
+  {
+   "text": "Memphis Grizzlies",
+   "color": "#5d76a9"
+  },
+  {
+   "text": "Miami Heat",
+   "color": "#98002e"
+  },
+  {
+   "text": "Milwaukee Bucks",
+   "color": "#00471b"
+  },
+  {
+   "text": "Minnesota Timberwolves",
+   "color": "#236192"
+  },
+  {
+   "text": "New Orleans Pelicans",
+   "color": "#0c2340"
+  },
+  {
+   "text": "New York Knicks",
+   "color": "#006bb6"
+  },
+  {
+   "text": "Oklahoma City Thunder",
+   "color": "#007ac1"
+  },
+  {
+   "text": "Orlando Magic",
+   "color": "#0077c0"
+  },
+  {
+   "text": "Philadelphia 76ers",
+   "color": "#ed174c"
+  },
+  {
+   "text": "Phoenix Suns",
+   "color": "#e56020"
+  },
+  {
+   "text": "Portland Trail Blazers",
+   "color": "#e03a3e"
+  },
+  {
+   "text": "Sacramento Kings",
+   "color": "#5a2d81"
+  },
+  {
+   "text": "San Antonio Spurs",
+   "color": "#8a8d8f"
+  },
+  {
+   "text": "Toronto Raptors",
+   "color": "#ce1141"
+  },
+  {
+   "text": "Utah Jazz",
+   "color": "#753bbd"
+  },
+  {
+   "text": "Washington Wizards",
+   "color": "#002b5c"
+  }
+ ],
+ "nfl-team-picker": [
+  {
+   "text": "Arizona Cardinals",
+   "color": "#97233f"
+  },
+  {
+   "text": "Atlanta Falcons",
+   "color": "#a71930"
+  },
+  {
+   "text": "Baltimore Ravens",
+   "color": "#241773"
+  },
+  {
+   "text": "Buffalo Bills",
+   "color": "#00338d"
+  },
+  {
+   "text": "Carolina Panthers",
+   "color": "#0085ca"
+  },
+  {
+   "text": "Chicago Bears",
+   "color": "#c83803"
+  },
+  {
+   "text": "Cincinnati Bengals",
+   "color": "#fb4f14"
+  },
+  {
+   "text": "Cleveland Browns",
+   "color": "#311d00"
+  },
+  {
+   "text": "Dallas Cowboys",
+   "color": "#041e42"
+  },
+  {
+   "text": "Denver Broncos",
+   "color": "#fb4f14"
+  },
+  {
+   "text": "Detroit Lions",
+   "color": "#0076b6"
+  },
+  {
+   "text": "Green Bay Packers",
+   "color": "#203731"
+  },
+  {
+   "text": "Houston Texans",
+   "color": "#03202f"
+  },
+  {
+   "text": "Indianapolis Colts",
+   "color": "#002c5f"
+  },
+  {
+   "text": "Jacksonville Jaguars",
+   "color": "#006778"
+  },
+  {
+   "text": "Kansas City Chiefs",
+   "color": "#e31837"
+  },
+  {
+   "text": "Las Vegas Raiders",
+   "color": "#000000"
+  },
+  {
+   "text": "Los Angeles Chargers",
+   "color": "#0080c6"
+  },
+  {
+   "text": "Los Angeles Rams",
+   "color": "#003594"
+  },
+  {
+   "text": "Miami Dolphins",
+   "color": "#008e97"
+  },
+  {
+   "text": "Minnesota Vikings",
+   "color": "#4f2683"
+  },
+  {
+   "text": "New England Patriots",
+   "color": "#002244"
+  },
+  {
+   "text": "New Orleans Saints",
+   "color": "#d3bc8d"
+  },
+  {
+   "text": "New York Giants",
+   "color": "#0b2265"
+  },
+  {
+   "text": "New York Jets",
+   "color": "#125740"
+  },
+  {
+   "text": "Philadelphia Eagles",
+   "color": "#004c54"
+  },
+  {
+   "text": "Pittsburgh Steelers",
+   "color": "#ffb612"
+  },
+  {
+   "text": "San Francisco 49ers",
+   "color": "#aa0000"
+  },
+  {
+   "text": "Seattle Seahawks",
+   "color": "#69be28"
+  },
+  {
+   "text": "Tampa Bay Buccaneers",
+   "color": "#d50a0a"
+  },
+  {
+   "text": "Tennessee Titans",
+   "color": "#4b92db"
+  },
+  {
+   "text": "Washington Commanders",
+   "color": "#5a1414"
+  }
+ ],
+ "mlb-team-picker": [
+  {
+   "text": "Arizona Diamondbacks",
+   "color": "#a71930"
+  },
+  {
+   "text": "Athletics",
+   "color": "#003831"
+  },
+  {
+   "text": "Atlanta Braves",
+   "color": "#ce1141"
+  },
+  {
+   "text": "Baltimore Orioles",
+   "color": "#df4601"
+  },
+  {
+   "text": "Boston Red Sox",
+   "color": "#bd3039"
+  },
+  {
+   "text": "Chicago Cubs",
+   "color": "#0e3386"
+  },
+  {
+   "text": "Chicago White Sox",
+   "color": "#27251f"
+  },
+  {
+   "text": "Cincinnati Reds",
+   "color": "#c6011f"
+  },
+  {
+   "text": "Cleveland Guardians",
+   "color": "#e50022"
+  },
+  {
+   "text": "Colorado Rockies",
+   "color": "#33006f"
+  },
+  {
+   "text": "Detroit Tigers",
+   "color": "#0c2340"
+  },
+  {
+   "text": "Houston Astros",
+   "color": "#eb6e1f"
+  },
+  {
+   "text": "Kansas City Royals",
+   "color": "#004687"
+  },
+  {
+   "text": "Los Angeles Angels",
+   "color": "#ba0021"
+  },
+  {
+   "text": "Los Angeles Dodgers",
+   "color": "#005a9c"
+  },
+  {
+   "text": "Miami Marlins",
+   "color": "#00a3e0"
+  },
+  {
+   "text": "Milwaukee Brewers",
+   "color": "#ffc52f"
+  },
+  {
+   "text": "Minnesota Twins",
+   "color": "#d31145"
+  },
+  {
+   "text": "New York Mets",
+   "color": "#ff5910"
+  },
+  {
+   "text": "New York Yankees",
+   "color": "#0c2340"
+  },
+  {
+   "text": "Philadelphia Phillies",
+   "color": "#e81828"
+  },
+  {
+   "text": "Pittsburgh Pirates",
+   "color": "#fdb827"
+  },
+  {
+   "text": "San Diego Padres",
+   "color": "#2f241d"
+  },
+  {
+   "text": "San Francisco Giants",
+   "color": "#fd5a1e"
+  },
+  {
+   "text": "Seattle Mariners",
+   "color": "#005c5c"
+  },
+  {
+   "text": "St. Louis Cardinals",
+   "color": "#c41e3a"
+  },
+  {
+   "text": "Tampa Bay Rays",
+   "color": "#8fbce6"
+  },
+  {
+   "text": "Texas Rangers",
+   "color": "#003278"
+  },
+  {
+   "text": "Toronto Blue Jays",
+   "color": "#134a8e"
+  },
+  {
+   "text": "Washington Nationals",
+   "color": "#14225a"
+  }
+ ]
+}

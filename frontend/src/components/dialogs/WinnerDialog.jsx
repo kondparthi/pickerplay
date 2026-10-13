@@ -2,10 +2,20 @@ import { useApp } from '../../store/AppStore'
 import { contrastText } from '../../lib/colors'
 import { popSound } from '../../lib/audio'
 import Modal from '../Modal'
+import { useState } from 'react'
+import { randomInt } from '../../lib/random'
+
+/** An entry message may hold several lines (e.g. Truth questions) – show one at random. */
+export function pickMessage(msg) {
+  const lines = (msg || '').split(/\r?\n/).map((l) => l.trim()).filter(Boolean)
+  return lines.length ? lines[randomInt(lines.length)] : ''
+}
 
 export default function WinnerDialog({ items }) {
   const { ws, t, closeDialog, setEntries } = useApp()
   const first = items[0]
+  const [msgs, setMsgs] = useState(() => items.map((it) => pickMessage(it.entry.message)))
+  const another = (i) => setMsgs((m) => m.map((x, k) => (k === i ? pickMessage(items[i].entry.message) : x)))
   const wheel = ws.wheels[first.wheelIndex]
   const s = wheel?.settings || {}
   const color = first.color || 'var(--primary)'
@@ -46,7 +56,10 @@ export default function WinnerDialog({ items }) {
             {items.length > 1 && <div className="muted small">{ws.wheels[it.wheelIndex]?.title || `${t('Wheel')} ${it.wheelIndex + 1}`}</div>}
             {it.entry.image && <img className="winner-img" src={it.entry.image} alt="" />}
             <div className="winner-name">{it.entry.text}</div>
-            {it.entry.message && <p className="winner-msg">{it.entry.message}</p>}
+            {msgs[i] && <p className="winner-msg">{msgs[i]}</p>}
+            {(it.entry.message || '').split(/\n/).filter((l) => l.trim()).length > 1 && (
+              <button className="btn btn-text small winner-another" onClick={() => another(i)}>↻ {t('Another one')}</button>
+            )}
           </div>
         ))}
       </div>

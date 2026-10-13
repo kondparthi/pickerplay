@@ -77,6 +77,7 @@ export default {
   "Clear the list": "பட்டியலை அழி",
   "Copy": "நகலெடு",
   "Spin the wheel to see results here.": "முடிவுகளைக் காண சக்கரத்தைச் சுழற்றவும்.",
+  "Light mode": "லைட் மோட்",
   "Dark mode": "இருண்ட பயன்முறை",
   "Done": "முடிந்தது",
   "Search": "தேடு",

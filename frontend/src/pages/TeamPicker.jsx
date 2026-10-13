@@ -27,7 +27,7 @@ function Card({ title, children }) {
 }
 
 /** SEO content for /team-picker, in the same card style as the home page. */
-function TeamContent() {
+function TeamContent({ onTryExample }) {
   const { t, site, boot } = useApp()
   const name = site.site_name
   const tools = boot.tools || []
@@ -67,7 +67,8 @@ function TeamContent() {
 
         <Card title={t('Balance teams fairly')}>
           <p>{t('Want an even mix of boys and girls, or beginners and experts? Add a label after a comma and tick “Balance teams by label”.')}</p>
-          <pre className="tp-example">Asha, girl{'\n'}Ravi, boy{'\n'}Meena, girl{'\n'}Arjun, boy</pre>
+          <pre className="tp-example">{BALANCE_EXAMPLE}</pre>
+          {onTryExample && <button className="btn btn-soft small" onClick={onTryExample}><Icon name="play" size={15} /> {t('Try this example')}</button>}
           <p className="muted">{t('Each label is spread evenly across all teams, and team sizes never differ by more than one person.')}</p>
         </Card>
 
@@ -105,9 +106,36 @@ function TeamContent() {
   )
 }
 
-const KEY = 'pp.teampicker.v1'
-const DEFAULT_NAMES = 'Anthony\nBernard\nCherry\nDiana\nEthan\nFarah\nGeorge\nHina'
+const KEY = 'pp.teampicker.v2'
+const DEFAULT_NAMES = 'Emma\nLiam\nOlivia\nNoah\nAva\nEthan\nSophia\nMason'
+const BALANCE_EXAMPLE = 'Amelia, girl\nTom, boy\nNissy, girl\nSatvik, boy'
 const TEAM_COLORS = ['#2e7d32', '#f5b70a', '#1e88e5', '#e53935', '#8e24aa', '#00897b', '#fb8c00', '#5546c9', '#6d4c41', '#d81b60']
+
+/** − [ n ] + control; typing is free-form and only committed when valid, so “3” never becomes “13”. */
+function Stepper({ value, min = 1, max = 99, onChange, label }) {
+  const [draft, setDraft] = useState(String(value))
+  useEffect(() => setDraft(String(value)), [value])
+  const commit = (v) => {
+    const n = Math.max(min, Math.min(max, parseInt(v, 10) || min))
+    onChange(n)
+    setDraft(String(n))
+  }
+  return (
+    <span className="tp-stepper">
+      <button type="button" onClick={() => commit(value - 1)} disabled={value <= min} aria-label={`${label} −1`}>−</button>
+      <input className="input" inputMode="numeric" value={draft} aria-label={label}
+        onChange={(e) => {
+          const v = e.target.value.replace(/[^0-9]/g, '')
+          setDraft(v)
+          const n = parseInt(v, 10)
+          if (n >= min && n <= max) onChange(n)
+        }}
+        onBlur={() => commit(draft)}
+        onKeyDown={(e) => { if (e.key === 'Enter') commit(draft) }} />
+      <button type="button" onClick={() => commit(value + 1)} disabled={value >= max} aria-label={`${label} +1`}>+</button>
+    </span>
+  )
+}
 
 /** "Name, Label" -> { name, label } (label is used for balancing, e.g. gender / skill / class) */
 function parse(text) {
@@ -188,6 +216,13 @@ export default function TeamPicker() {
   }, [text, mode, teamCount, teamSize, leader, balance, animate, sound, teamNamesText, teams])
 
   useEffect(() => () => clearInterval(timer.current), [])
+
+  // changing the number of teams / team size shows a fresh preview with the new count
+  const firstCount = useRef(true)
+  useEffect(() => {
+    if (firstCount.current) { firstCount.current = false; return }
+    if (!running) setTeams(null)
+  }, [count, mode]) // eslint-disable-line
 
   const start = () => {
     if (total < 2) return toast(t('Add at least 2 names.'))
@@ -340,8 +375,8 @@ export default function TeamPicker() {
                 <button className="chip-btn" onClick={() => setText(text.split(/\r?\n/).filter((l) => l.trim()).sort((a, b) => a.localeCompare(b)).join('\n'))}><Icon name="sort" size={16} /> {t('Sort')}</button>
                 <button className="chip-btn" onClick={() => setText('')}><Icon name="trash" size={16} /> {t('Clear')}</button>
               </div>
-              <textarea className="entries-textarea tp-names" value={text} spellCheck={false} placeholder={'Anthony\nBernard\nCherry…'} onChange={(e) => setText(e.target.value)} />
-              {balance && <p className="muted small">{t('Add a label after a comma to balance teams, e.g. “Asha, girl” or “Ravi, senior”.')} {labels ? `(${labels} ${t('labels found')})` : ''}</p>}
+              <textarea className="entries-textarea tp-names" value={text} spellCheck={false} placeholder={'Emma\nLiam\nOlivia…'} onChange={(e) => setText(e.target.value)} />
+              {balance && <p className="muted small">{t('Add a label after a comma to balance teams, e.g. “Amelia, girl” or “Tom, boy”.')} {labels ? `(${labels} ${t('labels found')})` : ''}</p>}
 
               <div className="tp-settings">
                 <div className="tp-mode">
@@ -349,13 +384,13 @@ export default function TeamPicker() {
                   <button className={mode === 'size' ? 'active' : ''} onClick={() => setMode('size')}>{t('Members per team')}</button>
                 </div>
                 {mode === 'teams' ? (
-                  <label className="tp-field">{t('Number of teams')}
-                    <input className="input" type="number" min="1" max={Math.max(1, total)} value={teamCount} onChange={(e) => setTeamCount(Math.max(1, Number(e.target.value) || 1))} />
-                  </label>
+                  <div className="tp-field">{t('Number of teams')}
+                    <Stepper value={teamCount} min={1} max={Math.max(2, total)} onChange={setTeamCount} label={t('Number of teams')} />
+                  </div>
                 ) : (
-                  <label className="tp-field">{t('Members per team')}
-                    <input className="input" type="number" min="1" max={Math.max(1, total)} value={teamSize} onChange={(e) => setTeamSize(Math.max(1, Number(e.target.value) || 1))} />
-                  </label>
+                  <div className="tp-field">{t('Members per team')}
+                    <Stepper value={teamSize} min={1} max={Math.max(2, total)} onChange={setTeamSize} label={t('Members per team')} />
+                  </div>
                 )}
                 <label className="tp-field">{t('Use only')} <span className="muted small">({t('0 = everyone')})</span>
                   <span className="row"><input className="input" type="number" min="0" max={total} value={pickQty} onChange={(e) => setPickQty(Math.max(0, Number(e.target.value) || 0))} /><span className="muted">/ {total}</span></span>
@@ -381,7 +416,7 @@ export default function TeamPicker() {
       </main>
 
       <div className="content-ad-wrap"><AdSlot place="team" /></div>
-      <TeamContent />
+      <TeamContent onTryExample={() => { setText(BALANCE_EXAMPLE); setBalance(true); setMode('teams'); setTeamCount(2); setTeams(null); window.scrollTo({ top: 0, behavior: 'auto' }) }} />
       <Footer />
     </div>
   )

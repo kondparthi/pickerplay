@@ -319,7 +319,8 @@ html.reduce-motion *, html.reduce-motion *::before { animation: none !important;
 .winner-item { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .winner-name { font-size: clamp(30px, 6vw, 54px); line-height: 1.15; word-break: break-word; font-family: Quicksand, Roboto, sans-serif; font-weight: 600; }
 .winner-img { max-height: 200px; border-radius: 6px; }
-.winner-msg { margin: 0; color: var(--text-2); }
+.winner-msg { margin: 10px auto 0; max-width: 460px; padding: 12px 16px; border-radius: 12px; background: var(--surface-2); color: var(--text); font-size: 18px; font-weight: 500; line-height: 1.45; }
+.winner-another { margin-top: 6px; }
 
 /* customize */
 .customize-modal .modal-body { padding-top: 6px; }
@@ -534,3 +535,13 @@ html.dark .fs-bar { background: rgba(0,0,0,.25); }
 .content-ad-wrap { padding: 0 16px; max-width: 1100px; margin: 8px auto 0; }
 .bp-body .ad-inline { margin: 28px 0; }
 .bl-wrap > .ad-inline { margin: 18px 0; }
+.embed-msg { font-size: clamp(14px, 2.4vw, 20px); max-width: 520px; }
+
+/* ---------- league (NBA/NFL/MLB) filter ---------- */
+.league-filter { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 16px 0; }
+.lf-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.lf-chip { border: 1.5px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 7px 16px; font: inherit; font-weight: 600; font-size: 14px; cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.lf-chip.small { padding: 4px 12px; font-size: 13px; font-weight: 500; }
+.lf-chip:hover { border-color: var(--primary); color: var(--primary); }
+.lf-chip.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.lf-all { font-weight: 700; }

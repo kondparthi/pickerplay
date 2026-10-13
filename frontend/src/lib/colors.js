@@ -1,8 +1,8 @@
 import { secureRandom } from './random'
 
 export const THEMES = [
+  { name: 'PickerPlay', colors: ['#9cd60c', '#ff3269', '#fee20a', '#7c5afe', '#31c0ff'] },
   { name: 'Classic pastel', colors: ['#33a5e8', '#7cd992', '#f8d85b', '#b67fd6'] },
-  { name: 'Brand', colors: ['#29a3e3', '#7cc22c', '#f5c518', '#5546c9', '#ef4f7a'] },
   { name: 'Vivid rainbow', colors: ['#e53935', '#fb8c00', '#fdd835', '#43a047', '#1e88e5', '#8e24aa'] },
   { name: 'Ocean', colors: ['#03256c', '#2541b2', '#1768ac', '#06bee1', '#a2d6f9'] },
   { name: 'Sunset', colors: ['#ff6b6b', '#ff8e53', '#feca57', '#ff9ff3', '#c56cf0'] },

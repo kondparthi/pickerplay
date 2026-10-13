@@ -191,6 +191,19 @@ export default function CustomizeDialog() {
               <select className="input select sm" value={d.centerSize} onChange={(e) => set({ centerSize: e.target.value })}>
                 {['S', 'M', 'L', 'XL'].map((s) => <option key={s}>{s}</option>)}
               </select>
+              {!d.centerImage && (
+                <>
+                  <label className="form-label">{t('Center text')}</label>
+                  <input className="input sm" style={{ width: 110 }} maxLength={12} value={d.centerText ?? 'SPIN'} placeholder={t('none')} onChange={(e) => set({ centerText: e.target.value })} />
+                </>
+              )}
+            </div>
+            <div className="form-row wrap">
+              <label className="form-label">{t('Text size')}</label>
+              <select className="input select sm" value={String(d.textScale ?? 1)} onChange={(e) => set({ textScale: Number(e.target.value) })}>
+                {[['0.8', t('Small')], ['1', t('Normal')], ['1.4', t('Large')], ['2', t('Extra large')]].map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+              </select>
+              <Check checked={!!d.boldText} onChange={(v) => set({ boldText: v })}>{t('Bold text')}</Check>
             </div>
             <hr />
             <div className="check-row">
@@ -201,7 +214,7 @@ export default function CustomizeDialog() {
             <div className="form-row wrap">
               <label className="form-label">{t('Pointer color')}</label>
               <input type="color" value={d.pointerColor || '#5546c9'} onChange={(e) => set({ pointerColor: e.target.value })} />
-              {d.pointerColor && <button className="btn btn-text small" onClick={() => set({ pointerColor: '' })}>{t('Auto')}</button>}
+              {d.pointerColor ? <button className="btn btn-text small" onClick={() => set({ pointerColor: '' })}>{t('Auto')}</button> : <span className="muted small">{t('Auto: matches the slice')}</span>}
               <label className="form-label">{t('Text color')}</label>
               <input type="color" value={d.textColor || '#222222'} onChange={(e) => set({ textColor: e.target.value })} />
               {d.textColor && <button className="btn btn-text small" onClick={() => set({ textColor: '' })}>{t('Auto')}</button>}

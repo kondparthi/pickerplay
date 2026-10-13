@@ -5,6 +5,7 @@ import { api } from '../lib/api'
 import { wheelFromConfig } from '../lib/defaults'
 import { playAfter } from '../lib/audio'
 import { activePalette } from '../lib/wheelRender'
+import { pickMessage } from '../components/dialogs/WinnerDialog'
 import { contrastText } from '../lib/colors'
 import Wheel from '../components/Wheel'
 
@@ -39,7 +40,7 @@ export default function Embed({ code }) {
     const s = wheel.settings
     playAfter(s.afterSound, s.afterVolume ?? 50)
     if (s.confetti) confetti({ particleCount: 120, spread: 90, origin: { y: 0.5 }, colors: activePalette(s) })
-    setWinner(r)
+    setWinner({ ...r, msg: pickMessage(r.entry.message) })
     api.post('/stats/spin', { seconds: s.spinTime, path: window.location.pathname }).catch(() => {})
     window.parent?.postMessage({ type: 'pickerplay:winner', code, winner: { text: r.entry.text, image: r.entry.image || null } }, '*')
   }
@@ -71,6 +72,7 @@ export default function Embed({ code }) {
         <button className="embed-winner" style={{ background: winner.color, color: contrastText(winner.color) }} onClick={() => setWinner(null)}>
           <small>{wheel.settings.popupMessage}</small>
           <strong>{winner.entry.text}</strong>
+          {winner.msg && <span className="embed-msg">{winner.msg}</span>}
         </button>
       )}
       <a className="embed-credit" href={`/${code}`} target="_blank" rel="noreferrer">{site.site_name}</a>

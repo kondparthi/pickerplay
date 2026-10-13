@@ -18,8 +18,12 @@ export const SOUNDS_AFTER = [
   { id: 'none', label: 'No sound' },
 ]
 
+// PickerPlay brand wheel (logo): green, pink, yellow, purple, blue – 5 slices
+export const BRAND_COLORS = '#9cd60c,#ff3269,#fee20a,#7c5afe,#31c0ff'
+export const DEFAULT_NAMES = 'Emma\nLiam\nOlivia\nNoah\nAva'
+
 export function defaultSettings(site = {}) {
-  const colors = (site.default_colors || '#33a5e8,#7cd992,#f8d85b,#b67fd6')
+  const colors = (site.default_colors || BRAND_COLORS)
     .split(',').map((c) => c.trim()).filter(Boolean)
   return {
     // During spin
@@ -45,7 +49,10 @@ export function defaultSettings(site = {}) {
     bgImage: '',
     colors: toColorSlots(colors),
     centerImage: '',
-    centerSize: 'S',
+    centerSize: 'M',
+    centerText: 'SPIN',
+    textScale: 1,
+    boldText: false,
     pageGradient: true,
     pageBgColor: '',
     pageBgImage: '',
@@ -62,7 +69,7 @@ export function makeEntries(texts) {
 }
 
 export function defaultEntries(site = {}) {
-  const raw = site.default_entries || 'Ali\nBeatriz\nCharles\nDiya\nEric\nFatima\nGabriel\nHanna'
+  const raw = site.default_entries || DEFAULT_NAMES
   return makeEntries(raw.split(/\r?\n/).map((s) => s.trim()).filter(Boolean))
 }
 

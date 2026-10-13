@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useApp } from '../store/AppStore'
-import Toolbar from './Toolbar'
+import Toolbar, { Brand } from './Toolbar'
 import LeftColumn from './LeftColumn'
 import WheelStage from './WheelStage'
 import SidePanel from './SidePanel'
@@ -8,7 +8,7 @@ import Footer from './Footer'
 import Icon from './Icon'
 
 export default function Workspace({ children, heading }) {
-  const { activeWheel, panelHidden, fullscreen, setFullscreen, site, t } = useApp()
+  const { activeWheel, panelHidden, fullscreen, setFullscreen, t } = useApp()
   const s = activeWheel.settings
 
   useEffect(() => {
@@ -34,7 +34,9 @@ export default function Workspace({ children, heading }) {
     return (
       <div className="fs-wrap app-bg" style={bgStyle}>
         <div className="fs-bar">
-          <span className="fs-brand">{site.site_name}</span>
+          <span className="fs-brand" onClickCapture={() => { setFullscreen(false); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}) }}>
+            <Brand />
+          </span>
           <button className="icon-btn" onClick={() => { setFullscreen(false); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}) }} aria-label={t('Exit fullscreen')}>
             <Icon name="minimize" />
           </button>

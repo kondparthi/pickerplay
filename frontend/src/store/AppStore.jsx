@@ -24,7 +24,7 @@ const FALLBACK_SETTINGS = {
   page_bg_from: '#dcebfa',
   page_bg_to: '#efe4f6',
   show_info_cards: '1',
-  show_stats: '1',
+  show_stats: '0',
   ads_enabled: '0',
   allow_registration: '1',
   allow_gallery: '1',
@@ -122,8 +122,14 @@ export function AppProvider({ children }) {
     r.style.setProperty('--primary', site.primary_color || '#5546c9')
     r.style.setProperty('--secondary', site.secondary_color || '#29a3e3')
     r.style.setProperty('--accent', site.accent_color || '#7cc22c')
-    r.style.setProperty('--bg-from', site.page_bg_from || '#dcebfa')
-    r.style.setProperty('--bg-to', site.page_bg_to || '#efe4f6')
+    // brand page gradient in light mode; dark mode uses the dark gradient from styles.css
+    if (prefs.dark) {
+      r.style.removeProperty('--bg-from')
+      r.style.removeProperty('--bg-to')
+    } else {
+      r.style.setProperty('--bg-from', site.page_bg_from || '#dcebfa')
+      r.style.setProperty('--bg-to', site.page_bg_to || '#efe4f6')
+    }
     r.classList.toggle('dark', !!prefs.dark)
     r.classList.toggle('reduce-motion', !!prefs.reduceMotion)
     r.lang = lang

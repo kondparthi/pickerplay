@@ -35,7 +35,7 @@ export function getImage(url) {
 /* ---------- segments ---------- */
 export function activePalette(settings) {
   const p = (settings.colors || []).filter((c) => c.enabled).map((c) => c.color)
-  return p.length ? p : ['#33a5e8', '#7cd992', '#f8d85b', '#b67fd6']
+  return p.length ? p : ['#9cd60c', '#ff3269', '#fee20a', '#7c5afe', '#31c0ff']
 }
 
 /**
@@ -157,6 +157,8 @@ export function renderWheel(segs, settings, diameter, opts = {}) {
   }
 
   // labels
+  const scale = Math.max(0.5, Math.min(3, Number(settings.textScale) || 1))
+  const weight = settings.boldText ? 800 : 600
   const rOuter = R * 0.93
   const rInner = centerR + R * 0.035
   const avail = rOuter - rInner
@@ -191,17 +193,17 @@ export function renderWheel(segs, settings, diameter, opts = {}) {
       const room = textRight - rInner
       const rRef = rInner + room * 0.55
       const arcLimit = span >= Math.PI ? R * 0.16 : 2 * rRef * Math.sin(span / 2) * 0.8
-      let fs = Math.min(R * 0.135, arcLimit)
+      let fs = Math.min(R * 0.135 * scale, arcLimit)
       if (fs >= R * 0.012 && room > 4) {
-        ctx.font = `600 ${fs}px ${font}`
+        ctx.font = `${weight} ${fs}px ${font}`
         let w = ctx.measureText(text).width
         if (w > room) {
-          fs = Math.max(fs * (room / w), Math.min(fs, R * 0.045))
-          ctx.font = `600 ${fs}px ${font}`
+          fs = Math.max(fs * (room / w) * 0.97, Math.min(fs, R * 0.045))
+          ctx.font = `${weight} ${fs}px ${font}`
           w = ctx.measureText(text).width
         }
         let label = text
-        if (w > room) label = truncate(ctx, text, room)
+        if (w > room * 1.01) label = truncate(ctx, text, room)
         if (imageMode) {
           ctx.lineWidth = Math.max(2, fs * 0.16)
           ctx.strokeStyle = 'rgba(0,0,0,0.55)'
@@ -210,6 +212,11 @@ export function renderWheel(segs, settings, diameter, opts = {}) {
         }
         ctx.fillStyle = textColor
         ctx.fillText(label, textRight, 0)
+        // dice convention: underline a lone 6 or 9 so they can't be confused when the wheel turns
+        if (label === '6' || label === '9') {
+          const lw = ctx.measureText(label).width
+          ctx.fillRect(textRight - lw, fs * 0.42, lw, Math.max(2, fs * 0.08))
+        }
       }
     }
     ctx.restore()
@@ -292,12 +299,13 @@ export function drawFrame(ctx, size, wheelBitmap, state) {
   ctx.clearRect(0, 0, size, size)
 
   if (state.shadow) {
+    // soft outer glow + offset drop shadow, then a white rim around the wheel
     ctx.save()
     ctx.beginPath()
-    ctx.arc(cx, cy, R, 0, TAU)
-    ctx.shadowColor = 'rgba(0,0,0,0.35)'
-    ctx.shadowBlur = R * 0.07
-    ctx.shadowOffsetY = R * 0.025
+    ctx.arc(cx, cy, R * 1.012, 0, TAU)
+    ctx.shadowColor = 'rgba(20,16,60,0.38)'
+    ctx.shadowBlur = R * 0.11
+    ctx.shadowOffsetY = R * 0.035
     ctx.fillStyle = '#fff'
     ctx.fill()
     ctx.restore()
@@ -321,9 +329,21 @@ export function drawFrame(ctx, size, wheelBitmap, state) {
   }
   ctx.restore()
 
+  if (state.shadow) {
+    ctx.save()
+    ctx.beginPath()
+    ctx.arc(cx, cy, R, 0, TAU)
+    ctx.lineWidth = Math.max(2, R * 0.022)
+    ctx.strokeStyle = 'rgba(255,255,255,0.95)'
+    ctx.stroke()
+    ctx.restore()
+  }
+
+  if (state.centerText) drawCenterLabel(ctx, cx, cy, R * (CENTER_RATIO[state.centerSize] || CENTER_RATIO.M), state.centerText, R)
+
   drawPointer(ctx, cx + R, cy, R, state.pointerColor || '#5546c9', state.pointerTilt || 0)
 
-  if (state.hintAlpha > 0) {
+  if (state.hintAlpha > 0 && !state.centerText) {
     ctx.save()
     ctx.globalAlpha = state.hintAlpha
     const font = `700 ${Math.round(R * 0.15)}px Roboto, Arial, sans-serif`
@@ -331,6 +351,37 @@ export function drawFrame(ctx, size, wheelBitmap, state) {
     arcText(ctx, state.hintBottom || 'or press ctrl+enter', cx, cy, R * 0.66, Math.PI / 2, false, `700 ${Math.round(R * 0.12)}px Roboto, Arial, sans-serif`)
     ctx.restore()
   }
+}
+
+/** White hub with a soft shadow and a label (e.g. SPIN). Drawn every frame so it never rotates. */
+function drawCenterLabel(ctx, cx, cy, r, text, R) {
+  ctx.save()
+  ctx.beginPath()
+  ctx.arc(cx, cy, r, 0, TAU)
+  ctx.shadowColor = 'rgba(0,0,0,0.28)'
+  ctx.shadowBlur = R * 0.05
+  ctx.shadowOffsetY = R * 0.012
+  const g = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.35, r * 0.1, cx, cy, r)
+  g.addColorStop(0, '#ffffff')
+  g.addColorStop(1, '#eef0f6')
+  ctx.fillStyle = g
+  ctx.fill()
+  ctx.shadowColor = 'transparent'
+  ctx.lineWidth = Math.max(1, R * 0.008)
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)'
+  ctx.stroke()
+  let fs = r * 0.62
+  ctx.font = `800 ${fs}px Poppins, Quicksand, "Segoe UI", Roboto, sans-serif`
+  const w = ctx.measureText(text).width
+  if (w > r * 1.6) {
+    fs *= (r * 1.6) / w
+    ctx.font = `800 ${fs}px Poppins, Quicksand, "Segoe UI", Roboto, sans-serif`
+  }
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = '#1b1b2b'
+  ctx.fillText(text, cx, cy + fs * 0.04)
+  ctx.restore()
 }
 
 function drawPointer(ctx, x, y, R, color, tilt) {
@@ -395,6 +446,27 @@ export function renderStatic(canvas, wheel, cssSize, rotation = 0) {
   const { shown } = buildSegments(wheel)
   const { R } = geometry(cssSize)
   const bmp = renderWheel(shown, wheel.settings, R * 2 * dpr)
-  const pointer = wheel.settings.pointerColor || activePalette(wheel.settings)[3 % activePalette(wheel.settings).length]
-  drawFrame(ctx, cssSize, bmp, { rotation, shadow: wheel.settings.shadow !== false, pointerColor: pointer })
+  drawFrame(ctx, cssSize, bmp, {
+    rotation,
+    shadow: wheel.settings.shadow !== false,
+    pointerColor: pointerColorFor(wheel.settings, shown, rotation),
+    ...centerLabel(wheel.settings),
+  })
+}
+
+/** Pointer takes the colour of the slice it points at, unless a fixed colour is chosen. */
+export function pointerColorFor(settings, shown, rotation) {
+  if (settings.pointerColor) return settings.pointerColor
+  if (settings.colorMode !== 'image' && shown.length) {
+    const seg = shown[segmentAt(shown, rotation)]
+    if (seg?.color) return seg.color
+  }
+  const p = activePalette(settings)
+  return p[2 % p.length]
+}
+
+/** Centre label settings (hidden when a centre image is used). */
+export function centerLabel(settings) {
+  const text = settings.centerImage ? '' : (settings.centerText ?? 'SPIN').trim()
+  return { centerText: text, centerSize: settings.centerSize || 'M' }
 }

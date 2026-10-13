@@ -30,7 +30,7 @@ const isWheelPage = (p) => !NON_WHEEL.includes(p) && !p.startsWith('/blog') && !
 // eslint-disable-next-line no-unused-vars
 export default function Toolbar({ minimal = false }) {
   const app = useApp()
-  const { t, openDialog, user, boot, lang, activeWheel, fullscreen, setFullscreen, logout, resetToDefault } = app
+  const { t, openDialog, user, boot, lang, activeWheel, fullscreen, setFullscreen, logout, resetToDefault, prefs, setPrefs } = app
   const nav = useNavigate()
   const { pathname } = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -107,6 +107,10 @@ export default function Toolbar({ minimal = false }) {
         <button className={`tb-btn ${pathname.startsWith('/blog') ? 'is-current' : ''}`} onClick={go(() => nav('/blog'))}>
           <Icon name="book" />
           <span>{t('Blog')}</span>
+        </button>
+        <button className="tb-btn tb-icon-only" onClick={go(() => setPrefs({ dark: !prefs.dark }))} title={prefs.dark ? t('Light mode') : t('Dark mode')} aria-label={prefs.dark ? t('Light mode') : t('Dark mode')}>
+          <Icon name={prefs.dark ? 'sun' : 'moon'} />
+          <span className="mobile-label">{prefs.dark ? t('Light mode') : t('Dark mode')}</span>
         </button>
         <button className="tb-btn tb-icon-only" onClick={go(wheel(toggleFullscreen))} title={t('Fullscreen')} aria-label={t('Fullscreen')}>
           <Icon name={fullscreen ? 'minimize' : 'maximize'} />

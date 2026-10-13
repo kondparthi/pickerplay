@@ -77,6 +77,7 @@ export default {
   "Clear the list": "Vider la liste",
   "Copy": "Copier",
   "Spin the wheel to see results here.": "Tournez la roue pour voir les résultats ici.",
+  "Light mode": "Mode clair",
   "Dark mode": "Mode sombre",
   "Done": "Terminé",
   "Search": "Rechercher",

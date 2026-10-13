@@ -1,6 +1,6 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
 import {
-  buildSegments, drawFrame, geometry, layout, onImageLoaded, renderWheel, segmentAt, activePalette, TAU,
+  buildSegments, drawFrame, geometry, layout, onImageLoaded, renderWheel, segmentAt, TAU, pointerColorFor, centerLabel,
 } from '../lib/wheelRender'
 import { randomInt, secureRandom, weightedIndex } from '../lib/random'
 import { startDrumroll, stopDrumroll, tick, unlockAudio } from '../lib/audio'
@@ -148,12 +148,12 @@ const Wheel = forwardRef(function Wheel(
       }
 
       if (s.dirty && s.size) {
-        const palette = activePalette(settings)
         ctx.setTransform(s.dpr, 0, 0, s.dpr, 0, 0)
         drawFrame(ctx, s.size, s.bmp, {
           rotation: s.rotation,
           shadow: settings.shadow !== false,
-          pointerColor: settings.pointerColor || palette[3 % palette.length],
+          pointerColor: pointerColorFor(settings, s.segs.shown, s.rotation),
+          ...centerLabel(settings),
           pointerTilt: s.tilt,
           hintAlpha: s.hintAlpha,
           hintTop,

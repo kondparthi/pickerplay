@@ -77,6 +77,7 @@ export default {
   "Clear the list": "జాబితా క్లియర్",
   "Copy": "కాపీ",
   "Spin the wheel to see results here.": "ఫలితాల కోసం వీల్ తిప్పండి.",
+  "Light mode": "లైట్ మోడ్",
   "Dark mode": "డార్క్ మోడ్",
   "Done": "పూర్తయింది",
   "Search": "వెతుకు",

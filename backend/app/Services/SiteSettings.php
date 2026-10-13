@@ -35,13 +35,13 @@ class SiteSettings
         'contact_email' => ['support@pickerplay.com', true],
         'version' => ['1.0.0', true],
         // Wheel defaults for brand-new visitors
-        'default_entries' => ["Ali\nBeatriz\nCharles\nDiya\nEric\nFatima\nGabriel\nHanna", true],
-        'default_colors' => ['#33a5e8,#7cd992,#f8d85b,#b67fd6', true],
+        'default_entries' => ["Emma\nLiam\nOlivia\nNoah\nAva", true],
+        'default_colors' => ['#9cd60c,#ff3269,#fee20a,#7c5afe,#31c0ff', true],
         'default_spin_time' => ['10', true],
         'default_popup_message' => ['We have a winner!', true],
         // Home page
         'show_info_cards' => ['1', true],
-        'show_stats' => ['1', true],
+        'show_stats' => ['0', true],
         'stats_offset_spins' => ['0', true],
         'stats_offset_hours' => ['0', true],
         'gallery_tags' => ['yes no,numbers,names,food,team,classroom,games,truth or dare,countries,colors', true],

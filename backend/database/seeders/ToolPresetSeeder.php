@@ -60,7 +60,13 @@ class ToolPresetSeeder extends Seeder
         // Rewritten page content lives in database/seeders/content/*.php
         $pages = array_merge(require __DIR__.'/content/tools_a.php', require __DIR__.'/content/tools_b.php');
 
+        $v2 = require __DIR__.'/content/presets_v2.php';
+
         foreach ($tools as $i => [$slug, $name, $emoji, $intro, $entries, $settings]) {
+            if (isset($v2[$slug])) {
+                $entries = $v2[$slug]['entries'];
+                $settings = array_merge($settings, $v2[$slug]['settings']);
+            }
             $config = WheelConfig::sanitize([
                 'title' => $name,
                 'entries' => array_map(fn ($e) => is_array($e) ? $e : ['text' => $e], $entries),

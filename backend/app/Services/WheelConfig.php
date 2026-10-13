@@ -51,6 +51,9 @@ class WheelConfig
         'pointerColor' => 'color',
         'textColor' => 'color',
         'font' => 'string:60',
+        'centerText' => 'string:12',
+        'textScale' => 'float:0.5:3',
+        'boldText' => 'bool',
     ];
 
     public static function sanitize(array $config): array
@@ -84,7 +87,7 @@ class WheelConfig
                 'color' => self::color($e['color'] ?? null),
                 'weight' => isset($e['weight']) ? max(0, min(1000, round((float) $e['weight'], 3))) : 1,
                 'enabled' => array_key_exists('enabled', $e) ? (bool) $e['enabled'] : true,
-                'message' => isset($e['message']) ? mb_substr((string) $e['message'], 0, 300) : null,
+                'message' => isset($e['message']) ? mb_substr((string) $e['message'], 0, 6000) : null,
             ], fn ($v) => $v !== null);
         }
 
@@ -116,6 +119,8 @@ class WheelConfig
                 return (bool) $v;
             case 'int':
                 return max((int) $parts[1], min((int) $parts[2], (int) $v));
+            case 'float':
+                return is_numeric($v) ? max((float) $parts[1], min((float) $parts[2], round((float) $v, 2))) : null;
             case 'string':
                 return is_scalar($v) ? mb_substr((string) $v, 0, (int) $parts[1]) : null;
             case 'enum':

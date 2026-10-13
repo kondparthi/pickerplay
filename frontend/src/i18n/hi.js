@@ -77,6 +77,7 @@ export default {
   "Clear the list": "सूची साफ़ करें",
   "Copy": "कॉपी",
   "Spin the wheel to see results here.": "परिणाम देखने के लिए व्हील घुमाएँ।",
+  "Light mode": "लाइट मोड",
   "Dark mode": "डार्क मोड",
   "Done": "हो गया",
   "Search": "खोजें",

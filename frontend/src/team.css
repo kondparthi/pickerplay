@@ -66,3 +66,11 @@ html.dark .tp-intro h2 { color: #b3a9ff; }
 .tp-info details { border-bottom: 1px solid var(--border); padding: 8px 0; }
 .tp-info details summary { cursor: pointer; font-weight: 500; }
 .tp-info details p { margin: 6px 0 0; color: var(--text-2); }
+
+/* − n + stepper */
+.tp-stepper { display: inline-flex; align-items: stretch; border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); width: 100%; max-width: 220px; }
+.tp-stepper button { flex: none; width: 46px; border: 0; background: var(--surface-3); color: var(--text); font-size: 22px; font-weight: 600; cursor: pointer; line-height: 1; }
+.tp-stepper button:hover:not(:disabled) { background: var(--primary); color: #fff; }
+.tp-stepper button:disabled { opacity: .4; cursor: not-allowed; }
+.tp-stepper .input { flex: 1; min-width: 0; border: 0; border-radius: 0; text-align: center; font-size: 18px; font-weight: 700; height: 42px; background: transparent; }
+.tp-stepper .input:focus { outline: 2px solid var(--primary); outline-offset: -2px; }

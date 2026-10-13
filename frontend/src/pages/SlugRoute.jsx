@@ -7,6 +7,7 @@ import Workspace from '../components/Workspace'
 import InfoCards from '../components/InfoCards'
 import ToolContent from '../components/ToolContent'
 import NotFound from './NotFound'
+import LeagueFilter from '../components/LeagueFilter'
 
 const SHARE_RE = /^[a-z0-9]{3}-[a-z0-9]{3}$/i
 
@@ -62,7 +63,7 @@ export default function SlugRoute() {
 
   const tool = state.tool
   return (
-    <Workspace heading={tool ? <h1 className="tool-heading">{tool.emoji} {tool.heading || tool.name}</h1> : null}>
+    <Workspace heading={tool ? <><h1 className="tool-heading">{tool.emoji} {tool.heading || tool.name}</h1><LeagueFilter key={tool.slug} slug={tool.slug} /></> : null}>
       {tool ? <ToolContent html={tool.content} heading={tool.meta_title?.split('|')[0].trim() || tool.heading} currentSlug={tool.slug} /> : <InfoCards />}
     </Workspace>
   )
