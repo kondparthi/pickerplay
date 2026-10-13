@@ -49,6 +49,11 @@ class SiteSettings
         'ads_enabled' => ['0', true],
         'ad_code' => ['', true],
         'ad_code_mobile' => ['', true],
+        'adsense_client' => ['', true],          // ca-pub-XXXXXXXXXXXXXXXX – loads AdSense (Auto ads) site-wide + builds ads.txt
+        'ad_code_content' => ['', true],         // in-content ad unit (blog, team picker, game pages)
+        'ad_places' => ['wheel,tool,team,blog_list,blog_post', true],
+        'ads_closable' => ['1', true],
+        'ads_txt' => ['', false],               // extra ads.txt lines for other ad networks
         'ad_report_email' => ['support@pickerplay.com', true],
         // SEO / tracking
         'meta_title' => ['PickerPlay – Random Name Picker Wheel & Spinner', true],
@@ -87,6 +92,14 @@ class SiteSettings
     public static function get(string $key, mixed $default = null): mixed
     {
         return self::all()[$key] ?? $default;
+    }
+
+    /** AdSense publisher ID normalised to "pub-1234567890123456" (accepts ca-pub-…, pub-… or digits). */
+    public static function adsensePub(): ?string
+    {
+        $digits = preg_replace('/\D+/', '', (string) self::get('adsense_client', ''));
+
+        return strlen($digits) >= 10 ? 'pub-'.$digits : null;
     }
 
     public static function isPublic(string $key): bool

@@ -82,6 +82,7 @@ export default {
   "Search": "Rechercher",
   "Edit title": "Modifier le titre",
   "Shared": "Partagée",
+  "Advertisement": "Publicité",
   "Report bad ad": "Signaler une annonce",
   "Close ads": "Fermer les annonces",
   "What is the wheel spinner for?": "À quoi sert la roue ?",

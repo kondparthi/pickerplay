@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../store/AppStore'
+import AdSlot from './AdSlot'
 import '../content.css'
 
 /**
@@ -40,14 +41,18 @@ export default function ToolContent({ html, heading, currentSlug }) {
       )}
       <section className="info-grid pc-grid">
         {sections.map((s, i) => (
-          <article key={i} className="info-card card pc-card">
+          <Fragment key={i}>
+          {i === 2 && <AdSlot place="tool" className="grid-ad" />}
+          <article className="info-card card pc-card">
             <h2>
               {site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" />}
               {s.title}
             </h2>
             <div className="pc-body" dangerouslySetInnerHTML={{ __html: s.html }} />
           </article>
+          </Fragment>
         ))}
+        {sections.length < 2 && <AdSlot place="tool" className="grid-ad" />}
         <article className="info-card card pc-card">
           <h2>
             {site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" />}

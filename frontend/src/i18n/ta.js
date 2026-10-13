@@ -82,6 +82,7 @@ export default {
   "Search": "தேடு",
   "Edit title": "தலைப்பைத் திருத்து",
   "Shared": "பகிரப்பட்டது",
+  "Advertisement": "விளம்பரம்",
   "Report bad ad": "மோசமான விளம்பரத்தைப் புகாரளி",
   "Close ads": "விளம்பரங்களை மூடு",
   "What is the wheel spinner for?": "சக்கரம் எதற்காக?",

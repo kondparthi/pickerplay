@@ -47,4 +47,25 @@ class SitemapController extends Controller
 
         return response($txt, 200, ['Content-Type' => 'text/plain']);
     }
+
+    /** ads.txt – built from the AdSense publisher ID plus any extra lines added in Admin → Ads. */
+    public function adsTxt(): Response
+    {
+        $lines = [];
+        $pub = \App\Services\SiteSettings::adsensePub();
+        if ($pub) {
+            $lines[] = "google.com, {$pub}, DIRECT, f08c47fec0942fa0";
+        }
+        foreach (preg_split('/\r?\n/', (string) \App\Services\SiteSettings::get('ads_txt', '')) as $l) {
+            $l = trim($l);
+            if ($l !== '' && ! in_array($l, $lines, true)) {
+                $lines[] = $l;
+            }
+        }
+
+        return response($lines ? implode("\n", $lines)."\n" : "# No ad networks configured yet\n", 200, [
+            'Content-Type' => 'text/plain; charset=UTF-8',
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
+    }
 }

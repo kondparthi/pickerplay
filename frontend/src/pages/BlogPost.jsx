@@ -6,6 +6,7 @@ import { api } from '../lib/api'
 import { normalizeHtml, slugifyText } from '../lib/content'
 import Toolbar from '../components/Toolbar'
 import Footer from '../components/Footer'
+import AdSlot from '../components/AdSlot'
 import Icon from '../components/Icon'
 import NotFound from './NotFound'
 import { Cover, PostCard, fmtDate } from './BlogList'
@@ -148,6 +149,7 @@ export default function BlogPost() {
                   </details>
                 )}
                 <div className="bp-prose" dangerouslySetInnerHTML={{ __html: html }} />
+                <AdSlot place="blog_post" />
 
                 {post.tags?.length > 0 && (
                   <div className="bp-tags">

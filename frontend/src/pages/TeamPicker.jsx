@@ -10,6 +10,7 @@ import { playAfter, tick, unlockAudio } from '../lib/audio'
 import { store, downloadJson } from '../lib/storage'
 import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
+import AdSlot from '../components/AdSlot'
 import '../team.css'
 
 function Card({ title, children }) {
@@ -35,7 +36,7 @@ function TeamContent() {
       <section className="tp-intro">
         <h2>{t('Team Picker – Random Team Generator')} | {name}</h2>
         <p className="tp-lead">{t('Tired of “that’s not fair!” and 10 minutes wasted picking teams?')}</p>
-        <p>{t('Paste your list of names and split it into fair, random teams in one click. No sign-up, no ads in the way, 100% free. Also known as a random group generator, team randomizer or team picker wheel, it is the fastest way to make unbiased teams for games, classrooms, work projects and events.')}</p>
+        <p>{t('Paste your list of names and split it into fair, random teams in one click. No sign-up, no install, 100% free. Also known as a random group generator, team randomizer or team picker wheel, it is the fastest way to make unbiased teams for games, classrooms, work projects and events.')}</p>
       </section>
       <section className="info-grid tp-info">
         <Card title={t('How to split a list of names into teams')}>
@@ -379,6 +380,7 @@ export default function TeamPicker() {
         </section>
       </main>
 
+      <div className="content-ad-wrap"><AdSlot place="team" /></div>
       <TeamContent />
       <Footer />
     </div>

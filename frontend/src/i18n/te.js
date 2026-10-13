@@ -82,6 +82,7 @@ export default {
   "Search": "వెతుకు",
   "Edit title": "శీర్షిక మార్చు",
   "Shared": "షేర్ చేయబడింది",
+  "Advertisement": "ప్రకటన",
   "Report bad ad": "చెడు ప్రకటనను నివేదించు",
   "Close ads": "ప్రకటనలు మూసివేయి",
   "What is the wheel spinner for?": "వీల్ స్పిన్నర్ దేనికి?",

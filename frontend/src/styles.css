@@ -523,3 +523,14 @@ html.dark .fs-bar { background: rgba(0,0,0,.25); }
   .adv-pct { display: none; }
 }
 .winner-modal .modal-body .modal-foot { padding: 14px 22px 18px; }
+
+/* ---------- in-content ad slots ---------- */
+.ad-inline { max-width: 100%; margin: 0 auto 16px; padding: 10px 12px 12px; border-radius: 14px; background: var(--surface, #fff); border: 1px dashed var(--border); align-items: center; }
+.ad-inline .ad-links { width: 100%; justify-content: flex-end; align-items: center; font-size: 13px; }
+.ad-inline .ad-label { margin-right: auto; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted, #888); }
+.ad-inline .ad-content { max-width: 100%; width: 100%; min-height: 90px; display: flex; justify-content: center; }
+.ad-inline .ad-content > * { max-width: 100%; }
+.info-grid .grid-ad { column-span: all; break-inside: avoid; }
+.content-ad-wrap { padding: 0 16px; max-width: 1100px; margin: 8px auto 0; }
+.bp-body .ad-inline { margin: 28px 0; }
+.bl-wrap > .ad-inline { margin: 18px 0; }

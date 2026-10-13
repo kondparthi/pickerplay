@@ -82,6 +82,7 @@ export default {
   "Search": "Buscar",
   "Edit title": "Editar título",
   "Shared": "Compartida",
+  "Advertisement": "Publicidad",
   "Report bad ad": "Denunciar anuncio",
   "Close ads": "Cerrar anuncios",
   "What is the wheel spinner for?": "¿Para qué sirve la ruleta?",

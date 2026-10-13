@@ -38,6 +38,14 @@ function AssetUpload({ label, k, value, onUploaded, help }) {
   )
 }
 
+const AD_PLACES = [
+  ['wheel', 'Beside the wheel', 'Home, game & shared wheel pages'],
+  ['tool', 'Inside page content', 'Between the info cards below the wheel'],
+  ['team', 'Team Picker', 'Above the Team Picker guide'],
+  ['blog_list', 'Blog list', 'Below the featured article'],
+  ['blog_post', 'Blog articles', 'At the end of each article'],
+]
+
 const SECTIONS = ['Branding', 'Wheel defaults', 'Home page', 'Ads', 'SEO & tracking', 'Features', 'Integrations']
 
 export default function SettingsPage() {
@@ -149,10 +157,45 @@ export default function SettingsPage() {
         )}
         {section === 'Ads' && (
           <>
-            <Toggle checked={s.ads_enabled === '1'} onChange={flag('ads_enabled')} label="Show ads (left of the wheel on desktop, below on mobile)" />
-            {area('ad_code', 'Ad code (desktop)', 'Paste your AdSense / ad network HTML including <script> tags.', 6)}
-            {area('ad_code_mobile', 'Ad code (mobile, optional)', 'Used on screens narrower than 760px.', 4)}
+            <Toggle checked={s.ads_enabled === '1'} onChange={flag('ads_enabled')} label="Show ads on the website" />
+
+            <div className="ads-sub">Google AdSense</div>
+            {text('adsense_client', 'AdSense publisher ID', 'From AdSense → Account → Account information, e.g. ca-pub-1234567890123456. Loads AdSense on every public page (needed for site approval and Auto ads) and fills ads.txt automatically.', { placeholder: 'ca-pub-0000000000000000' })}
+            <div className="ads-note">
+              <Icon name="check" size={16} />
+              <span>
+                Your ads.txt: <a href="/ads.txt" target="_blank" rel="noreferrer">{window.location.origin}/ads.txt</a> — open it after saving to confirm the
+                <code>google.com, pub-…, DIRECT</code> line. For European/UK visitors turn on Google’s consent message in
+                AdSense → <b>Privacy &amp; messaging</b> (no code needed).
+              </span>
+            </div>
+
+            <div className="ads-sub">Where ads appear</div>
+            <div className="ads-places">
+              {AD_PLACES.map(([k, label, help]) => {
+                const list = (s.ad_places ?? '').split(',').filter(Boolean)
+                const on = list.includes(k)
+                return (
+                  <label key={k} className={`ads-place ${on ? 'on' : ''}`}>
+                    <input type="checkbox" checked={on} onChange={() => setS((x) => {
+                      const cur = (x.ad_places ?? '').split(',').filter(Boolean)
+                      return { ...x, ad_places: (on ? cur.filter((c) => c !== k) : [...cur, k]).join(',') }
+                    })} />
+                    <span><b>{label}</b><small>{help}</small></span>
+                  </label>
+                )
+              })}
+            </div>
+
+            <div className="ads-sub">Ad unit codes</div>
+            {area('ad_code', 'Beside-the-wheel ad (desktop)', 'Paste the AdSense ad unit code (the <ins class="adsbygoogle"> block with its <script>). A 300×250 or 300×600 unit fits best.', 6)}
+            {area('ad_code_mobile', 'Beside-the-wheel ad (mobile, optional)', 'Used on screens narrower than 760px. A responsive or 320×100 unit works well.', 4)}
+            {area('ad_code_content', 'In-content ad (blog, Team Picker, game pages)', 'A responsive / in-article unit. If empty, the desktop code above is used.', 5)}
+
+            <div className="ads-sub">Options</div>
+            <Toggle checked={s.ads_closable !== '0'} onChange={flag('ads_closable')} label='Let visitors hide ads with "Close ads" for their visit' />
             {text('ad_report_email', '"Report bad ad" email')}
+            {area('ads_txt', 'Extra ads.txt lines (other ad networks)', 'One line per network, e.g. from Ezoic, Media.net. The AdSense line is added automatically.', 3)}
           </>
         )}
         {section === 'SEO & tracking' && (

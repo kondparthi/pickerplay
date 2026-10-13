@@ -82,6 +82,7 @@ export default {
   "Search": "खोजें",
   "Edit title": "शीर्षक संपादित करें",
   "Shared": "साझा",
+  "Advertisement": "विज्ञापन",
   "Report bad ad": "खराब विज्ञापन की रिपोर्ट करें",
   "Close ads": "विज्ञापन बंद करें",
   "What is the wheel spinner for?": "व्हील स्पिनर किस लिए है?",

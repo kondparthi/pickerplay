@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useApp } from '../store/AppStore'
 import { api } from '../lib/api'
 import Odometer from './Odometer'
+import AdSlot from './AdSlot'
 
 function Card({ title, children }) {
   const { site } = useApp()
@@ -68,6 +69,8 @@ export default function InfoCards() {
         </ul>
       </Card>
 
+      <AdSlot place="tool" className="grid-ad" />
+
       <Card title={t('Is the wheel truly random?')}>
         <p>{t('Yes. Every result comes from your browser’s cryptographically secure random generator (crypto.getRandomValues), not Math.random(). The winner is chosen first, then the animation lands the pointer on it.')}</p>
         <button className="btn btn-primary" onClick={() => openDialog('fairness')}>
@@ -113,7 +116,7 @@ export default function InfoCards() {
         <Link to="/page/privacy">{t('Privacy policy')}</Link>
       </Card>
 
-      {site.ads_enabled === '1' && (
+      {site.ads_enabled === '1' && site.ads_closable !== '0' && (
         <Card title={t('Can I close the ads?')}>
           <p>{t('Ads keep this site free. Press the × next to "Close ads" and they disappear for the rest of your visit.')}</p>
         </Card>

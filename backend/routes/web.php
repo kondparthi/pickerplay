@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'sitemap']);
 Route::get('/robots.txt', [SitemapController::class, 'robots']);
+Route::get('/ads.txt', [SitemapController::class, 'adsTxt']);
 
 // Everything else is handled by the React single-page app
 Route::get('/{any?}', SpaController::class)

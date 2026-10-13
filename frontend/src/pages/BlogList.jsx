@@ -4,6 +4,7 @@ import { useApp } from '../store/AppStore'
 import { api } from '../lib/api'
 import Toolbar from '../components/Toolbar'
 import Footer from '../components/Footer'
+import AdSlot from '../components/AdSlot'
 import Icon from '../components/Icon'
 import '../blog.css'
 
@@ -108,6 +109,7 @@ export default function BlogList() {
             <p className="muted">{state.total} {t('articles')}{q ? ` · “${q}”` : ''}{category ? ` · ${category}` : ''} · <button className="linkish" onClick={() => setParams({})}>{t('Clear filters')}</button></p>
           )}
           {showFeatured && <PostCard post={first} featured />}
+          <AdSlot place="blog_list" />
           <div className="bl-grid">
             {(showFeatured ? rest : state.items).map((p) => <PostCard key={p.id} post={p} />)}
           </div>

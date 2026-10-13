@@ -117,6 +117,7 @@ class SpaController extends Controller
             ! empty($s['google_analytics_id']) ? $this->analytics($s['google_analytics_id']) : null,
             ! empty($s['custom_css']) ? '<style id="pp-custom-css">'.str_ireplace('</style', '', $s['custom_css']).'</style>' : null,
             $s['custom_head_html'] ?? null,
+            $this->adsense($s, $path),
         ]));
 
         $html = file_get_contents($indexFile);
@@ -151,5 +152,21 @@ class SpaController extends Controller
 
         return "<script async src=\"https://www.googletagmanager.com/gtag/js?id={$id}\"></script>"
             ."<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{$id}');</script>";
+    }
+
+    /** AdSense loader (enables Auto ads + manual units). Never on admin/account pages or on embeds framed by other sites. */
+    private function adsense(array $s, string $path): ?string
+    {
+        $pub = SiteSettings::adsensePub();
+        if (! $pub || ($s['ads_enabled'] ?? '0') !== '1') {
+            return null;
+        }
+        if (preg_match('#^(admin|account|reset-password|embed/)#', $path)) {
+            return null;
+        }
+        $client = 'ca-'.$pub;
+
+        return '<meta name="google-adsense-account" content="'.$client.'">'."\n    "
+            .'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='.$client.'" crossorigin="anonymous"></script>';
     }
 }
