@@ -3,12 +3,13 @@ import { Link, useLocation } from 'react-router-dom'
 import { useApp } from '../store/AppStore'
 import Icon from './Icon'
 import '../megamenu.css'
+import ToolIcon from './ToolIcon'
 
 // Column layout for the mega menu. Tools added later in /admin that are not
 // listed here appear automatically under "More pickers".
 const GROUPS = [
-  { title: 'Popular', slugs: ['__wheel', '__team', 'yes-no-wheel', 'truth-or-dare-wheel', 'what-to-eat-wheel'] },
-  { title: 'Decisions & games', slugs: ['yes-no-maybe-wheel', 'coin-flip-wheel', 'dice-roller-wheel', 'day-picker'] },
+  { title: 'Popular', slugs: ['__wheel', '__team', '__poll', 'yes-no-wheel', 'truth-or-dare-wheel'] },
+  { title: 'Decisions & games', slugs: ['yes-no-maybe-wheel', 'coin-flip-wheel', 'dice-roller-wheel', 'what-to-eat-wheel', 'day-picker'] },
   { title: 'Numbers, letters & colors', slugs: ['number-picker', 'number-picker-1-100', 'letter-picker', 'color-picker'] },
   { title: 'Places & sports', slugs: ['country-picker', 'state-picker', 'nba-team-picker', 'nfl-team-picker', 'mlb-team-picker'] },
 ]
@@ -16,6 +17,7 @@ const GROUPS = [
 const BUILTIN = {
   __wheel: { slug: '', name: 'Wheel spinner', emoji: '🎡', desc: 'Spin any list of names' },
   __team: { slug: 'team-picker', name: 'Team Picker', emoji: '👥', desc: 'Split names into teams' },
+  __poll: { slug: 'polling-wheel', name: 'Polling Wheel', emoji: '🗳️', desc: 'Share a poll, see live votes', badge: 'New' },
 }
 
 export default function MegaMenu({ onNavigate }) {
@@ -94,9 +96,9 @@ export default function MegaMenu({ onNavigate }) {
                     className={`mm-item ${isCurrent(tool.slug) ? 'current' : ''}`}
                     onClick={() => { setOpen(false); onNavigate?.() }}
                   >
-                    <span className="mm-icon">{tool.emoji || '🎯'}</span>
+                    <span className="mm-icon"><ToolIcon icon={tool.emoji} /></span>
                     <span className="mm-text">
-                      <span className="mm-name">{t(tool.name)}</span>
+                      <span className="mm-name">{t(tool.name)}{tool.badge && <em className="mm-badge">{t(tool.badge)}</em>}</span>
                       {tool.desc && <span className="mm-desc">{t(tool.desc)}</span>}
                     </span>
                   </Link>

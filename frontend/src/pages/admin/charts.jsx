@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import ToolIcon from '../../components/ToolIcon'
 
 /* Shared, dependency-free SVG charts for the admin analytics views. */
 
@@ -113,7 +114,7 @@ export function GameBars({ games = [], metric = 'visitors', limit, onPick }) {
       {list.map((g) => (
         <li key={g.path} title={`${g.label}: ${(g.views || 0).toLocaleString()} views · ${(g.visitors || 0).toLocaleString()} visitors · ${(g.spins || 0).toLocaleString()} spins`}
           onClick={onPick ? () => onPick(g) : undefined}>
-          <span className="an-bar-label"><em>{g.emoji || '🎯'}</em>{g.label}</span>
+          <span className="an-bar-label"><em><ToolIcon icon={g.emoji} /></em>{g.label}</span>
           <span className="an-bar-track"><i style={{ width: `${(g[metric] || 0) ? Math.max(1.5, ((g[metric] || 0) / max) * 100) : 0}%` }} /></span>
           <span className="an-bar-val">{(g[metric] || 0).toLocaleString()}</span>
         </li>

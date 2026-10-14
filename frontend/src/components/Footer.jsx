@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useApp } from '../store/AppStore'
 import Icon from './Icon'
+import ToolIcon from './ToolIcon'
 
 export default function Footer() {
   const { boot, site, openDialog, t } = useApp()
@@ -12,7 +13,7 @@ export default function Footer() {
         <div className="footer-tools">
           {tools.map((tool) => (
             <Link key={tool.slug} to={`/${tool.slug}`}>
-              {tool.emoji} {tool.name}
+              <ToolIcon icon={tool.emoji} /> {tool.name}
             </Link>
           ))}
         </div>

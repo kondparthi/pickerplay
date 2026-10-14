@@ -11,12 +11,12 @@ class GallerySeeder extends Seeder
     public function run(): void
     {
         $samples = [
-            ['Rainbow colours', ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']],
-            ['Dinner ideas', ['Pizza', 'Biryani', 'Tacos', 'Sushi', 'Pasta', 'Dosa', 'Burger', 'Noodles']],
-            ['Classroom jobs', ['Line leader', 'Door holder', 'Board cleaner', 'Plant waterer', 'Paper passer', 'Librarian']],
-            ['Weekend activity', ['Movie night', 'Hike', 'Board games', 'Cook together', 'Visit a museum', 'Picnic']],
-            ['Team names', ['Thunder', 'Falcons', 'Rockets', 'Tigers', 'Sharks', 'Wolves']],
-            ['Workout of the day', ['Push-ups', 'Squats', 'Plank', 'Burpees', 'Lunges', 'Jumping jacks', 'Rest day']],
+            ['Rainbow Colors', ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']],
+            ['Dinner Ideas', ['Pizza', 'Biryani', 'Tacos', 'Sushi', 'Pasta', 'Dosa', 'Burger', 'Noodles']],
+            ['Classroom Jobs', ['Line leader', 'Door holder', 'Board cleaner', 'Plant waterer', 'Paper passer', 'Librarian']],
+            ['Weekend Activity', ['Movie night', 'Hike', 'Board games', 'Cook together', 'Visit a museum', 'Picnic']],
+            ['Team Names', ['Thunder', 'Falcons', 'Rockets', 'Tigers', 'Sharks', 'Wolves']],
+            ['Workout Of The Day', ['Push-ups', 'Squats', 'Plank', 'Burpees', 'Lunges', 'Jumping jacks', 'Rest day']],
         ];
         foreach ($samples as $i => [$title, $entries]) {
             if (Wheel::where('kind', 'shared')->where('title', $title)->exists()) {

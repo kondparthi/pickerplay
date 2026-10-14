@@ -3,6 +3,7 @@ import { useApp } from '../../store/AppStore'
 import { useResource } from './common'
 import Icon from '../../components/Icon'
 import { Delta, GameBars, TrendChart } from './charts'
+import ToolIcon from '../../components/ToolIcon'
 
 const TILES = [
   ['spins_year', 'Spins this year', 'dice', '#5546c9'],
@@ -91,7 +92,7 @@ export default function Dashboard() {
           {anGames.length > 7 && (
             <div className="db-least">
               <span className="muted small">Least visited:</span>
-              {anGames.slice(-3).reverse().map((g) => <span key={g.path} className="an-pill zero">{g.emoji} {g.label} · {g.visitors}</span>)}
+              {anGames.slice(-3).reverse().map((g) => <span key={g.path} className="an-pill zero"><ToolIcon icon={g.emoji} /> {g.label} · {g.visitors}</span>)}
             </div>
           )}
         </div>

@@ -43,7 +43,7 @@ class ToolPresetSeeder extends Seeder
                 ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], []],
             ['what-to-eat-wheel', 'What Should I Eat Wheel', '🍕', 'Hungry and undecided? Spin the food wheel to pick what to eat today.',
                 explode(',', $food), []],
-            ['truth-or-dare-wheel', 'Truth or Dare Wheel', '🎲', 'Spin to decide: truth or dare? A fun party game picker.',
+            ['truth-or-dare-wheel', 'Truth or Dare Wheel', '/brand/tod.svg', 'Spin to decide: truth or dare? A fun party game picker.',
                 ['Truth', 'Dare', 'Truth', 'Dare'], ['colors' => [['color' => '#1e88e5', 'enabled' => true], ['color' => '#e53935', 'enabled' => true]]]],
             ['nba-team-picker', 'NBA Team Picker', '🏀', 'Pick a random NBA team for drafts, fantasy leagues or video game matches.',
                 explode(',', $nba), []],
@@ -53,7 +53,7 @@ class ToolPresetSeeder extends Seeder
                 explode(',', $mlb), []],
             ['coin-flip-wheel', 'Heads or Tails', '🪙', 'A fair coin toss on a wheel: heads or tails.',
                 ['Heads', 'Tails'], ['colors' => [['color' => '#ffb300', 'enabled' => true], ['color' => '#90a4ae', 'enabled' => true]], 'spinTime' => 4]],
-            ['dice-roller-wheel', 'Dice Roller Wheel', '🎯', 'Roll a virtual six-sided die using the wheel.',
+            ['dice-roller-wheel', 'Dice Roller Wheel', '🎲', 'Roll a virtual six-sided die using the wheel.',
                 ['1', '2', '3', '4', '5', '6'], ['spinTime' => 4]],
         ];
 

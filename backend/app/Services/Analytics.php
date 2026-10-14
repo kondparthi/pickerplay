@@ -38,6 +38,8 @@ class Analytics
         return match (true) {
             $path === '/' => [$path, 'home'],
             $path === '/team-picker' => [$path, 'team'],
+            $path === '/polling-wheel' => [$path, 'poll'],
+            (bool) preg_match('#^/poll/[a-z0-9]{7}(/results)?$#', $path) => [preg_replace('#/results$#', '', $path), 'poll_vote'],
             $path === '/gallery' => [$path, 'gallery'],
             $path === '/blog' => [$path, 'blog_list'],
             str_starts_with($path, '/blog/') => [$path, 'blog'],
@@ -56,6 +58,8 @@ class Analytics
         return match ($type) {
             'home' => 'Wheel spinner (home)',
             'team' => 'Team Picker',
+            'poll' => 'Polling Wheel',
+            'poll_vote' => 'Poll: '.mb_substr((string) \App\Models\Poll::where('code', substr($path, 6))->value('question'), 0, 120),
             'gallery' => 'Gallery',
             'blog_list' => 'Blog',
             'blog' => Post::where('slug', $slug)->value('title'),
@@ -159,7 +163,7 @@ class Analytics
 
         // every game, including ones nobody opened in this period ("rarely used")
         $byPath = $pages->keyBy('path');
-        $games = collect([['/', 'Wheel spinner (home)', '🎡'], ['/team-picker', 'Team Picker', '👥']])
+        $games = collect([['/', 'Wheel spinner (home)', '🎡'], ['/team-picker', 'Team Picker', '👥'], ['/polling-wheel', 'Polling Wheel', '🗳️']])
             ->merge(ToolPreset::where('is_active', true)->orderBy('sort_order')->get()->map(fn ($t) => ['/'.$t->slug, $t->name, $t->emoji]))
             ->map(function ($g) use ($byPath) {
                 $r = $byPath[$g[0]] ?? null;

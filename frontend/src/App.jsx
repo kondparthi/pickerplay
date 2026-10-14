@@ -10,6 +10,7 @@ import Account from './pages/Account'
 import ResetPassword from './pages/ResetPassword'
 import NotFound from './pages/NotFound'
 import TeamPicker from './pages/TeamPicker'
+import { PollCreate, PollResults, PollVote } from './pages/Polling'
 import BlogList from './pages/BlogList'
 import BlogPost from './pages/BlogPost'
 import Dialogs from './components/Dialogs'
@@ -41,6 +42,9 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/team-picker" element={<TeamPicker />} />
+        <Route path="/polling-wheel" element={<PollCreate />} />
+        <Route path="/poll/:code" element={<PollVote />} />
+        <Route path="/poll/:code/results" element={<PollResults />} />
         <Route path="/blog" element={<BlogList />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/embed/:code" element={<EmbedRoute />} />

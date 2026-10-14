@@ -77,6 +77,18 @@ class SpaController extends Controller
                 $status = 404;
                 $meta['robots'] = 'noindex';
             }
+        } elseif ($path === 'polling-wheel') {
+            $meta['title'] = "Polling Wheel – Create a Free Online Poll & Vote | {$site}";
+            $meta['description'] = 'Create a quick poll with Yes, No, Maybe or your own answers, share the link and watch the votes fill a live results wheel. Free for teams, classes and groups.';
+        } elseif (preg_match('#^poll/([a-z0-9]{7})(/results)?$#i', $path, $m)) {
+            $poll = \App\Models\Poll::where('code', strtolower($m[1]))->first();
+            $meta['robots'] = 'noindex,nofollow';
+            if ($poll) {
+                $meta['title'] = "Vote: {$poll->question} | {$site}";
+                $meta['description'] = 'Cast your vote: '.Str::limit(collect($poll->options)->pluck('text')->implode(' · '), 140);
+            } else {
+                $status = 404;
+            }
         } elseif ($path === 'team-picker') {
             $meta['title'] = "Team Picker – Random Team Generator | {$site}";
             $meta['description'] = 'Split names into random, fair teams or groups in one click. Pick team leaders, balance by gender or skill, copy or download the result. Free.';

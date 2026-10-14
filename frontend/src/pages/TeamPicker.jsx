@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../lib/api'
 import AdSlot from '../components/AdSlot'
 import '../team.css'
+import ToolIcon from '../components/ToolIcon'
 
 function Card({ title, children }) {
   const { site } = useApp()
@@ -97,7 +98,7 @@ function TeamContent({ onTryExample }) {
           <div className="tool-chips">
             <Link to="/" className="tool-chip"><span>🎡</span> {t('Wheel spinner')}</Link>
             {tools.slice(0, 10).map((tool) => (
-              <Link key={tool.slug} to={`/${tool.slug}`} className="tool-chip"><span>{tool.emoji}</span> {tool.name}</Link>
+              <Link key={tool.slug} to={`/${tool.slug}`} className="tool-chip"><span><ToolIcon icon={tool.emoji} /></span> {tool.name}</Link>
             ))}
           </div>
         </Card>
@@ -106,8 +107,8 @@ function TeamContent({ onTryExample }) {
   )
 }
 
-const KEY = 'pp.teampicker.v2'
-const DEFAULT_NAMES = 'Emma\nLiam\nOlivia\nNoah\nAva\nEthan\nSophia\nMason'
+const KEY = 'pp.teampicker.v3'
+const DEFAULT_NAMES = 'Christopher\nLisa\nDaniel\nNissy\nMatthew\nSandra\nSatvik\nSteven'
 const BALANCE_EXAMPLE = 'Amelia, girl\nTom, boy\nNissy, girl\nSatvik, boy'
 const TEAM_COLORS = ['#2e7d32', '#f5b70a', '#1e88e5', '#e53935', '#8e24aa', '#00897b', '#fb8c00', '#5546c9', '#6d4c41', '#d81b60']
 
@@ -375,7 +376,7 @@ export default function TeamPicker() {
                 <button className="chip-btn" onClick={() => setText(text.split(/\r?\n/).filter((l) => l.trim()).sort((a, b) => a.localeCompare(b)).join('\n'))}><Icon name="sort" size={16} /> {t('Sort')}</button>
                 <button className="chip-btn" onClick={() => setText('')}><Icon name="trash" size={16} /> {t('Clear')}</button>
               </div>
-              <textarea className="entries-textarea tp-names" value={text} spellCheck={false} placeholder={'Emma\nLiam\nOlivia…'} onChange={(e) => setText(e.target.value)} />
+              <textarea className="entries-textarea tp-names" value={text} spellCheck={false} placeholder={'Christopher\nLisa\nDaniel…'} onChange={(e) => setText(e.target.value)} />
               {balance && <p className="muted small">{t('Add a label after a comma to balance teams, e.g. “Amelia, girl” or “Tom, boy”.')} {labels ? `(${labels} ${t('labels found')})` : ''}</p>}
 
               <div className="tp-settings">

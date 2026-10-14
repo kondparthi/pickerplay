@@ -4,6 +4,7 @@ import { useApp } from '../store/AppStore'
 import { api } from '../lib/api'
 import Odometer from './Odometer'
 import AdSlot from './AdSlot'
+import ToolIcon from './ToolIcon'
 
 function Card({ title, children }) {
   const { site } = useApp()
@@ -127,7 +128,7 @@ export default function InfoCards() {
           <div className="tool-chips">
             {tools.map((tool) => (
               <Link key={tool.slug} to={`/${tool.slug}`} className="tool-chip">
-                <span>{tool.emoji}</span> {tool.name}
+                <span><ToolIcon icon={tool.emoji} /></span> {tool.name}
               </Link>
             ))}
           </div>

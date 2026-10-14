@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react'
 import { useResource } from './common'
 import Icon from '../../components/Icon'
 import { Delta, GameBars, TrendChart, fmtDay } from './charts'
+import ToolIcon from '../../components/ToolIcon'
 
 const RANGES = [[7, '7 days'], [14, '14 days'], [30, '30 days'], [90, '90 days'], [365, '12 months']]
 export const TYPE_LABEL = {
-  home: 'Wheel (home)', team: 'Team Picker', tool: 'Picker game', gallery: 'Gallery', blog_list: 'Blog list',
+  home: 'Wheel (home)', team: 'Team Picker', poll: 'Polling Wheel', poll_vote: 'Poll (shared)', tool: 'Picker game', gallery: 'Gallery', blog_list: 'Blog list',
   blog: 'Blog post', page: 'Page', share: 'Shared wheel', embed: 'Embedded wheel', other: 'Other',
 }
 const METRICS = [['visitors', 'Visitors'], ['views', 'Views'], ['spins', 'Spins']]
@@ -130,7 +131,7 @@ export default function AnalyticsPage() {
           <ul className="an-rare">
             {rare.map((g) => (
               <li key={g.path}>
-                <span className="an-rare-emoji">{g.emoji || '🎯'}</span>
+                <span className="an-rare-emoji"><ToolIcon icon={g.emoji} /></span>
                 <div>
                   <a href={g.path} target="_blank" rel="noreferrer">{g.label}</a>
                   <span className="muted small">

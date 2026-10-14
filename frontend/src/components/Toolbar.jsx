@@ -24,8 +24,8 @@ export function Brand() {
 
 // Pages that show the wheel workspace. On every other page the wheel buttons
 // first navigate to the wheel, so the toolbar is identical everywhere.
-const NON_WHEEL = ['/team-picker', '/gallery', '/account', '/reset-password']
-const isWheelPage = (p) => !NON_WHEEL.includes(p) && !p.startsWith('/blog') && !p.startsWith('/page/') && !p.startsWith('/admin') && !p.startsWith('/embed/')
+const NON_WHEEL = ['/team-picker', '/polling-wheel', '/gallery', '/account', '/reset-password']
+const isWheelPage = (p) => !NON_WHEEL.includes(p) && !p.startsWith('/blog') && !p.startsWith('/page/') && !p.startsWith('/admin') && !p.startsWith('/embed/') && !p.startsWith('/poll/')
 
 // eslint-disable-next-line no-unused-vars
 export default function Toolbar({ minimal = false }) {

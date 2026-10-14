@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useApp } from '../store/AppStore'
 import AdSlot from './AdSlot'
 import '../content.css'
+import ToolIcon from './ToolIcon'
 
 /**
  * Renders a picker page's HTML content in the site theme:
@@ -62,7 +63,7 @@ export default function ToolContent({ html, heading, currentSlug }) {
             <Link to="/" className="tool-chip"><span>🎡</span> {t('Wheel spinner')}</Link>
             <Link to="/team-picker" className="tool-chip"><span>👥</span> {t('Team Picker')}</Link>
             {tools.map((tool) => (
-              <Link key={tool.slug} to={`/${tool.slug}`} className="tool-chip"><span>{tool.emoji}</span> {tool.name}</Link>
+              <Link key={tool.slug} to={`/${tool.slug}`} className="tool-chip"><span><ToolIcon icon={tool.emoji} /></span> {tool.name}</Link>
             ))}
           </div>
         </article>

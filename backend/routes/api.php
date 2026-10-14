@@ -27,6 +27,14 @@ Route::get('/tools/{slug}', [Api\ToolController::class, 'show']);
 Route::get('/posts', [Api\PostController::class, 'index']);
 Route::get('/posts/{slug}', [Api\PostController::class, 'show']);
 
+// Polling Wheel
+Route::post('/polls', [Api\PollController::class, 'store'])->middleware('throttle:writes');
+Route::get('/polls/{code}', [Api\PollController::class, 'show'])->where('code', '[a-z0-9]{7}');
+Route::post('/polls/{code}/vote', [Api\PollController::class, 'vote'])->where('code', '[a-z0-9]{7}')->middleware('throttle:votes');
+Route::get('/polls/{code}/results', [Api\PollController::class, 'results'])->where('code', '[a-z0-9]{7}');
+Route::patch('/polls/{code}', [Api\PollController::class, 'update'])->where('code', '[a-z0-9]{7}')->middleware('throttle:writes');
+Route::delete('/polls/{code}', [Api\PollController::class, 'destroy'])->where('code', '[a-z0-9]{7}')->middleware('throttle:writes');
+
 /*
 |--------------------------------------------------------------------------
 | Auth

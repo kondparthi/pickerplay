@@ -4,6 +4,7 @@ import { api } from '../../lib/api'
 import { wheelToConfig } from '../../lib/defaults'
 import { Field, PageHead, Toggle, useResource } from './common'
 import Icon from '../../components/Icon'
+import ToolIcon from '../../components/ToolIcon'
 
 const EMPTY = { slug: '', name: '', emoji: '🎯', heading: '', meta_title: '', meta_description: '', content: '', is_active: true, show_in_menu: true, sort_order: 100, config: { entries: [], settings: {} } }
 
@@ -55,7 +56,7 @@ export default function ToolsPage() {
         <div className="card form-grid">
           <Field label="Name"><input className="input" value={edit.name} onChange={set('name')} /></Field>
           <Field label="URL slug" help={`${window.location.origin}/${edit.slug || 'your-slug'}`}><input className="input mono" value={edit.slug} onChange={(e) => set('slug')(e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, '-'))} /></Field>
-          <Field label="Emoji / icon"><input className="input sm" value={edit.emoji || ''} onChange={set('emoji')} maxLength={16} /></Field>
+          <Field label="Emoji / icon" help="An emoji, or an image path like /brand/tod.svg"><input className="input sm" value={edit.emoji || ''} onChange={set('emoji')} maxLength={16} /></Field>
           <Field label="Page heading (H1)"><input className="input" value={edit.heading || ''} onChange={set('heading')} /></Field>
           <Field label="SEO title"><input className="input" value={edit.meta_title || ''} onChange={set('meta_title')} maxLength={200} /></Field>
           <Field label="Meta description" help={`${(edit.meta_description || '').length}/300`}><textarea className="input" rows={2} value={edit.meta_description || ''} onChange={set('meta_description')} maxLength={300} /></Field>
@@ -88,7 +89,7 @@ export default function ToolsPage() {
           <tbody>
             {(data || []).map((tool) => (
               <tr key={tool.id}>
-                <td>{tool.emoji} <strong>{tool.name}</strong></td>
+                <td><ToolIcon icon={tool.emoji} /> <strong>{tool.name}</strong></td>
                 <td><a href={`/${tool.slug}`} target="_blank" rel="noreferrer" className="mono">/{tool.slug}</a></td>
                 <td>{tool.config?.entries?.length || 0}</td>
                 <td>{tool.is_active ? 'Active' : <span className="muted">Hidden</span>}{tool.show_in_menu ? '' : ' · not in menu'}</td>

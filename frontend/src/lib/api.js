@@ -11,10 +11,11 @@ export function setToken(t) {
 }
 
 export class ApiError extends Error {
-  constructor(message, status, errors) {
+  constructor(message, status, errors, data) {
     super(message)
     this.status = status
     this.errors = errors || {}
+    this.data = data || null
   }
 }
 
@@ -45,7 +46,7 @@ async function request(method, url, body, { form = false } = {}) {
     if (res.status === 401 && token) setToken(null)
     const firstError = data?.errors ? Object.values(data.errors)[0]?.[0] : null
     const msg = firstError || data?.message || (res.status === 429 ? 'Too many requests, please wait a moment.' : `Request failed (${res.status})`)
-    throw new ApiError(msg, res.status, data?.errors)
+    throw new ApiError(msg, res.status, data?.errors, data)
   }
   if (data === null && text) throw new ApiError('Unexpected server response', res.status)
   return data

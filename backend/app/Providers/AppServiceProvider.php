@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('writes', fn (Request $r) => Limit::perMinute(30)->by($r->user()?->id ?: $r->ip()));
         RateLimiter::for('uploads', fn (Request $r) => Limit::perMinute(20)->by($r->user()?->id ?: $r->ip()));
         RateLimiter::for('feedback', fn (Request $r) => Limit::perMinute(5)->by($r->ip()));
+        // offices/schools share one IP, so votes allow a generous per-IP rate
+        RateLimiter::for('votes', fn (Request $r) => Limit::perMinute(300)->by($r->ip()));
         RateLimiter::for('stats', fn (Request $r) => Limit::perMinute(60)->by($r->ip()));
         RateLimiter::for('developer', fn (Request $r) => Limit::perMinute(60)->by(optional($r->attributes->get('api_key'))->id ?: $r->ip()));
     }
