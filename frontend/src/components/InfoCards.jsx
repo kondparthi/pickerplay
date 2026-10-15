@@ -42,7 +42,7 @@ export default function InfoCards() {
 
   return (
     <section className="info-grid">
-      <Card title={t('What is the wheel spinner for?')}>
+      <Card title={t('What Is a Wheel Spinner and What Is It Used For?')}>
         <p>{t('People find new uses for the wheel every day. A few favourites:')}</p>
         <ul>
           <li>{t('Teachers: pick which student answers next, forms groups or chooses the next topic.')}</li>
@@ -55,7 +55,7 @@ export default function InfoCards() {
         </ul>
       </Card>
 
-      <Card title={t('Wheel features')}>
+      <Card title={t('Wheel Spinner Features')}>
         <p>{t('{name} gives you a fast, flexible wheel spinner with every feature free.').replace('{name}', name)}</p>
         <ul>
           <li><strong>{t('Weighted entries')}:</strong> {t('make some slices bigger and more likely in Advanced mode.')}</li>
@@ -72,17 +72,17 @@ export default function InfoCards() {
 
       <AdSlot place="tool" className="grid-ad" />
 
-      <Card title={t('Is the wheel truly random?')}>
+      <Card title={t('Is the Wheel Spinner Truly Random?')}>
         <p>{t('Yes. Every result comes from your browser’s cryptographically secure random generator (crypto.getRandomValues), not Math.random(). The winner is chosen first, then the animation lands the pointer on it.')}</p>
         <button className="btn btn-primary" onClick={() => openDialog('fairness')}>
-          {t('Run 10,000 spins')}
+          {t('Run 7,000 spins')}
         </button>
         <p>
           <strong>{t('Same result twice?')}</strong> {t('That is normal for true randomness - each spin is independent, like flipping a coin. To avoid repeats, remove the winner after each spin.')}
         </p>
       </Card>
 
-      <Card title={t('How to use the wheel spinner')}>
+      <Card title={t('How to Use the PickerPlays Wheel Spinner')}>
         <p>{t('Type your entries in the box to the right of the wheel, one per line. Click the wheel to spin and get a random winner. Use Customize at the top of the page to change colours, sounds and spin time.')}</p>
         <p>
           <Link to="/page/faq">{t('Read the FAQ')}</Link>
@@ -102,7 +102,7 @@ export default function InfoCards() {
         </Card>
       )}
 
-      <Card title={t('Can I use the wheel in OBS or Streamlabs?')}>
+      <Card title={t('Can I Use the Wheel Spinner in OBS or Streamlabs for Live Streams?')}>
         <p>{t('Yes. Share your wheel, then add its embed link as a browser source in your streaming software.')}</p>
         <ul>
           <li>{t('Viewer giveaways from your chat')}</li>
@@ -112,7 +112,7 @@ export default function InfoCards() {
         <Link to="/page/streaming">{t('Streaming guide')}</Link>
       </Card>
 
-      <Card title={t('Is my data private?')}>
+      <Card title={t('Is My Data Private on the Wheel Spinner?')}>
         <p>{t('The wheel you are editing stays in your browser. Nothing is uploaded unless you save it to your account or create a share link.')}</p>
         <Link to="/page/privacy">{t('Privacy policy')}</Link>
       </Card>
