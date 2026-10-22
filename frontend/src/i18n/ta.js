@@ -96,7 +96,7 @@ export default {
   "Activity in": "செயல்பாடு",
   "Wheel spins": "சுழற்சிகள்",
   "Hours of spinning": "சுழன்ற மணிநேரம்",
-  "Run 10,000 spins": "10,000 முறை சுழற்று",
+  "Run 7,000 spins": "7,000 முறை சுழற்று",
   "More pickers": "மேலும் தேர்விகள்",
   "Terms & conditions": "விதிமுறைகள்",
   "Privacy policy": "தனியுரிமைக் கொள்கை",

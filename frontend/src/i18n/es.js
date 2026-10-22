@@ -96,7 +96,7 @@ export default {
   "Activity in": "Actividad en",
   "Wheel spins": "Giros",
   "Hours of spinning": "Horas girando",
-  "Run 10,000 spins": "Hacer 10.000 giros",
+  "Run 7,000 spins": "Hacer 7.000 giros",
   "More pickers": "Más selectores",
   "Terms & conditions": "Términos y condiciones",
   "Privacy policy": "Política de privacidad",

@@ -96,7 +96,7 @@ export default {
   "Activity in": "Activité en",
   "Wheel spins": "Tours de roue",
   "Hours of spinning": "Heures de rotation",
-  "Run 10,000 spins": "Lancer 10 000 tours",
+  "Run 7,000 spins": "Lancer 7 000 tours",
   "More pickers": "Plus de sélecteurs",
   "Terms & conditions": "Conditions d'utilisation",
   "Privacy policy": "Politique de confidentialité",

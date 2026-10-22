@@ -4,13 +4,13 @@ import { buildSegments } from '../../lib/wheelRender'
 import { weightedIndex } from '../../lib/random'
 import Modal from '../Modal'
 
-/** "Run 10,000 spins" - proves the distribution with the very same random function the wheel uses. */
+/** "Run 7,000 spins" - proves the distribution with the very same random function the wheel uses. */
 export default function FairnessDialog() {
   const { activeWheel, closeDialog, t } = useApp()
   const [result, setResult] = useState(null)
   const [running, setRunning] = useState(false)
   const { all } = buildSegments(activeWheel)
-  const N = 10000
+  const N = 7000
 
   const run = () => {
     setRunning(true)
@@ -30,11 +30,11 @@ export default function FairnessDialog() {
 
   const max = result ? Math.max(...result.rows.map((r) => r.actual), 1) : 1
   return (
-    <Modal title={t('Run 10,000 spins')} onClose={closeDialog} wide>
-      <p>{t('This runs 10,000 picks on your current entries with the same crypto.getRandomValues() function the wheel uses, and compares the results with the expected chance.')}</p>
+    <Modal title={t('Run 7,000 spins')} onClose={closeDialog} wide>
+      <p>{t('This runs 7,000 picks on your current entries with the same crypto.getRandomValues() function the wheel uses, and compares the results with the expected chance.')}</p>
       {!all.length && <div className="alert">{t('Add some entries first.')}</div>}
       <button className="btn btn-primary" onClick={run} disabled={running || !all.length}>
-        {running ? t('Spinning…') : result ? t('Run again') : t('Run 10,000 spins')}
+        {running ? t('Spinning…') : result ? t('Run again') : t('Run 7,000 spins')}
       </button>
       {result && (
         <>

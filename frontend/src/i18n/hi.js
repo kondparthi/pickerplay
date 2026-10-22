@@ -96,7 +96,7 @@ export default {
   "Activity in": "गतिविधि",
   "Wheel spins": "व्हील घुमाव",
   "Hours of spinning": "घूमने के घंटे",
-  "Run 10,000 spins": "10,000 बार घुमाएँ",
+  "Run 7,000 spins": "7,000 बार घुमाएँ",
   "More pickers": "और पिकर्स",
   "Terms & conditions": "नियम और शर्तें",
   "Privacy policy": "गोपनीयता नीति",

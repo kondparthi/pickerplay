@@ -153,7 +153,7 @@ export default function SidePanel() {
               { label: t('Rename this wheel'), icon: <Icon name="pencil" />, onClick: () => openDialog('editTitle') },
               { label: t('Remove this wheel'), icon: <Icon name="trash" />, onClick: () => removeWheel(index), disabled: ws.wheels.length <= 1 },
               { divider: true },
-              { label: t('Run 10,000 spins'), icon: <Icon name="chart" />, onClick: () => openDialog('fairness') },
+              { label: t('Run 7,000 spins'), icon: <Icon name="chart" />, onClick: () => openDialog('fairness') },
             ]}
           />
         </div>

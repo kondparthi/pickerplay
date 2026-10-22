@@ -96,7 +96,7 @@ export default {
   "Activity in": "కార్యకలాపం",
   "Wheel spins": "వీల్ తిరుగుళ్ళు",
   "Hours of spinning": "తిరిగిన గంటలు",
-  "Run 10,000 spins": "10,000 సార్లు తిప్పు",
+  "Run 7,000 spins": "7,000 సార్లు తిప్పు",
   "More pickers": "మరిన్ని పికర్స్",
   "Terms & conditions": "నిబంధనలు",
   "Privacy policy": "గోప్యతా విధానం",
