@@ -404,3 +404,9 @@ html.dark .an-pill.zero { color: #fcd34d; }
 .ads-place span { display: flex; flex-direction: column; gap: 2px; }
 .ads-place b { font-size: 14px; }
 .ads-place small { color: var(--ad-muted); font-size: 12.5px; }
+
+/* popup messages editor (Picker tools) */
+.msg-editor { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+.msg-row { display: flex; flex-direction: column; gap: 6px; padding: 12px; border: 1px solid var(--ad-border); border-radius: 12px; background: color-mix(in srgb, var(--ad-bg) 50%, var(--ad-card)); }
+.msg-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.msg-row textarea { resize: vertical; line-height: 1.5; }

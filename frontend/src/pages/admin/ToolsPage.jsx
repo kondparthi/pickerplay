@@ -14,11 +14,22 @@ export default function ToolsPage() {
   const [edit, setEdit] = useState(null)
   const [entriesText, setEntriesText] = useState('')
   const [msg, setMsg] = useState('')
+  const [messages, setMessages] = useState({}) // answer text -> popup lines (one per line)
+  const [msgOpen, setMsgOpen] = useState(false)
+
+  const messagesFrom = (entries = []) => {
+    const m = {}
+    entries.forEach((e) => { if (e.message && m[e.text] === undefined) m[e.text] = e.message })
+    return m
+  }
 
   const open = (tool) => {
     setMsg('')
     setEdit({ ...EMPTY, ...tool })
     setEntriesText((tool?.config?.entries || []).map((e) => e.text).join('\n'))
+    const m = messagesFrom(tool?.config?.entries)
+    setMessages(m)
+    setMsgOpen(Object.keys(m).length > 0)
   }
   const set = (k) => (v) => setEdit((x) => ({ ...x, [k]: v?.target ? v.target.value : v }))
 
@@ -27,7 +38,17 @@ export default function ToolsPage() {
     const lines = entriesText.split(/\r?\n/).map((s) => s.trim()).filter(Boolean)
     // keep per-entry extras (colors, images, weights) for unchanged lines
     const old = new Map((edit.config?.entries || []).map((e) => [e.text, e]))
-    const config = { ...edit.config, title: edit.name, entries: lines.map((t) => old.get(t) || { text: t }) }
+    const config = {
+      ...edit.config,
+      title: edit.name,
+      entries: lines.map((t) => {
+        const e = { ...(old.get(t) || { text: t }) }
+        const m = (messages[t] || '').split(/\r?\n/).map((x) => x.trim()).filter(Boolean).join('\n')
+        if (m) e.message = m
+        else delete e.message
+        return e
+      }),
+    }
     const body = { ...edit, config, sort_order: Number(edit.sort_order) || 0 }
     try {
       if (edit.id) await api.put(`/admin/tools/${edit.id}`, body)
@@ -66,7 +87,25 @@ export default function ToolsPage() {
               const cfg = wheelToConfig(activeWheel)
               setEdit((x) => ({ ...x, config: cfg }))
               setEntriesText(cfg.entries.map((e) => e.text).join('\n'))
+              setMessages(messagesFrom(cfg.entries))
             }}><Icon name="dice" size={15} /> Use current wheel (entries + all settings)</button>
+          </Field>
+          <Field label="Popup messages (optional)" wide help="Shown in the result popup under the winning answer. Add several lines and one is picked at random on each spin – e.g. the questions for Truth and the challenges for Dare.">
+            {!msgOpen ? (
+              <button type="button" className="btn btn-soft small" onClick={() => setMsgOpen(true)}><Icon name="plus" size={15} /> Add popup messages</button>
+            ) : (
+              <div className="msg-editor">
+                {[...new Set(entriesText.split(/\r?\n/).map((x) => x.trim()).filter(Boolean))].map((t) => {
+                  const count = (messages[t] || '').split(/\r?\n/).filter((x) => x.trim()).length
+                  return (
+                    <div key={t} className="msg-row">
+                      <div className="msg-head"><b>{t}</b><span className="muted small">{count ? `${count} message${count === 1 ? '' : 's'} · one is picked at random` : 'no message'}</span></div>
+                      <textarea className="input" rows={Math.min(12, Math.max(3, count + 1))} placeholder="One message per line" value={messages[t] || ''} onChange={(e) => setMessages((m) => ({ ...m, [t]: e.target.value }))} />
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </Field>
           <Field label="SEO content (HTML, shown below the wheel)" wide><textarea className="input mono" rows={12} value={edit.content || ''} onChange={set('content')} /></Field>
           <Field label="Sort order"><input className="input sm" type="number" value={edit.sort_order} onChange={set('sort_order')} /></Field>
