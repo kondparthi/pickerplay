@@ -69,7 +69,7 @@ class SiteSettings
         'enabled_languages' => ['en,hi,te,ta,es,fr', true],
         // Private (never sent to browsers)
         'unsplash_access_key' => ['', false],
-        'feedback_notify_email' => ['', false],
+        'feedback_notify_email' => ['support@pickerplay.com', false],
     ];
 
     public static function all(): array

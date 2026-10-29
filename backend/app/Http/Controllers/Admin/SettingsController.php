@@ -45,6 +45,30 @@ class SettingsController extends Controller
     }
 
     /** POST /api/admin/settings/asset  (multipart: file, key=logo_url|logo_dark_url|favicon_url|og_image) */
+    /** Sends a sample feedback email so the admin can check the SMTP settings in .env. */
+    public function testEmail(Request $request): JsonResponse
+    {
+        $to = $request->input('to') ?: SiteSettings::get('feedback_notify_email');
+        if (! $to || ! filter_var(trim(explode(',', $to)[0]), FILTER_VALIDATE_EMAIL)) {
+            return response()->json(['message' => 'Enter the email address first.'], 422);
+        }
+        $fb = new \App\Models\Feedback([
+            'name' => 'PickerPlay test',
+            'email' => null,
+            'type' => 'feedback',
+            'message' => "This is a test email from the admin panel.\nIf you can read this, feedback form emails are working.",
+            'page_url' => rtrim(config('app.url'), '/').'/',
+        ]);
+        $fb->created_at = now();
+        try {
+            \Illuminate\Support\Facades\Mail::to(array_map('trim', explode(',', $to)))->send(new \App\Mail\FeedbackReceived($fb));
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'Sending failed: '.$e->getMessage()], 422);
+        }
+
+        return response()->json(['message' => "Test email sent to {$to}. Check the inbox (and spam folder)."]);
+    }
+
     public function uploadAsset(Request $request): JsonResponse
     {
         $request->validate([

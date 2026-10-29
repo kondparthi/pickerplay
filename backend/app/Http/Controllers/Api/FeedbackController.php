@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\FeedbackReceived;
 use App\Models\Feedback;
 use App\Services\SiteSettings;
 use Illuminate\Http\JsonResponse;
@@ -31,12 +32,15 @@ class FeedbackController extends Controller
             'ip' => $request->ip(),
         ]);
 
-        if ($to = SiteSettings::get('feedback_notify_email')) {
+        // ad reports go to the "Report bad ad" email (if set), everything else to the feedback email
+        $to = $fb->type === 'ad_report'
+            ? (SiteSettings::get('ad_report_email') ?: SiteSettings::get('feedback_notify_email'))
+            : SiteSettings::get('feedback_notify_email');
+        if ($to) {
             try {
-                Mail::raw("New {$fb->type} from ".($fb->name ?: 'anonymous')." <{$fb->email}>\n\n{$fb->message}\n\nPage: {$fb->page_url}",
-                    fn ($m) => $m->to($to)->subject('['.SiteSettings::get('site_name').'] New '.$fb->type));
+                Mail::to(array_map('trim', explode(',', $to)))->send(new FeedbackReceived($fb));
             } catch (\Throwable $e) {
-                report($e);
+                report($e); // the message is still saved in Admin -> Feedback
             }
         }
 

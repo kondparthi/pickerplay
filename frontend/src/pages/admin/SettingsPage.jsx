@@ -52,6 +52,7 @@ export default function SettingsPage() {
   const { setBoot, toast } = useApp()
   const [{ data, error }] = useResource('/admin/settings')
   const [s, setS] = useState(null)
+  const [testing, setTesting] = useState(false)
   const [section, setSection] = useState('Branding')
   const [saving, setSaving] = useState(false)
   const [msg, setMsg] = useState('')
@@ -230,7 +231,16 @@ export default function SettingsPage() {
         {section === 'Integrations' && (
           <>
             {text('unsplash_access_key', 'Unsplash Access Key', 'Enables image search in the image picker. Free at unsplash.com/developers. Never sent to browsers.')}
-            {text('feedback_notify_email', 'Email new feedback to', 'Requires MAIL_* settings in .env')}
+            {text('feedback_notify_email', 'Email new feedback to', 'Every feedback form message is emailed here. Several addresses: separate with commas. Uses the MAIL_* SMTP settings in .env.')}
+            <div className="field field-wide">
+              <span className="row wrap" style={{ gap: 10, alignItems: 'center' }}>
+                <button type="button" className="btn btn-soft small" disabled={testing} onClick={async () => {
+                  setTesting(true)
+                  try { const r = await api.post('/admin/settings/test-email', { to: s.feedback_notify_email }); toast(r.message) } catch (e) { toast(e.message) } finally { setTesting(false) }
+                }}><Icon name="mail" size={15} /> {testing ? 'Sending…' : 'Send test email'}</button>
+                <span className="muted small">Save first if you changed the address.</span>
+              </span>
+            </div>
           </>
         )}
       </div>

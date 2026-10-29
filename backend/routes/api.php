@@ -86,6 +86,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     Route::get('/settings', [Admin\SettingsController::class, 'index']);
     Route::put('/settings', [Admin\SettingsController::class, 'update']);
     Route::post('/settings/asset', [Admin\SettingsController::class, 'uploadAsset']);
+    Route::post('/settings/test-email', [Admin\SettingsController::class, 'testEmail'])->middleware('throttle:feedback');
 
     Route::get('/wheels', [Admin\WheelController::class, 'index']);
     Route::patch('/wheels/{id}', [Admin\WheelController::class, 'update']);
