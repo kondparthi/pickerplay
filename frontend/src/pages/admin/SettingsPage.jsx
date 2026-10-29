@@ -4,6 +4,7 @@ import { api } from '../../lib/api'
 import { LANGUAGES } from '../../i18n'
 import { Field, PageHead, Toggle, useResource } from './common'
 import Icon from '../../components/Icon'
+import CookieBanner from '../../components/CookieBanner'
 
 function AssetUpload({ label, k, value, onUploaded, help }) {
   const ref = useRef(null)
@@ -46,7 +47,7 @@ const AD_PLACES = [
   ['blog_post', 'Blog articles', 'At the end of each article'],
 ]
 
-const SECTIONS = ['Branding', 'Wheel defaults', 'Home page', 'Ads', 'SEO & tracking', 'Features', 'Integrations']
+const SECTIONS = ['Branding', 'Wheel defaults', 'Home page', 'Ads', 'Cookie box', 'SEO & tracking', 'Features', 'Integrations']
 
 export default function SettingsPage() {
   const { setBoot, toast } = useApp()
@@ -197,6 +198,37 @@ export default function SettingsPage() {
             <Toggle checked={s.ads_closable !== '0'} onChange={flag('ads_closable')} label='Let visitors hide ads with "Close ads" for their visit' />
             {text('ad_report_email', '"Report bad ad" email')}
             {area('ads_txt', 'Extra ads.txt lines (other ad networks)', 'One line per network, e.g. from Ezoic, Media.net. The AdSense line is added automatically.', 3)}
+          </>
+        )}
+        {section === 'Cookie box' && (
+          <>
+            <Toggle checked={s.cookie_enabled === '1'} onChange={flag('cookie_enabled')} label={s.cookie_enabled === '1' ? 'Cookie box is ACTIVE on the website' : 'Cookie box is INACTIVE (hidden)'} />
+            <Field label="Style">
+              <select className="input" value={s.cookie_style || 'box'} onChange={set('cookie_style')}>
+                <option value="box">Box – bottom-left card</option>
+                <option value="bar">Bar – full width at the bottom</option>
+              </select>
+            </Field>
+            {text('cookie_title', 'Title', 'Leave empty for no title.')}
+            {area('cookie_text', 'Message', 'Short and clear works best.', 3)}
+            {text('cookie_accept', '“Accept” button text')}
+            {text('cookie_reject', '“Reject” button text')}
+            <Toggle checked={s.cookie_show_reject !== '0'} onChange={flag('cookie_show_reject')} label='Show the "Only necessary" button' />
+            {text('cookie_policy_url', '“Learn more” link', 'e.g. /page/privacy or a full https:// link.')}
+            <Toggle checked={s.cookie_consent_mode === '1'} onChange={flag('cookie_consent_mode')} label="Google Consent Mode: Analytics & AdSense cookies wait until the visitor accepts" />
+            <p className="muted small field-wide" style={{ margin: 0 }}>When this is on, Google Analytics and AdSense still work before consent but without cookies (cookieless pings / limited ads). Recommended for Europe/UK visitors and AdSense rules.</p>
+            <div className="field field-wide">
+              <span className="field-label">Preview</span>
+              <div className={`cookie-preview-wrap ${s.cookie_enabled === '1' ? '' : 'is-off'}`}>
+                <CookieBanner preview settings={{ ...s, cookie_enabled: '1' }} />
+              </div>
+              <span className="row wrap" style={{ gap: 10, marginTop: 8 }}>
+                <button type="button" className="btn btn-soft small" onClick={() => { try { localStorage.removeItem('pp.cookieConsent') } catch { /* ignore */ } toast('Your choice was cleared – open the website to see the cookie box again.') }}>
+                  <Icon name="refresh" size={15} /> Show the box to me again
+                </button>
+                <span className="muted small">Visitors only see the box once; “Cookie settings” in the footer opens it again.</span>
+              </span>
+            </div>
           </>
         )}
         {section === 'SEO & tracking' && (

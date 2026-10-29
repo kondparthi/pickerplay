@@ -15,6 +15,7 @@ import BlogList from './pages/BlogList'
 import BlogPost from './pages/BlogPost'
 import Dialogs from './components/Dialogs'
 import Toasts from './components/Toasts'
+import CookieBanner from './components/CookieBanner'
 
 const Admin = lazy(() => import('./pages/admin/Admin'))
 
@@ -64,6 +65,7 @@ export default function App() {
       </Routes>
       <Dialogs />
       <Toasts />
+      <CookieBanner />
     </>
   )
 }

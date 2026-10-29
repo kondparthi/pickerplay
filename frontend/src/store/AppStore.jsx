@@ -26,6 +26,7 @@ const FALLBACK_SETTINGS = {
   page_bg_to: '#efe4f6',
   show_info_cards: '1',
   show_stats: '0',
+  cookie_enabled: '0',
   ads_enabled: '0',
   allow_registration: '1',
   allow_gallery: '1',

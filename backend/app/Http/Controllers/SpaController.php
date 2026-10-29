@@ -126,6 +126,7 @@ class SpaController extends Controller
             $favicon ? '<link rel="icon" href="'.$e($favicon).'">' : null,
             $favicon ? '<link rel="apple-touch-icon" href="'.$e($favicon).'">' : null,
             '<script>window.__PP_BOOT__='.json_encode($boot + ['preload' => $preload], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE).';</script>',
+            $this->consentDefaults($s, $path),
             ! empty($s['google_analytics_id']) ? $this->analytics($s['google_analytics_id']) : null,
             ! empty($s['custom_css']) ? '<style id="pp-custom-css">'.str_ireplace('</style', '', $s['custom_css']).'</style>' : null,
             $s['custom_head_html'] ?? null,
@@ -180,5 +181,22 @@ class SpaController extends Controller
 
         return '<meta name="google-adsense-account" content="'.$client.'">'."\n    "
             .'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='.$client.'" crossorigin="anonymous"></script>';
+    }
+
+    /**
+     * Google Consent Mode v2 defaults – must run before Analytics / AdSense.
+     * Until the visitor presses "Accept all" in the cookie box, Google tags run cookieless.
+     */
+    private function consentDefaults(array $s, string $path): ?string
+    {
+        if (($s['cookie_enabled'] ?? '0') !== '1' || ($s['cookie_consent_mode'] ?? '0') !== '1' || str_starts_with($path, 'admin')) {
+            return null;
+        }
+
+        return "<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}"
+            ."(function(){var c=null;try{c=JSON.parse(localStorage.getItem('pp.cookieConsent')||'null')}catch(e){}"
+            ."var g=c&&c.choice==='all'?'granted':'denied';"
+            ."gtag('consent','default',{ad_storage:g,analytics_storage:g,ad_user_data:g,ad_personalization:g,functionality_storage:'granted',security_storage:'granted',wait_for_update:500});"
+            ."gtag('set','ads_data_redaction',g==='denied');})();</script>";
     }
 }

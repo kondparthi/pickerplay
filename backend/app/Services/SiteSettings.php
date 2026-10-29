@@ -55,6 +55,16 @@ class SiteSettings
         'ads_closable' => ['1', true],
         'ads_txt' => ['', false],               // extra ads.txt lines for other ad networks
         'ad_report_email' => ['support@pickerplay.com', true],
+        // Cookie consent box
+        'cookie_enabled' => ['1', true],
+        'cookie_style' => ['box', true],            // box (bottom-left card) | bar (full-width bottom bar)
+        'cookie_title' => ['We use cookies 🍪', true],
+        'cookie_text' => ['We use cookies to keep the site working, understand how it is used and show ads. You can accept all cookies or only the necessary ones.', true],
+        'cookie_accept' => ['Accept all', true],
+        'cookie_reject' => ['Only necessary', true],
+        'cookie_show_reject' => ['1', true],
+        'cookie_policy_url' => ['/page/privacy', true],
+        'cookie_consent_mode' => ['1', true],        // Google Consent Mode v2: analytics/ads cookies wait for "Accept"
         // SEO / tracking
         'meta_title' => ['PickerPlay – Random Name Picker Wheel & Spinner', true],
         'meta_description' => ['Spin the wheel to pick a random name, winner or decision. Free, fast, customizable wheel spinner with sounds, images, sharing and multiple wheels.', true],

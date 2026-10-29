@@ -410,3 +410,8 @@ html.dark .an-pill.zero { color: #fcd34d; }
 .msg-row { display: flex; flex-direction: column; gap: 6px; padding: 12px; border: 1px solid var(--ad-border); border-radius: 12px; background: color-mix(in srgb, var(--ad-bg) 50%, var(--ad-card)); }
 .msg-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .msg-row textarea { resize: vertical; line-height: 1.5; }
+
+/* cookie box preview */
+.cookie-preview-wrap { padding: 22px; border-radius: 14px; border: 1px dashed var(--ad-border); background: repeating-linear-gradient(45deg, transparent 0 10px, color-mix(in srgb, var(--ad-border) 35%, transparent) 10px 11px); }
+.cookie-preview-wrap.is-off { opacity: .45; filter: grayscale(.6); }
+.cookie-preview-wrap .cookie-box { max-width: 400px; }

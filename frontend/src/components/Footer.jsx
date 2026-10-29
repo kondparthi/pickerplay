@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useApp } from '../store/AppStore'
 import Icon from './Icon'
 import ToolIcon from './ToolIcon'
+import { openCookieSettings } from './CookieBanner'
 
 export default function Footer() {
   const { boot, site, openDialog, t } = useApp()
@@ -27,6 +28,11 @@ export default function Footer() {
         <button className="linkish" onClick={() => openDialog('feedback')}>
           <Icon name="feedback" size={16} /> <span>{t('Feedback')}</span>
         </button>
+        {site.cookie_enabled === '1' && (
+          <button className="linkish" onClick={openCookieSettings}>
+            <Icon name="shield" size={16} /> <span>{t('Cookie settings')}</span>
+          </button>
+        )}
       </div>
       <div className="footer-meta">
         <span>{site.copyright}</span>
