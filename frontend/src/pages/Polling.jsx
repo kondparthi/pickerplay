@@ -133,6 +133,160 @@ function ResultBars({ results, myVote }) {
   )
 }
 
+
+/* Column chart of the results. Colours are resolved from the theme so the SVG can be saved as a PNG. */
+function themeColors() {
+  const cs = getComputedStyle(document.documentElement)
+  const v = (n, f) => (cs.getPropertyValue(n) || '').trim() || f
+  const dark = document.documentElement.classList.contains('dark')
+  return {
+    text: v('--text', dark ? '#ececf1' : '#1c1d2e'),
+    muted: v('--text-2', dark ? '#a5a8b3' : '#6b7090'),
+    grid: dark ? 'rgba(255,255,255,.10)' : 'rgba(0,0,0,.08)',
+    bg: v('--surface', dark ? '#1f2128' : '#ffffff'),
+  }
+}
+
+function wrapLabel(text, maxChars) {
+  const words = String(text).split(/\s+/)
+  const lines = ['']
+  for (const w of words) {
+    const cur = lines[lines.length - 1]
+    if ((cur + ' ' + w).trim().length <= maxChars) lines[lines.length - 1] = (cur + ' ' + w).trim()
+    else if (lines.length < 2) lines.push(w)
+    else { lines[1] = (lines[1] + ' ' + w).trim(); break }
+  }
+  return lines.map((l) => (l.length > maxChars ? l.slice(0, maxChars - 1) + '…' : l))
+}
+
+export function ResultsChart({ results, question, myVote, height = 300, download = false }) {
+  const { t, site } = useApp()
+  const svgRef = useRef(null)
+  const [hover, setHover] = useState(null)
+  const wrapRef = useRef(null)
+  const [W, setW] = useState(640)
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const ro = new ResizeObserver(([e]) => setW(Math.max(260, Math.round(e.contentRect.width))))
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  const c = themeColors()
+  const opts = results?.options || []
+  const n = Math.max(1, opts.length)
+  const pad = { l: 36, r: 8, t: 26, b: 52 }
+  const iw = W - pad.l - pad.r
+  const ih = height - pad.t - pad.b
+  const maxV = Math.max(1, ...opts.map((o) => o.votes))
+  const step = maxV <= 5 ? 1 : Math.ceil(maxV / 4 / (maxV > 50 ? 10 : 1)) * (maxV > 50 ? 10 : 1)
+  const top = Math.ceil(maxV / step) * step
+  const ticks = []
+  for (let v = 0; v <= top; v += step) ticks.push(v)
+  const slot = iw / n
+  const bw = Math.min(90, slot * 0.62)
+  const y = (v) => pad.t + ih - (v / top) * ih
+  const maxChars = Math.max(5, Math.floor(slot / 7.4))
+  const valueLabel = (o) => (slot < 70 ? String(o.votes) : `${o.votes} · ${o.percent}%`)
+
+  const savePng = () => {
+    const svg = svgRef.current
+    if (!svg) return
+    const xml = new XMLSerializer().serializeToString(svg)
+    const img = new Image()
+    const scale = 2
+    img.onload = () => {
+      const cv = document.createElement('canvas')
+      cv.width = W * scale
+      cv.height = (height + 40) * scale
+      const ctx = cv.getContext('2d')
+      ctx.fillStyle = c.bg
+      ctx.fillRect(0, 0, cv.width, cv.height)
+      ctx.scale(scale, scale)
+      ctx.fillStyle = c.text
+      ctx.font = '600 16px Roboto, Arial, sans-serif'
+      ctx.fillText((question || '').slice(0, 80), 16, 26)
+      ctx.drawImage(img, 0, 36, W, height)
+      ctx.fillStyle = c.muted
+      ctx.font = '12px Roboto, Arial, sans-serif'
+      ctx.textAlign = 'right'
+      ctx.fillText(`${results.total} ${t('votes')} · ${site.site_name}`, W - 16, 26)
+      const a = document.createElement('a')
+      a.download = 'poll-results.png'
+      a.href = cv.toDataURL('image/png')
+      a.click()
+    }
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml)
+  }
+
+  if (!opts.length) return null
+  return (
+    <div className="pl-chart">
+      <div className="pl-chart-wrap" ref={wrapRef}>
+        <svg ref={svgRef} xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${W} ${height}`} width={W} height={height} role="img"
+          aria-label={`${t('Results')}: ${opts.map((o) => `${o.text} ${o.votes}`).join(', ')}`} onMouseLeave={() => setHover(null)}>
+          {ticks.map((v) => (
+            <g key={v}>
+              <line x1={pad.l} x2={W - pad.r} y1={y(v)} y2={y(v)} stroke={c.grid} strokeWidth="1" />
+              <text x={pad.l - 8} y={y(v) + 4} textAnchor="end" fontSize="12" fill={c.muted} fontFamily="Roboto, Arial, sans-serif">{v}</text>
+            </g>
+          ))}
+          {opts.map((o, i) => {
+            const cx = pad.l + slot * i + slot / 2
+            const h = Math.max(o.votes ? 3 : 0, (o.votes / top) * ih)
+            const x = cx - bw / 2
+            const yy = pad.t + ih - h
+            const r = Math.min(4, h)
+            const lines = wrapLabel(o.text, maxChars)
+            return (
+              <g key={o.id} onMouseEnter={() => setHover(i)} opacity={hover === null || hover === i ? 1 : 0.55} style={{ transition: 'opacity .15s' }}>
+                <rect x={pad.l + slot * i} y={pad.t} width={slot} height={ih} fill="transparent" />
+                {h > 0 && <path d={`M${x},${pad.t + ih} V${yy + r} Q${x},${yy} ${x + r},${yy} H${x + bw - r} Q${x + bw},${yy} ${x + bw},${yy + r} V${pad.t + ih} Z`} fill={o.color} />}
+                <text x={cx} y={yy - 7} textAnchor="middle" fontSize="13" fontWeight="700" fill={c.text} fontFamily="Roboto, Arial, sans-serif">{valueLabel(o)}</text>
+                {lines.map((l, k) => (
+                  <text key={k} x={cx} y={pad.t + ih + 18 + k * 15} textAnchor="middle" fontSize="12.5" fontWeight={myVote === o.id ? 700 : 500} fill={c.text} fontFamily="Roboto, Arial, sans-serif">{l}</text>
+                ))}
+              </g>
+            )
+          })}
+          <line x1={pad.l} x2={W - pad.r} y1={pad.t + ih} y2={pad.t + ih} stroke={c.muted} strokeWidth="1" opacity=".5" />
+        </svg>
+        {hover !== null && opts[hover] && (
+          <div className="pl-chart-tip" style={{ left: `${((pad.l + slot * hover + slot / 2) / W) * 100}%` }}>
+            <span className="pl-dot" style={{ background: opts[hover].color }} /> <b>{opts[hover].text}</b>
+            <span>{opts[hover].votes} {opts[hover].votes === 1 ? t('vote') : t('votes')} · {opts[hover].percent}%</span>
+          </div>
+        )}
+      </div>
+      {download && (
+        <div className="pl-chart-foot">
+          <span className="muted small">{results.total} {results.total === 1 ? t('vote') : t('votes')}</span>
+          <button className="btn btn-soft small" onClick={savePng} disabled={!results.total}><Icon name="download" size={15} /> {t('Download PNG')}</button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** List / Bar graph switch used on the voting page. */
+function ResultsSwitch({ results, myVote, question }) {
+  const { t } = useApp()
+  const [view, setView] = useState(() => store.get('pp.pollView', 'chart'))
+  const pick = (v) => { setView(v); store.set('pp.pollView', v) }
+  return (
+    <>
+      <div className="pl-sub-row">
+        <h3 className="pl-sub">{t('Results so far')}</h3>
+        <div className="pl-seg">
+          <button className={view === 'chart' ? 'on' : ''} onClick={() => pick('chart')}><Icon name="chart" size={14} /> {t('Bar graph')}</button>
+          <button className={view === 'list' ? 'on' : ''} onClick={() => pick('list')}><Icon name="list" size={14} /> {t('List')}</button>
+        </div>
+      </div>
+      {view === 'chart' ? <ResultsChart results={results} myVote={myVote} question={question} height={260} /> : <ResultBars results={results} myVote={myVote} />}
+    </>
+  )
+}
+
 /* ------------------------------------------------------------------ create */
 export function PollCreate() {
   const { t, site, toast } = useApp()
@@ -421,8 +575,7 @@ export function PollVote() {
 
             {(voted || !poll.is_open) && results && (
               <>
-                <h3 className="pl-sub">{t('Results so far')}</h3>
-                <ResultBars results={results} myVote={myVote} />
+                <ResultsSwitch results={results} myVote={myVote} question={poll.question} />
               </>
             )}
             {(voted || !poll.is_open) && !results && <p className="muted small">{t('The poll creator will share the results.')}</p>}
@@ -546,6 +699,11 @@ export function PollResults() {
                 <button className="btn btn-text small" onClick={() => window.confirm(t('Remove all votes and start again?')) && patch({ reset: true }, t('Votes cleared'))}>{t('Reset votes')}</button>
                 <button className="btn btn-text small danger" onClick={remove}><Icon name="trash" size={15} /> {t('Delete poll')}</button>
               </div>
+            </div>
+
+            <div className="card pl-card">
+              <h3 className="pl-sub">{t('Results – bar graph')}</h3>
+              {results.total ? <ResultsChart results={results} question={poll.question} download /> : <p className="muted">{t('The graph appears as soon as the first vote comes in.')}</p>}
             </div>
 
             <div className="card pl-card">
