@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/quicksand": "5.1.0",
+    "@fontsource/roboto": "5.1.0",
     "@tiptap/extension-character-count": "2.27.2",
     "@tiptap/extension-color": "2.27.2",
     "@tiptap/extension-highlight": "2.27.2",

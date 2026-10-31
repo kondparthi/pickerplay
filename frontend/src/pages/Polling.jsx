@@ -59,7 +59,7 @@ function Card({ title, children }) {
   const { site } = useApp()
   return (
     <article className="info-card card">
-      <h2>{site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" />}{title}</h2>
+      <h2>{site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" width="30" height="30" loading="lazy" decoding="async" />}{title}</h2>
       {children}
     </article>
   )

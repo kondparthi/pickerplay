@@ -46,7 +46,7 @@ export default function ToolContent({ html, heading, currentSlug }) {
           {i === 2 && <AdSlot place="tool" className="grid-ad" />}
           <article className="info-card card pc-card">
             <h2>
-              {site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" />}
+              {site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" width="30" height="30" loading="lazy" decoding="async" />}
               {s.title}
             </h2>
             <div className="pc-body" dangerouslySetInnerHTML={{ __html: s.html }} />
@@ -56,7 +56,7 @@ export default function ToolContent({ html, heading, currentSlug }) {
         {sections.length < 2 && <AdSlot place="tool" className="grid-ad" />}
         <article className="info-card card pc-card">
           <h2>
-            {site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" />}
+            {site.favicon_url && <img src={site.favicon_url} alt="" className="info-icon" width="30" height="30" loading="lazy" decoding="async" />}
             {t('More pickers')}
           </h2>
           <div className="tool-chips">

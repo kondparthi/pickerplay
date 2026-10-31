@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import {
   buildSegments, drawFrame, geometry, layout, onImageLoaded, renderWheel, segmentAt, TAU, pointerColorFor, centerLabel,
 } from '../lib/wheelRender'
@@ -26,6 +26,8 @@ const Wheel = forwardRef(function Wheel(
   ref
 ) {
   const boxRef = useRef(null)
+  const [idleReady, setIdleReady] = useState(false)
+  useEffect(() => { const t = setTimeout(() => setIdleReady(true), 2500); return () => clearTimeout(t) }, [])
   const canvasRef = useRef(null)
   const wheelRef = useRef(wheel)
   wheelRef.current = wheel
@@ -80,7 +82,7 @@ const Wheel = forwardRef(function Wheel(
     const apply = () => {
       const w = Math.min(box.clientWidth, maxSize)
       const size = Math.max(120, Math.floor(w))
-      const dpr = Math.min(2.5, window.devicePixelRatio || 1)
+      const dpr = Math.min(2, window.devicePixelRatio || 1)
       const s = st.current
       if (size === s.size && dpr === s.dpr) return
       s.size = size
@@ -113,7 +115,7 @@ const Wheel = forwardRef(function Wheel(
         s.rotation = s.anim.from + (s.anim.to - s.anim.from) * ease(t)
         s.dirty = true
         if (t >= 1) finish()
-      } else if (idle && !reduceMotion && !s.spinning && s.segs.shown.length) {
+      } else if (idle && idleReady && !reduceMotion && !s.spinning && s.segs.shown.length) {
         s.rotation += dt * 0.07
         s.dirty = true
       }
@@ -166,7 +168,7 @@ const Wheel = forwardRef(function Wheel(
     }
     st.current.raf = requestAnimationFrame(frame)
     return () => cancelAnimationFrame(st.current.raf)
-  }, [idle, reduceMotion, hintTop, hintBottom]) // eslint-disable-line
+  }, [idle, idleReady, reduceMotion, hintTop, hintBottom]) // eslint-disable-line
 
   function finish() {
     const s = st.current

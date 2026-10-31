@@ -53,7 +53,7 @@ export default function CookieBanner({ preview = false, settings }) {
         {site.cookie_title && <b className="cookie-title">{site.cookie_title}</b>}
         <p>
           {site.cookie_text || t('We use cookies to keep the site working, understand how it is used and show ads.')}{' '}
-          {internal ? <Link to={policy}>{t('Learn more')}</Link> : <a href={policy} target="_blank" rel="noreferrer">{t('Learn more')}</a>}
+          {internal ? <Link to={policy}>{t('Read our cookie policy')}</Link> : <a href={policy} target="_blank" rel="noreferrer">{t('Read our cookie policy')}</a>}
         </p>
       </div>
       <div className="cookie-btns">

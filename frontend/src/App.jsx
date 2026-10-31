@@ -3,16 +3,18 @@ import { Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { api } from './lib/api'
 import Home from './pages/Home'
 import SlugRoute from './pages/SlugRoute'
-import Gallery from './pages/Gallery'
-import Embed from './pages/Embed'
-import PageView from './pages/PageView'
-import Account from './pages/Account'
-import ResetPassword from './pages/ResetPassword'
+const Gallery = lazy(() => import('./pages/Gallery'))
+const Embed = lazy(() => import('./pages/Embed'))
+const PageView = lazy(() => import('./pages/PageView'))
+const Account = lazy(() => import('./pages/Account'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
 import NotFound from './pages/NotFound'
-import TeamPicker from './pages/TeamPicker'
-import { PollCreate, PollResults, PollVote } from './pages/Polling'
-import BlogList from './pages/BlogList'
-import BlogPost from './pages/BlogPost'
+const TeamPicker = lazy(() => import('./pages/TeamPicker'))
+const PollCreate = lazy(() => import('./pages/Polling').then((m) => ({ default: m.PollCreate })))
+const PollVote = lazy(() => import('./pages/Polling').then((m) => ({ default: m.PollVote })))
+const PollResults = lazy(() => import('./pages/Polling').then((m) => ({ default: m.PollResults })))
+const BlogList = lazy(() => import('./pages/BlogList'))
+const BlogPost = lazy(() => import('./pages/BlogPost'))
 import Dialogs from './components/Dialogs'
 import Toasts from './components/Toasts'
 import CookieBanner from './components/CookieBanner'
@@ -39,6 +41,7 @@ export default function App() {
   usePageTracking()
   return (
     <>
+      <Suspense fallback={<div className="page-loading" />}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/gallery" element={<Gallery />} />
@@ -63,6 +66,7 @@ export default function App() {
         <Route path="/:slug" element={<SlugRoute />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
       <Dialogs />
       <Toasts />
       <CookieBanner />

@@ -12,8 +12,8 @@ export function Brand() {
     <Link to="/" className="brand" aria-label={site.site_name}>
       {site.logo_url ? (
         <>
-          <img src={site.logo_url} alt={site.site_name} className="brand-logo brand-light" style={{ height: `${parseInt(site.logo_height || 44, 10)}px` }} />
-          {site.logo_dark_url && <img src={site.logo_dark_url} alt="" className="brand-logo brand-dark" style={{ height: `${parseInt(site.logo_height || 44, 10)}px` }} />}
+          <img src={site.logo_url} alt={site.site_name} className="brand-logo brand-light" width="176" height="44" fetchpriority="high" style={{ height: `${parseInt(site.logo_height || 44, 10)}px` }} />
+          {site.logo_dark_url && <img src={site.logo_dark_url} alt="" className="brand-logo brand-dark" width="176" height="44" style={{ height: `${parseInt(site.logo_height || 44, 10)}px` }} />}
         </>
       ) : (
         <span className="brand-text">{site.site_name}</span>

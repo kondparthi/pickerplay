@@ -145,7 +145,8 @@ export function AppProvider({ children }) {
       }
       link.href = site.favicon_url
     }
-    if (site.font_family && !document.getElementById('pp-wheel-font')) {
+    // Quicksand + Roboto ship with the site; only load other fonts chosen in admin
+    if (site.font_family && !['quicksand', 'roboto'].includes(site.font_family.toLowerCase()) && !document.getElementById('pp-wheel-font')) {
       const l = document.createElement('link')
       l.id = 'pp-wheel-font'
       l.rel = 'stylesheet'
