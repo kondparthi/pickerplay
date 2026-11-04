@@ -26,6 +26,8 @@ const FALLBACK_SETTINGS = {
   page_bg_to: '#efe4f6',
   show_info_cards: '1',
   show_stats: '0',
+  disclaimer_enabled: '1',
+  disclaimer_text: 'Disclaimer: This wheel is for entertainment and decision-making only. No gambling, no real money prizes.',
   cookie_enabled: '0',
   ads_enabled: '0',
   allow_registration: '1',

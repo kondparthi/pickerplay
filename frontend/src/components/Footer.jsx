@@ -34,6 +34,7 @@ export default function Footer() {
           </button>
         )}
       </div>
+      {site.disclaimer_enabled !== '0' && site.disclaimer_text && <p className="footer-disclaimer">{site.disclaimer_text}</p>}
       <div className="footer-meta">
         <span>{site.copyright}</span>
         {site.contact_email && <a href={`mailto:${site.contact_email}`}>{site.contact_email}</a>}

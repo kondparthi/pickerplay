@@ -42,6 +42,8 @@ class SiteSettings
         // Home page
         'show_info_cards' => ['1', true],
         'show_stats' => ['0', true],
+        'disclaimer_enabled' => ['1', true],
+        'disclaimer_text' => ['Disclaimer: This wheel is for entertainment and decision-making only. No gambling, no real money prizes.', true],
         'stats_offset_spins' => ['0', true],
         'stats_offset_hours' => ['0', true],
         'gallery_tags' => ['yes no,numbers,names,food,team,classroom,games,truth or dare,countries,colors', true],

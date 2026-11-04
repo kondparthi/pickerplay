@@ -152,6 +152,8 @@ export default function SettingsPage() {
           <>
             <Toggle checked={s.show_info_cards === '1'} onChange={flag('show_info_cards')} label="Show information cards below the wheel" />
             <Toggle checked={s.show_stats === '1'} onChange={flag('show_stats')} label='Show "Activity" spin counter' />
+            <Toggle checked={s.disclaimer_enabled !== '0'} onChange={flag('disclaimer_enabled')} label="Show the disclaimer under the wheel and in the footer" />
+            {area('disclaimer_text', 'Disclaimer text', 'Shown below every wheel and at the bottom of every page.', 2)}
             {text('stats_offset_spins', 'Spin counter starting offset', 'Added to the real count (e.g. spins from the old site).', { type: 'number', min: 0 })}
             {text('stats_offset_hours', 'Hours counter starting offset', '', { type: 'number', min: 0 })}
             {text('gallery_tags', 'Gallery quick-search tags', 'Comma separated.')}

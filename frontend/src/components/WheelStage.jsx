@@ -113,6 +113,9 @@ export default function WheelStage() {
           />
         </div>
       ))}
+      {!fullscreen && app.site.disclaimer_enabled !== '0' && app.site.disclaimer_text && (
+        <p className="wheel-disclaimer">{app.site.disclaimer_text}</p>
+      )}
     </div>
   )
 }
