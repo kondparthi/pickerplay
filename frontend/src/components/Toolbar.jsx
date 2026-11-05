@@ -24,7 +24,7 @@ export function Brand() {
 
 // Pages that show the wheel workspace. On every other page the wheel buttons
 // first navigate to the wheel, so the toolbar is identical everywhere.
-const NON_WHEEL = ['/team-picker', '/polling-wheel', '/gallery', '/account', '/reset-password']
+const NON_WHEEL = ['/team-picker', '/polling-wheel', '/gallery', '/account', '/reset-password', '/contact']
 const isWheelPage = (p) => !NON_WHEEL.includes(p) && !p.startsWith('/blog') && !p.startsWith('/page/') && !p.startsWith('/admin') && !p.startsWith('/embed/') && !p.startsWith('/poll/')
 
 // eslint-disable-next-line no-unused-vars
@@ -70,6 +70,7 @@ export default function Toolbar({ minimal = false }) {
   const moreItems = [
     { label: t('Feedback'), icon: <Icon name="feedback" />, onClick: () => openDialog('feedback') },
     { label: t('FAQ'), icon: <Icon name="help" />, onClick: () => nav('/page/faq') },
+    { label: t('Contact us'), icon: <Icon name="mail" />, onClick: () => nav('/contact') },
     { label: t('Import Google spreadsheet'), icon: <Icon name="sheet" />, onClick: wheel(() => openDialog('importSheet')) },
     { divider: true },
     user

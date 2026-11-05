@@ -6,6 +6,7 @@ import SlugRoute from './pages/SlugRoute'
 const Gallery = lazy(() => import('./pages/Gallery'))
 const Embed = lazy(() => import('./pages/Embed'))
 const PageView = lazy(() => import('./pages/PageView'))
+const Contact = lazy(() => import('./pages/Contact'))
 const Account = lazy(() => import('./pages/Account'))
 const ResetPassword = lazy(() => import('./pages/ResetPassword'))
 import NotFound from './pages/NotFound'
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/embed/:code" element={<EmbedRoute />} />
         <Route path="/page/:slug" element={<PageView />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/account" element={<Account />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route

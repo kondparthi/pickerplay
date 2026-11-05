@@ -25,6 +25,9 @@ export default function Footer() {
             <Icon name={p.icon || 'file'} size={16} /> <span>{t(p.title)}</span>
           </Link>
         ))}
+        <Link to="/contact">
+          <Icon name="mail" size={16} /> <span>{t('Contact us')}</span>
+        </Link>
         <button className="linkish" onClick={() => openDialog('feedback')}>
           <Icon name="feedback" size={16} /> <span>{t('Feedback')}</span>
         </button>

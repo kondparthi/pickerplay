@@ -17,7 +17,8 @@ class FeedbackController extends Controller
         $data = $request->validate([
             'name' => ['nullable', 'string', 'max:120'],
             'email' => ['nullable', 'email', 'max:190'],
-            'type' => ['nullable', 'in:feedback,bug,idea,ad_report,wheel_report'],
+            'type' => ['nullable', 'in:feedback,bug,idea,ad_report,wheel_report,contact'],
+            'subject' => ['nullable', 'string', 'max:150'],
             'message' => ['required', 'string', 'min:3', 'max:5000'],
             'page_url' => ['nullable', 'string', 'max:500'],
             'website' => ['nullable', 'max:0'], // honeypot
@@ -27,7 +28,7 @@ class FeedbackController extends Controller
             'name' => isset($data['name']) ? strip_tags($data['name']) : null,
             'email' => $data['email'] ?? null,
             'type' => $data['type'] ?? 'feedback',
-            'message' => strip_tags($data['message']),
+            'message' => (! empty($data['subject']) ? 'Subject: '.strip_tags($data['subject'])."\n\n" : '').strip_tags($data['message']),
             'page_url' => $data['page_url'] ?? null,
             'ip' => $request->ip(),
         ]);

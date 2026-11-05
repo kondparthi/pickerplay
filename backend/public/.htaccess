@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # One address for Google: www.pickerplay.com -> pickerplay.com (matches the canonical URL)
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

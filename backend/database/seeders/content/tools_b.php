@@ -79,7 +79,7 @@ HTML,
 <li><strong>House parties</strong> – no paper chits. Put it on the TV and everyone sees the spin.</li>
 <li><strong>Couples</strong> – write your own romantic truths and fun dares.</li>
 <li><strong>Classrooms & teams</strong> – a clean, kid-friendly ice-breaker.</li>
-<li><strong>Fair & fun</strong> – sounds, confetti and a truly random result every time.</li>
+<li><strong>Fun to use</strong> – sounds, confetti and a random result on every spin.</li>
 </ul>
 
 <h2>Write your own truths & dares</h2>

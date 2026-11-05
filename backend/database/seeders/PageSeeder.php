@@ -120,9 +120,17 @@ HTML],
 HTML],
         ];
 
-        foreach ($pages as [$slug, $title, $icon, $sort, $content]) {
+        // full trust & legal pages (About, Privacy, Terms, Disclaimer, Cookie Policy) replace the starter versions
+        $legal = require __DIR__.'/content/legal.php';
+        $pages = array_values(array_filter($pages, fn ($p) => ! isset($legal[$p[0]])));
+        foreach ($legal as $slug => [$title, $icon, $sort, $meta, $html]) {
+            $pages[] = [$slug, $title, $icon, $sort, $html, $meta];
+        }
+
+        foreach ($pages as $row) {
+            [$slug, $title, $icon, $sort, $content] = $row;
             Page::updateOrCreate(['slug' => $slug], [
-                'title' => $title, 'icon' => $icon, 'sort_order' => $sort, 'content' => $content,
+                'title' => $title, 'icon' => $icon, 'sort_order' => $sort, 'content' => $content, 'meta_description' => $row[5] ?? null,
                 'show_in_footer' => true, 'is_published' => true,
             ]);
         }

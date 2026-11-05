@@ -26,6 +26,7 @@ export default function LeagueFilter({ slug }) {
           <button key={f.id} className={`lf-chip ${active === f.id ? 'on' : ''} ${f.level === 0 ? 'lf-all' : ''}`} onClick={() => choose(f)}>{f.label}</button>
         ))}
       </div>
+      <p className="lf-note">{t('Team names are trademarks of their respective owners. PickerPlay is not affiliated with or endorsed by any league or team.')}</p>
       <div className="lf-row lf-div">
         {divisions.map((f) => (
           <button key={f.id} className={`lf-chip small ${active === f.id ? 'on' : ''}`} onClick={() => choose(f)}>{f.label}</button>

@@ -72,8 +72,9 @@ export default function InfoCards() {
 
       <AdSlot place="tool" className="grid-ad" />
 
-      <Card title={t('Is the wheel truly random?')}>
-        <p>{t('Yes. Every result comes from your browser’s cryptographically secure random generator (crypto.getRandomValues), not Math.random(). The winner is chosen first, then the animation lands the pointer on it.')}</p>
+      <Card title={t('How does the wheel pick a result?')}>
+        <p>{t('Every result comes from your browser’s built-in secure random number generator (the Web Crypto API, crypto.getRandomValues), not Math.random(). The winner is chosen first, then the animation lands the pointer on it. Each entry’s chance matches its share of the wheel, so equal entries have equal chances.')}</p>
+        <p className="muted">{t('Random does not mean evenly spread: over a few spins the same entry can win twice in a row. Use the test below to see how results even out over thousands of spins.')}</p>
         <button className="btn btn-primary" onClick={() => openDialog('fairness')}>
           {t('Run 7,000 spins')}
         </button>

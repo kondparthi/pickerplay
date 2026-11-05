@@ -18,6 +18,7 @@ class FeedbackReceived extends Mailable
         'idea' => 'Feature idea',
         'ad_report' => 'Bad ad report',
         'wheel_report' => 'Wheel report',
+        'contact' => 'Contact message',
     ];
 
     public function __construct(public Feedback $feedback) {}

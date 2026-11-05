@@ -11,7 +11,7 @@ return [
     'meta_description' => 'Ask any question, spin the Yes or No wheel and get an instant, unbiased answer. Free, fair 50/50 decision maker with sounds and confetti.',
     'content' => <<<'HTML'
 <p class="lead">Pizza or burger? Text back or wait? Go out or stay in?</p>
-<p>The Yes or No Wheel ends decision fatigue in one tap. Think of your question, spin the wheel and get a clear <strong>YES</strong> or <strong>NO</strong> in seconds – completely random, completely fair.</p>
+<p>The Yes or No Wheel ends decision fatigue in one tap. Think of your question, spin the wheel and get a clear <strong>YES</strong> or <strong>NO</strong> in seconds – picked at random by your browser's secure random generator.</p>
 
 <h2>What is the Yes or No Wheel?</h2>
 <p>It is a free online decision maker with two equal slices: Yes and No. Every spin uses a cryptographically secure random generator, so each answer has an exact 50% chance. No algorithm leaning one way, no favourites.</p>
@@ -20,7 +20,7 @@ return [
 <ul>
 <li><strong>Stop overthinking:</strong> small choices take three seconds instead of thirty minutes.</li>
 <li><strong>Make decisions fun:</strong> sounds, suspense and confetti turn a boring choice into a mini game.</li>
-<li><strong>Totally fair:</strong> perfect when two people can't agree – let the wheel be the referee.</li>
+<li><strong>Neutral referee:</strong> perfect when two people can't agree – let a random spin decide.</li>
 <li><strong>Works everywhere:</strong> phone, tablet, laptop or classroom smartboard. No app, no sign-up.</li>
 </ul>
 
@@ -79,17 +79,17 @@ HTML,
 'number-picker' => [
     'heading' => 'Number Picker – Random Number Wheel',
     'meta_title' => 'Random Number Picker Wheel – Pick a Number 1-10 | PickerPlay',
-    'meta_description' => 'Spin the number picker wheel to get a truly random number. Perfect for giveaways, games, classrooms and lucky draws. Free and unbiased.',
+    'meta_description' => 'Spin the number picker wheel to get a random number. Perfect for giveaways, games, classrooms and lucky draws. Free, quick and easy.',
     'content' => <<<'HTML'
 <p class="lead">Need a random number – fast and fair?</p>
-<p>The Number Picker Wheel gives you a truly random number in one spin. It starts at 1–10, but you can type any list of numbers you like. Fair, transparent and far more exciting than a plain random number generator.</p>
+<p>The Number Picker Wheel gives you a random number in one spin. It starts at 1–10, but you can type any list of numbers you like. Transparent and far more exciting than a plain random number generator.</p>
 
 <h2>What is a number picker?</h2>
 <p>A number picker is a free online tool that selects one number at random from a range you choose. Every number has exactly the same chance, thanks to a cryptographically secure random generator. Also searched as: random number wheel, number randomizer, pick a number, number generator wheel.</p>
 
 <h2>Why use a wheel instead of guessing?</h2>
 <ul>
-<li><strong>100% fair:</strong> no patterns, no favourites – ideal for prize draws.</li>
+<li><strong>Equal chances:</strong> every number on the wheel has the same chance – handy for prize draws.</li>
 <li><strong>Ends arguments:</strong> who goes first, who gets the last slice? The wheel decides.</li>
 <li><strong>More fun:</strong> sounds and confetti make it great for videos and classrooms.</li>
 <li><strong>Any range:</strong> 1–10, 1–100, ticket numbers, seat numbers – you choose.</li>
@@ -156,7 +156,7 @@ HTML,
 
 <h2>Why use a random letter wheel?</h2>
 <ul>
-<li><strong>Truly random:</strong> no pattern, no favourites.</li>
+<li><strong>Equal chances:</strong> every letter has the same chance on each spin.</li>
 <li><strong>Saves time:</strong> teachers and parents get a letter in two seconds.</li>
 <li><strong>More exciting:</strong> a spinning wheel adds suspense a plain list can't.</li>
 <li><strong>Works on all devices:</strong> phone, tablet, desktop or smartboard.</li>
@@ -231,7 +231,7 @@ HTML,
 
 <h2>Why use a random country picker?</h2>
 <ul>
-<li><strong>Fair and truly random</strong> – every country has the same chance.</li>
+<li><strong>Equal chances</strong> – every country has the same chance on each spin.</li>
 <li><strong>Travel inspiration</strong> – stuck between Bali and Bangkok? Let the wheel choose.</li>
 <li><strong>Learning made fun</strong> – teachers use it for flags, capitals and currencies.</li>
 <li><strong>Content ideas</strong> – the "random country challenge" is a creator favourite.</li>

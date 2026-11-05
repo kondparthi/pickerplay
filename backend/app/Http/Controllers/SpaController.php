@@ -77,6 +77,9 @@ class SpaController extends Controller
                 $status = 404;
                 $meta['robots'] = 'noindex';
             }
+        } elseif ($path === 'contact') {
+            $meta['title'] = "Contact Us | {$site}";
+            $meta['description'] = "Questions, ideas or business enquiries? Contact the {$site} team by form or email – we usually reply within 2 business days.";
         } elseif ($path === 'polling-wheel') {
             $meta['title'] = "Polling Wheel – Create a Free Online Poll & Vote | {$site}";
             $meta['description'] = 'Create a quick poll with Yes, No, Maybe or your own answers, share the link and watch the votes fill a live results wheel. Free for teams, classes and groups.';
