@@ -34,7 +34,11 @@ export default function ShareDialog({ existing = false }) {
 
   const base = window.location.origin
   const link = code ? `${base}/${code}` : ''
-  const embed = code ? `<iframe src="${base}/embed/${code}" width="600" height="600" style="border:0" allow="autoplay"></iframe>` : ''
+  const siteName = site?.site_name || 'PickerPlay'
+  const safeTitle = (w.title || 'Spin the wheel').replace(/[<>&"]/g, '')
+  // website embed: the iframe plus a visible credit link (a real link on the host page, unlike links inside the iframe)
+  const embed = code ? `<iframe src="${base}/embed/${code}" width="600" height="600" style="border:0;max-width:100%" allow="autoplay" title="${safeTitle}"></iframe>\n<p style="font-size:13px">Wheel made with <a href="${base}/">${siteName} – free random name picker wheel</a></p>` : ''
+  const streamUrl = code ? `${base}/embed/${code}` : ''
   const themed = (i) => (palettes[i] ? { ...w, settings: { ...w.settings, colorMode: 'colors', colors: toColorSlots(palettes[i]) } } : w)
 
   const create = async () => {
@@ -147,9 +151,15 @@ export default function ShareDialog({ existing = false }) {
           </div>
           <details className="embed-box">
             <summary>{t('Embed on a website or in OBS')}</summary>
+            <p className="muted small">{t('Website or blog – paste this HTML code:')}</p>
             <div className="copy-row">
-              <input className="input mono" readOnly value={embed} onFocus={(e) => e.target.select()} />
+              <textarea className="input mono" rows={3} readOnly value={embed} onFocus={(e) => e.target.select()} />
               <button className="btn btn-soft" onClick={() => copy(embed, 'embed')}>{copied === 'embed' ? t('Copied!') : t('Copy')}</button>
+            </div>
+            <p className="muted small">{t('OBS / Streamlabs – add this link as a Browser Source:')}</p>
+            <div className="copy-row">
+              <input className="input mono" readOnly value={streamUrl} onFocus={(e) => e.target.select()} />
+              <button className="btn btn-soft" onClick={() => copy(streamUrl, 'stream')}>{copied === 'stream' ? t('Copied!') : t('Copy')}</button>
             </div>
           </details>
           <p className="muted small">{t('Anyone with the link can open it. Links that are not used for 365 days are deleted.')}</p>

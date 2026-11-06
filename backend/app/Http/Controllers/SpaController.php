@@ -129,6 +129,7 @@ class SpaController extends Controller
             $favicon ? '<link rel="icon" href="'.$e($favicon).'">' : null,
             $favicon ? '<link rel="apple-touch-icon" href="'.$e($favicon).'">' : null,
             '<script>window.__PP_BOOT__='.json_encode($boot + ['preload' => $preload], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE).';</script>',
+            $this->structuredData($s, $path, $base, $site, $meta),
             $this->consentDefaults($s, $path),
             ! empty($s['google_analytics_id']) ? $this->analytics($s['google_analytics_id']) : null,
             ! empty($s['custom_css']) ? '<style id="pp-custom-css">'.str_ireplace('</style', '', $s['custom_css']).'</style>' : null,
@@ -201,5 +202,45 @@ class SpaController extends Controller
             ."var g=c&&c.choice==='all'?'granted':'denied';"
             ."gtag('consent','default',{ad_storage:g,analytics_storage:g,ad_user_data:g,ad_personalization:g,functionality_storage:'granted',security_storage:'granted',wait_for_update:500});"
             ."gtag('set','ads_data_redaction',g==='denied');})();</script>";
+    }
+
+    /**
+     * schema.org JSON-LD: tells Google that "PickerPlay" is a distinct brand / web app
+     * (home page: Organization + WebSite + WebApplication; tool pages: WebApplication).
+     */
+    private function structuredData(array $s, string $path, string $base, string $site, array $meta): ?string
+    {
+        if (str_starts_with($path, 'admin') || str_starts_with($path, 'account') || str_starts_with($path, 'embed/')) {
+            return null;
+        }
+        $logo = $this->abs($s['logo_url'] ?? '', $base);
+        $org = array_filter([
+            '@type' => 'Organization',
+            '@id' => $base.'/#organization',
+            'name' => $site,
+            'url' => $base.'/',
+            'logo' => $logo ?: null,
+            'email' => $s['contact_email'] ?? null,
+        ]);
+        $app = [
+            '@type' => 'WebApplication',
+            'name' => $path === '' ? $site.' Wheel Spinner' : preg_replace('/\s*\|.*$/', '', $meta['title']),
+            'url' => $meta['canonical'],
+            'description' => $meta['description'],
+            'applicationCategory' => 'UtilitiesApplication',
+            'operatingSystem' => 'Any (web browser)',
+            'isAccessibleForFree' => true,
+            'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD'],
+            'publisher' => ['@id' => $base.'/#organization'],
+        ];
+        $graph = [$org];
+        if ($path === '') {
+            $graph[] = ['@type' => 'WebSite', '@id' => $base.'/#website', 'name' => $site, 'alternateName' => array_values(array_unique([preg_replace('/(?<=[a-z])(?=[A-Z])/', ' ', $site), parse_url($base, PHP_URL_HOST)])), 'url' => $base.'/', 'publisher' => ['@id' => $base.'/#organization']];
+            $graph[] = $app;
+        } elseif (! preg_match('#^(page|blog|poll)/|^(blog|gallery|contact)$#', $path) && $meta['robots'] === 'index,follow') {
+            $graph[] = $app;
+        }
+
+        return '<script type="application/ld+json">'.json_encode(['@context' => 'https://schema.org', '@graph' => $graph], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG).'</script>';
     }
 }
