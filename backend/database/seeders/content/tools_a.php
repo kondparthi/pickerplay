@@ -244,7 +244,7 @@ HTML,
 <li><strong>Geography class</strong> – name the capital, flag or currency of the result.</li>
 <li><strong>Food challenges</strong> – cook that country's national dish tonight.</li>
 <li><strong>Quiz & guessing games</strong> – great with GeoGuessr-style games.</li>
-<li><strong>Office sweepstakes</strong> – assign World Cup teams or markets fairly.</li>
+<li><strong>World Cup supporters' day</strong> – give each colleague a country to cheer for.</li>
 <li><strong>Language learning</strong> – learn "hello" in the official language.</li>
 <li><strong>Story writing</strong> – pick a setting for your next story or game.</li>
 </ol>

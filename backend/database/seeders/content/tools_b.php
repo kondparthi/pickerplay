@@ -2,7 +2,7 @@
 
 // Rewritten SEO content for the picker pages (part B).
 
-return [
+$tools = [
 
 'day-picker' => [
     'heading' => 'Random Day Picker',
@@ -185,3 +185,6 @@ HTML,
 ],
 
 ];
+
+// NBA / NFL / MLB pages were rewritten in Nov 2026 (no betting wording)
+return array_replace($tools, require __DIR__.'/sports_v2.php');
