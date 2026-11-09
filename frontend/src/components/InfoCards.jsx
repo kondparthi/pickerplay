@@ -79,7 +79,7 @@ export default function InfoCards() {
           {t('Run 7,000 spins')}
         </button>
         <p>
-          <strong>{t('Same result twice?')}</strong> {t('That is normal for true randomness - each spin is independent, like flipping a coin. To avoid repeats, remove the winner after each spin.')}
+          <strong>{t('Same result twice?')}</strong> {t('That is normal - each spin is independent, like flipping a coin, so the same result can come up again. To avoid repeats, remove the winner after each spin.')}
         </p>
       </Card>
 
