@@ -40,12 +40,14 @@ class SpaController extends Controller
         ];
         $status = 200;
         $preload = null;
+        $ssr = null; // [h1, html] – readable content for crawlers before React loads
 
         if (preg_match('#^page/([a-z0-9_-]+)$#i', $path, $m)) {
             $page = Page::where('slug', $m[1])->where('is_published', true)->first();
             if ($page) {
                 $meta['title'] = "{$page->title} | {$site}";
                 $meta['description'] = $page->meta_description ?: Str::limit(strip_tags((string) $page->content), 155);
+                $ssr = [$page->title, (string) $page->content];
             } else {
                 $status = 404;
             }
@@ -65,11 +67,14 @@ class SpaController extends Controller
         } elseif ($path === 'blog') {
             $meta['title'] = "Blog – Tips, Ideas & Guides | {$site}";
             $meta['description'] = "Ideas, guides and tips for using random pickers, spinning wheels and team generators in class, at work, at parties and on stream.";
+            $list = Post::live()->orderByDesc('published_at')->limit(50)->get(['slug', 'title', 'excerpt']);
+            $ssr = ['Blog', '<p>'.e($meta['description']).'</p>'.$list->map(fn ($p) => '<h2><a href="/blog/'.e($p->slug).'">'.e($p->title).'</a></h2>'.($p->excerpt ? '<p>'.e($p->excerpt).'</p>' : ''))->implode('')];
         } elseif (preg_match('#^blog/([a-z0-9_-]+)$#i', $path, $m)) {
             $post = Post::live()->where('slug', $m[1])->first();
             if ($post) {
                 $meta['title'] = ($post->meta_title ?: $post->title)." | {$site}";
                 $meta['description'] = $post->meta_description ?: ($post->excerpt ?: Str::limit(strip_tags((string) $post->content), 155));
+                $ssr = [$post->title, (string) $post->content];
                 if ($post->cover_image) {
                     $meta['image'] = $this->abs($post->cover_image, $base);
                 }
@@ -80,9 +85,12 @@ class SpaController extends Controller
         } elseif ($path === 'contact') {
             $meta['title'] = "Contact Us | {$site}";
             $meta['description'] = "Questions, ideas or business enquiries? Contact the {$site} team by form or email – we usually reply within 2 business days.";
+            $mail = $s['contact_email'] ?? 'support@pickerplay.com';
+            $ssr = ['Contact Us', '<p>'.e($meta['description']).'</p><p>Email: <a href="mailto:'.e($mail).'">'.e($mail).'</a></p>'];
         } elseif ($path === 'polling-wheel') {
             $meta['title'] = "Polling Wheel – Create a Free Online Poll & Vote | {$site}";
             $meta['description'] = 'Create a quick poll with Yes, No, Maybe or your own answers, share the link and watch the votes fill a live results wheel. Free for teams, classes and groups.';
+            $ssr = ['Polling Wheel – Create a Free Online Poll', '<p>'.e($meta['description']).'</p>'];
         } elseif (preg_match('#^poll/([a-z0-9]{7})(/results)?$#i', $path, $m)) {
             $poll = \App\Models\Poll::where('code', strtolower($m[1]))->first();
             $meta['robots'] = 'noindex,nofollow';
@@ -95,6 +103,7 @@ class SpaController extends Controller
         } elseif ($path === 'team-picker') {
             $meta['title'] = "Team Picker – Random Team Generator | {$site}";
             $meta['description'] = 'Split names into random, fair teams or groups in one click. Pick team leaders, balance by gender or skill, copy or download the result. Free.';
+            $ssr = ['Team Picker – Random Team Generator', '<p>'.e($meta['description']).'</p>'];
         } elseif ($path !== '' && preg_match('#^[a-z0-9_-]+$#i', $path)
             && ! in_array($path, ['gallery', 'account', 'admin', 'reset-password'], true)) {
             $tool = ToolPreset::where('slug', $path)->where('is_active', true)->first();
@@ -102,6 +111,7 @@ class SpaController extends Controller
                 $meta['title'] = $tool->meta_title ?: "{$tool->name} | {$site}";
                 $meta['description'] = $tool->meta_description ?: $meta['description'];
                 $preload = ['tool' => $tool->only(['slug', 'name', 'heading', 'meta_title', 'meta_description', 'config', 'content', 'emoji'])];
+                $ssr = [$tool->heading ?: $tool->name, (string) $tool->content];
             } else {
                 $status = 404;
                 $meta['robots'] = 'noindex';
@@ -110,6 +120,9 @@ class SpaController extends Controller
             $meta['robots'] = 'noindex,nofollow';
         } elseif ($path === 'gallery') {
             $meta['title'] = "Wheel Gallery | {$site}";
+        }
+        if ($path === '') {
+            $ssr = ['Random Name Picker Wheel – Spin to Pick a Winner', '<p>'.e($meta['description']).'</p>'];
         }
 
         $e = fn ($v) => htmlspecialchars((string) $v, ENT_QUOTES, 'UTF-8');
@@ -141,6 +154,9 @@ class SpaController extends Controller
         $html = preg_replace('#<title>.*?</title>#s', '<title>'.$e($meta['title']).'</title>', $html, 1);
         $html = preg_replace('#<link rel="icon"[^>]*>#', '', $html);
         $html = str_replace('</head>', "    {$head}\n  </head>", $html);
+        if ($ssr && $status === 200) {
+            $html = str_replace('<div id="root"></div>', '<div id="root">'.$this->ssrBody($ssr[0], $ssr[1], $site).'</div>', $html);
+        }
         $html = str_replace('<html lang="en">', '<html lang="'.$e(app()->getLocale()).'">', $html);
 
         $response = response($html, $status)
@@ -242,5 +258,30 @@ class SpaController extends Controller
         }
 
         return '<script type="application/ld+json">'.json_encode(['@context' => 'https://schema.org', '@graph' => $graph], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG).'</script>';
+    }
+
+    /**
+     * Plain HTML version of the page inside <div id="root">. Visitors see it only for a moment
+     * (React replaces it on load), but crawlers that don't run JavaScript – and slow connections –
+     * get the real heading, text and links instead of an empty page.
+     */
+    private function ssrBody(string $h1, string $html, string $site): string
+    {
+        $html = preg_replace('#<(script|style|iframe)\b[^>]*>.*?</\1>#is', '', $html);
+        $links = \Illuminate\Support\Facades\Cache::remember('pp.ssr.links', 600, function () {
+            $tools = ToolPreset::where('is_active', true)->get(['slug', 'name'])
+                ->map(fn ($t) => '<a href="/'.e($t->slug).'">'.e($t->name).'</a>');
+            $pages = Page::where('is_published', true)->get(['slug', 'title'])
+                ->map(fn ($p) => '<a href="/page/'.e($p->slug).'">'.e($p->title).'</a>');
+
+            return '<nav aria-label="Tools"><a href="/">Name Picker Wheel</a> · <a href="/team-picker">Team Picker</a> · <a href="/polling-wheel">Polling Wheel</a> · '
+                .$tools->implode(' · ').'</nav>'
+                .'<footer><a href="/blog">Blog</a> · <a href="/contact">Contact us</a> · '.$pages->implode(' · ').'</footer>';
+        });
+        [$nav, $footer] = explode('<footer>', $links, 2);
+
+        return '<div class="pp-ssr" style="max-width:860px;margin:0 auto;padding:16px;line-height:1.6;font-family:system-ui,sans-serif">'
+            .'<header><a href="/"><strong>'.e($site).'</strong></a></header>'.$nav
+            .'<main><h1>'.e($h1).'</h1>'.$html.'</main><footer>'.$footer.'</div>';
     }
 }
