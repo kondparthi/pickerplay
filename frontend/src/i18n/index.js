@@ -5,6 +5,8 @@ import te from './te'
 import ta from './ta'
 import es from './es'
 import fr from './fr'
+import de from './de'
+import pl from './pl'
 
 export const LANGUAGES = [
   { code: 'en', name: 'English', english: 'English' },
@@ -13,9 +15,11 @@ export const LANGUAGES = [
   { code: 'ta', name: 'தமிழ்', english: 'Tamil' },
   { code: 'es', name: 'Español', english: 'Spanish' },
   { code: 'fr', name: 'Français', english: 'French' },
+  { code: 'de', name: 'Deutsch', english: 'German' },
+  { code: 'pl', name: 'Polski', english: 'Polish' },
 ]
 
-const DICTS = { hi, te, ta, es, fr }
+const DICTS = { hi, te, ta, es, fr, de, pl }
 
 export function makeT(lang) {
   const dict = DICTS[lang] || {}

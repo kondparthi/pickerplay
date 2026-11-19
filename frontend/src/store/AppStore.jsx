@@ -33,7 +33,7 @@ const FALLBACK_SETTINGS = {
   allow_registration: '1',
   allow_gallery: '1',
   allow_uploads: '1',
-  enabled_languages: 'en,hi,te,ta,es,fr',
+  enabled_languages: 'en,hi,te,ta,es,fr,de,pl',
   gallery_tags: 'yes no,numbers,names,food,team,classroom,games',
   version: '1.0.0',
   copyright: `© ${new Date().getFullYear()} PickerPlay. All rights reserved.`,

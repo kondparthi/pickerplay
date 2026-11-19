@@ -78,7 +78,7 @@ class SiteSettings
         'allow_registration' => ['1', true],
         'allow_gallery' => ['1', true],
         'allow_uploads' => ['1', true],
-        'enabled_languages' => ['en,hi,te,ta,es,fr', true],
+        'enabled_languages' => ['en,hi,te,ta,es,fr,de,pl', true],
         // Private (never sent to browsers)
         'unsplash_access_key' => ['', false],
         'feedback_notify_email' => ['support@pickerplay.com', false],
