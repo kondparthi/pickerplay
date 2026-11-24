@@ -111,5 +111,6 @@ export default {
   "Download file": "फ़ाइल डाउनलोड करें",
   "My wheels": "मेरे व्हील",
   "Send": "भेजें",
-  "Loading…": "लोड हो रहा है…"
+  "Loading…": "लोड हो रहा है…",
+  "Reset": "रीसेट",
 }

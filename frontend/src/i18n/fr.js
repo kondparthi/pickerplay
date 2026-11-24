@@ -111,5 +111,6 @@ export default {
   "Download file": "Télécharger le fichier",
   "My wheels": "Mes roues",
   "Send": "Envoyer",
-  "Loading…": "Chargement…"
+  "Loading…": "Chargement…",
+  "Reset": "Réinitialiser",
 }

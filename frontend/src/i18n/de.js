@@ -112,4 +112,5 @@ export default {
   "My wheels": "Meine Räder",
   "Send": "Senden",
   "Loading…": "Wird geladen…",
+  "Reset": "Zurücksetzen",
 }

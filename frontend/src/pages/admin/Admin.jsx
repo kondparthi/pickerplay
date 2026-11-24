@@ -9,6 +9,7 @@ import Dashboard from './Dashboard'
 import SettingsPage from './SettingsPage'
 import WheelsPage from './WheelsPage'
 import ToolsPage from './ToolsPage'
+import TeamPickerPage from './TeamPickerPage'
 import PagesPage from './PagesPage'
 import PostsPage from './PostsPage'
 import UsersPage from './UsersPage'
@@ -19,7 +20,7 @@ import '../../admin.css'
 
 const NAV_GROUPS = [
   { title: 'Overview', items: [['', 'dashboard', 'Dashboard'], ['analytics', 'chart', 'Analytics']] },
-  { title: 'Content', items: [['posts', 'book', 'Blog posts'], ['tools', 'grid', 'Picker tools'], ['pages', 'file', 'Pages'], ['wheels', 'dice', 'Wheels']] },
+  { title: 'Content', items: [['posts', 'book', 'Blog posts'], ['tools', 'grid', 'Picker tools'], ['team-picker', 'users', 'Team Picker'], ['pages', 'file', 'Pages'], ['wheels', 'dice', 'Wheels']] },
   { title: 'Community', items: [['users', 'users', 'Users'], ['feedback', 'inbox', 'Feedback']] },
   { title: 'System', items: [['settings', 'palette', 'Branding & settings'], ['activity', 'history', 'Activity log']] },
 ]
@@ -212,6 +213,7 @@ export default function Admin() {
             <Route path="settings" element={<SettingsPage />} />
             <Route path="wheels" element={<WheelsPage />} />
             <Route path="tools" element={<ToolsPage />} />
+            <Route path="team-picker" element={<TeamPickerPage />} />
             <Route path="posts" element={<PostsPage />} />
             <Route path="pages" element={<PagesPage />} />
             <Route path="users" element={<UsersPage />} />

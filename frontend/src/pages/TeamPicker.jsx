@@ -109,6 +109,22 @@ function TeamContent({ onTryExample }) {
 
 const KEY = 'pp.teampicker.v3'
 const DEFAULT_NAMES = 'Christopher\nLisa\nDaniel\nNissy\nMatthew\nSandra\nSatvik\nSteven'
+
+/** Starting values for new visitors and for the Reset button – editable in Admin -> Team Picker. */
+function tpDefaults(site = {}) {
+  const num = (v, d) => Math.max(1, parseInt(v, 10) || d)
+  return {
+    text: (site.tp_default_names ?? '').trim() ? site.tp_default_names : DEFAULT_NAMES,
+    mode: site.tp_default_mode === 'size' ? 'size' : 'teams',
+    teamCount: num(site.tp_default_teams, 2),
+    teamSize: num(site.tp_default_size, 2),
+    leader: site.tp_default_leader === '1',
+    balance: site.tp_default_balance === '1',
+    animate: site.tp_default_animate !== '0',
+    sound: site.tp_default_sound !== '0',
+    teamNamesText: site.tp_default_team_names || '',
+  }
+}
 const BALANCE_EXAMPLE = 'Amelia, girl\nTom, boy\nNissy, girl\nSatvik, boy'
 const TEAM_COLORS = ['#2e7d32', '#f5b70a', '#1e88e5', '#e53935', '#8e24aa', '#00897b', '#fb8c00', '#5546c9', '#6d4c41', '#d81b60']
 
@@ -181,8 +197,9 @@ function makeTeams(people, count, { balance, leader }) {
 
 export default function TeamPicker() {
   const { t, site, prefs, toast } = useApp()
-  const saved = useMemo(() => store.get(KEY, {}), [])
-  const [text, setText] = useState(saved.text ?? DEFAULT_NAMES)
+  const defs = useMemo(() => tpDefaults(site), [site])
+  const saved = useMemo(() => ({ ...defs, ...store.get(KEY, {}) }), []) // eslint-disable-line
+  const [text, setText] = useState(saved.text ?? defs.text)
   const [mode, setMode] = useState(saved.mode || 'teams') // teams | size
   const [teamCount, setTeamCount] = useState(saved.teamCount || 2)
   const [teamSize, setTeamSize] = useState(saved.teamSize || 2)
@@ -193,7 +210,7 @@ export default function TeamPicker() {
   const [sound, setSound] = useState(saved.sound ?? true)
   const [fullWidth, setFullWidth] = useState(false)
   const [teamNamesText, setTeamNamesText] = useState(saved.teamNamesText || '')
-  const [showNames, setShowNames] = useState(false)
+  const [showNames, setShowNames] = useState(!!saved.teamNamesText)
   const [teams, setTeams] = useState(saved.teams || null) // [[{name,label,leader}]]
   const [revealed, setRevealed] = useState(Infinity)
   const [running, setRunning] = useState(false)
@@ -209,8 +226,9 @@ export default function TeamPicker() {
   const labels = useMemo(() => new Set(people.map((p) => p.label).filter(Boolean)).size, [people])
 
   useEffect(() => {
-    document.title = `${t('Team Picker')} – ${t('Random Team Generator')} | ${site.site_name}`
-  }, [site.site_name, t])
+    const custom = (site.tp_meta_title || '').trim()
+    document.title = custom ? custom.replace('{site}', site.site_name) : `${t('Team Picker')} – ${t('Random Team Generator')} | ${site.site_name}`
+  }, [site.site_name, site.tp_meta_title, t])
 
   useEffect(() => {
     store.set(KEY, { text, mode, teamCount, teamSize, leader, balance, animate, sound, teamNamesText, teams })
@@ -220,8 +238,10 @@ export default function TeamPicker() {
 
   // changing the number of teams / team size shows a fresh preview with the new count
   const firstCount = useRef(true)
+  const skipClear = useRef(false) // Reset / Undo set the teams themselves
   useEffect(() => {
     if (firstCount.current) { firstCount.current = false; return }
+    if (skipClear.current) { skipClear.current = false; return }
     if (!running) setTeams(null)
   }, [count, mode]) // eslint-disable-line
 
@@ -274,6 +294,22 @@ export default function TeamPicker() {
     return map
   }, [teams])
 
+  /* Reset: back to the default names and settings (like "New" on the wheel page), with Undo. */
+  const apply = (v) => {
+    clearInterval(timer.current)
+    skipClear.current = true
+    setRunning(false)
+    setText(v.text); setMode(v.mode); setTeamCount(v.teamCount); setTeamSize(v.teamSize)
+    setLeader(v.leader); setBalance(v.balance); setAnimate(v.animate); setSound(v.sound)
+    setTeamNamesText(v.teamNamesText); setShowNames(!!v.teamNamesText)
+    setPickQty(v.pickQty || 0); setTeams(v.teams || null); setRevealed(Infinity)
+  }
+  const reset = () => {
+    const before = { text, mode, teamCount, teamSize, leader, balance, animate, sound, teamNamesText, pickQty, teams }
+    apply(defs)
+    toast(t('Loaded default names and options'), { action: { label: 'Undo', run: () => apply(before) } })
+  }
+
   const asText = () => (teams || []).map((team, i) => `${nameOf(i)}\n${team.map((p) => `- ${p.name}${p.leader ? ' (leader)' : ''}`).join('\n')}`).join('\n\n')
   const copy = () => navigator.clipboard?.writeText(asText()).then(() => toast(t('Copied to clipboard')))
   const downloadCsv = () => {
@@ -295,8 +331,8 @@ export default function TeamPicker() {
           <div className="tp-board" ref={boardRef} style={{ scrollMarginTop: 80 }}>
             <div className="tp-board-head">
               <div>
-                <h1>{t('Team Picker')}</h1>
-                <p className="muted">{t('Randomly split people into fair teams or groups')}</p>
+                <h1>{site.tp_heading && site.tp_heading !== 'Team Picker' ? site.tp_heading : t('Team Picker')}</h1>
+                <p className="muted">{site.tp_subheading && site.tp_subheading !== 'Randomly split people into fair teams or groups' ? site.tp_subheading : t('Randomly split people into fair teams or groups')}</p>
               </div>
               <div className="row wrap">
                 <button className="btn btn-primary tp-start" onClick={start} disabled={running}>
@@ -310,6 +346,9 @@ export default function TeamPicker() {
                     <button className="chip-btn" onClick={() => setTeams(null)}><Icon name="trash" size={16} /> {t('Clear groups')}</button>
                   </>
                 )}
+                <button className="chip-btn" onClick={reset} disabled={running} title={t('Reset to the default names and settings')}>
+                  <Icon name="refresh" size={16} /> {t('Reset')}
+                </button>
                 <button className="chip-btn" onClick={() => setFullWidth((f) => !f)} title={t('Full width')}>
                   <Icon name={fullWidth ? 'minimize' : 'maximize'} size={16} /> {fullWidth ? t('Show settings') : t('Full width')}
                 </button>
@@ -375,6 +414,7 @@ export default function TeamPicker() {
                 <button className="chip-btn" onClick={() => setText(shuffle(text.split(/\r?\n/).filter((l) => l.trim())).join('\n'))}><Icon name="shuffle" size={16} /> {t('Shuffle')}</button>
                 <button className="chip-btn" onClick={() => setText(text.split(/\r?\n/).filter((l) => l.trim()).sort((a, b) => a.localeCompare(b)).join('\n'))}><Icon name="sort" size={16} /> {t('Sort')}</button>
                 <button className="chip-btn" onClick={() => setText('')}><Icon name="trash" size={16} /> {t('Clear')}</button>
+                <button className="chip-btn" onClick={reset} disabled={running} title={t('Reset to the default names and settings')}><Icon name="refresh" size={16} /> {t('Reset')}</button>
               </div>
               <textarea className="entries-textarea tp-names" value={text} spellCheck={false} placeholder={'Christopher\nLisa\nDaniel…'} onChange={(e) => setText(e.target.value)} />
               {balance && <p className="muted small">{t('Add a label after a comma to balance teams, e.g. “Amelia, girl” or “Tom, boy”.')} {labels ? `(${labels} ${t('labels found')})` : ''}</p>}
@@ -417,7 +457,7 @@ export default function TeamPicker() {
       </main>
 
       <div className="content-ad-wrap"><AdSlot place="team" /></div>
-      <TeamContent onTryExample={() => { setText(BALANCE_EXAMPLE); setBalance(true); setMode('teams'); setTeamCount(2); setTeams(null); window.scrollTo({ top: 0, behavior: 'auto' }) }} />
+      {site.tp_show_guide !== '0' && <TeamContent onTryExample={() => { setText(BALANCE_EXAMPLE); setBalance(true); setMode('teams'); setTeamCount(2); setTeams(null); window.scrollTo({ top: 0, behavior: 'auto' }) }} />}
       <Footer />
     </div>
   )

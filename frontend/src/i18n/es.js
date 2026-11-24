@@ -111,5 +111,6 @@ export default {
   "Download file": "Descargar archivo",
   "My wheels": "Mis ruletas",
   "Send": "Enviar",
-  "Loading…": "Cargando…"
+  "Loading…": "Cargando…",
+  "Reset": "Restablecer",
 }

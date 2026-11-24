@@ -47,6 +47,21 @@ class SiteSettings
         'stats_offset_spins' => ['0', true],
         'stats_offset_hours' => ['0', true],
         'gallery_tags' => ['yes no,numbers,names,food,team,classroom,games,truth or dare,countries,colors', true],
+        // Team Picker (Admin -> Team Picker)
+        'tp_heading' => ['Team Picker', true],
+        'tp_subheading' => ['Randomly split people into fair teams or groups', true],
+        'tp_default_names' => ["Christopher\nLisa\nDaniel\nNissy\nMatthew\nSandra\nSatvik\nSteven", true],
+        'tp_default_mode' => ['teams', true],          // teams (number of teams) | size (members per team)
+        'tp_default_teams' => ['2', true],
+        'tp_default_size' => ['2', true],
+        'tp_default_leader' => ['0', true],
+        'tp_default_balance' => ['0', true],
+        'tp_default_animate' => ['1', true],
+        'tp_default_sound' => ['1', true],
+        'tp_default_team_names' => ['', true],
+        'tp_show_guide' => ['1', true],
+        'tp_meta_title' => ['Team Picker – Random Team Generator | {site}', true],
+        'tp_meta_description' => ['Split names into random, fair teams or groups in one click. Pick team leaders, balance by gender or skill, copy or download the result. Free.', true],
         // Ads
         'ads_enabled' => ['0', true],
         'ad_code' => ['', true],

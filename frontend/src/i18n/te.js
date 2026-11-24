@@ -111,5 +111,6 @@ export default {
   "Download file": "ఫైల్ డౌన్‌లోడ్",
   "My wheels": "నా వీల్స్",
   "Send": "పంపు",
-  "Loading…": "లోడ్ అవుతోంది…"
+  "Loading…": "లోడ్ అవుతోంది…",
+  "Reset": "రీసెట్",
 }

@@ -101,9 +101,10 @@ class SpaController extends Controller
                 $status = 404;
             }
         } elseif ($path === 'team-picker') {
-            $meta['title'] = "Team Picker – Random Team Generator | {$site}";
-            $meta['description'] = 'Split names into random, fair teams or groups in one click. Pick team leaders, balance by gender or skill, copy or download the result. Free.';
-            $ssr = ['Team Picker – Random Team Generator', '<p>'.e($meta['description']).'</p>'];
+            $tpTitle = trim((string) ($s['tp_meta_title'] ?? '')) ?: 'Team Picker – Random Team Generator | {site}';
+            $meta['title'] = str_replace('{site}', $site, $tpTitle);
+            $meta['description'] = trim((string) ($s['tp_meta_description'] ?? '')) ?: 'Split names into random, fair teams or groups in one click. Pick team leaders, balance by gender or skill, copy or download the result. Free.';
+            $ssr = [trim((string) ($s['tp_heading'] ?? '')) ?: 'Team Picker', '<p>'.e($s['tp_subheading'] ?? '').'</p><p>'.e($meta['description']).'</p>'];
         } elseif ($path !== '' && preg_match('#^[a-z0-9_-]+$#i', $path)
             && ! in_array($path, ['gallery', 'account', 'admin', 'reset-password'], true)) {
             $tool = ToolPreset::where('slug', $path)->where('is_active', true)->first();

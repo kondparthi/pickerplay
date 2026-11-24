@@ -111,5 +111,6 @@ export default {
   "Download file": "கோப்பைப் பதிவிறக்கு",
   "My wheels": "என் சக்கரங்கள்",
   "Send": "அனுப்பு",
-  "Loading…": "ஏற்றுகிறது…"
+  "Loading…": "ஏற்றுகிறது…",
+  "Reset": "மீட்டமை",
 }
