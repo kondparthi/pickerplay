@@ -33,6 +33,10 @@ foreach ([
     'nfl-team-picker-afc' => '/nfl-team-picker', 'nfl-team-picker-nfc' => '/nfl-team-picker',
     'nba-team-picker-east' => '/nba-team-picker', 'nba-team-picker-west' => '/nba-team-picker', 'nba-team-picker-eastern' => '/nba-team-picker', 'nba-team-picker-western' => '/nba-team-picker',
     'mlb-team-picker-al' => '/mlb-team-picker', 'mlb-team-picker-nl' => '/mlb-team-picker',
+    // Keyword-style addresses people type or link to (Nov 2026 keyword report)
+    'random-number-generator' => '/number-picker', 'number-generator' => '/number-picker',
+    'team-generator' => '/team-picker', 'random-group-generator' => '/team-picker',
+    'wheel-spinner' => '/', 'random-picker' => '/', 'name-picker' => '/', 'random-name-picker-wheel' => '/',
     'team-picker-wheel' => '/team-picker', 'random-team-generator' => '/team-picker', 'random-name-picker' => '/', 'spin-the-wheel' => '/',
 ] as $from => $to) {
     Route::permanentRedirect($from, $to);

@@ -143,7 +143,7 @@ class SpaController extends Controller
             $favicon ? '<link rel="icon" href="'.$e($favicon).'">' : null,
             $favicon ? '<link rel="apple-touch-icon" href="'.$e($favicon).'">' : null,
             '<script>window.__PP_BOOT__='.json_encode($boot + ['preload' => $preload], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE).';</script>',
-            $this->structuredData($s, $path, $base, $site, $meta),
+            $this->structuredData($s, $path, $base, $site, $meta, $ssr[1] ?? ''),
             $this->consentDefaults($s, $path),
             ! empty($s['google_analytics_id']) ? $this->analytics($s['google_analytics_id']) : null,
             ! empty($s['custom_css']) ? '<style id="pp-custom-css">'.str_ireplace('</style', '', $s['custom_css']).'</style>' : null,
@@ -225,7 +225,7 @@ class SpaController extends Controller
      * schema.org JSON-LD: tells Google that "PickerPlay" is a distinct brand / web app
      * (home page: Organization + WebSite + WebApplication; tool pages: WebApplication).
      */
-    private function structuredData(array $s, string $path, string $base, string $site, array $meta): ?string
+    private function structuredData(array $s, string $path, string $base, string $site, array $meta, string $content = ''): ?string
     {
         if (str_starts_with($path, 'admin') || str_starts_with($path, 'account') || str_starts_with($path, 'embed/')) {
             return null;
@@ -258,6 +258,10 @@ class SpaController extends Controller
             $graph[] = $app;
         }
 
+        if ($faq = $this->faqSchema($content, $meta['canonical'])) {
+            $graph[] = $faq;
+        }
+
         return '<script type="application/ld+json">'.json_encode(['@context' => 'https://schema.org', '@graph' => $graph], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG).'</script>';
     }
 
@@ -284,5 +288,44 @@ class SpaController extends Controller
         return '<div class="pp-ssr" style="max-width:860px;margin:0 auto;padding:16px;line-height:1.6;font-family:system-ui,sans-serif">'
             .'<header><a href="/"><strong>'.e($site).'</strong></a></header>'.$nav
             .'<main><h1>'.e($h1).'</h1>'.$html.'</main><footer>'.$footer.'</div>';
+    }
+
+    /**
+     * FAQPage structured data from the page's own FAQ – tool pages use <details><summary>Q</summary>A</details>,
+     * blog posts use <h3>Q</h3><p>A</p> under a "Frequently asked questions" heading. Only questions that are
+     * visible on the page are included (Google's rule for FAQ markup).
+     */
+    private function faqSchema(string $html, string $url): ?array
+    {
+        if ($html === '') {
+            return null;
+        }
+        $clean = fn ($t) => trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags((string) $t), ENT_QUOTES | ENT_HTML5, 'UTF-8')));
+        $pairs = [];
+        if (preg_match_all('#<details[^>]*>\s*<summary[^>]*>(.*?)</summary>(.*?)</details>#is', $html, $m, PREG_SET_ORDER)) {
+            foreach ($m as $x) {
+                $pairs[] = [$clean($x[1]), $clean($x[2])];
+            }
+        }
+        if (! $pairs && preg_match('#<h2[^>]*>\s*(?:Frequently asked questions|FAQs?)\s*</h2>(.*?)(?=<h2|$)#is', $html, $sec)
+            && preg_match_all('#<h3[^>]*>(.*?)</h3>\s*((?:<p[^>]*>.*?</p>\s*)+)#is', $sec[1], $m, PREG_SET_ORDER)) {
+            foreach ($m as $x) {
+                $pairs[] = [$clean($x[1]), $clean($x[2])];
+            }
+        }
+        $pairs = array_values(array_filter($pairs, fn ($p) => $p[0] !== '' && $p[1] !== ''));
+        if (! $pairs) {
+            return null;
+        }
+
+        return [
+            '@type' => 'FAQPage',
+            '@id' => $url.'#faq',
+            'mainEntity' => array_map(fn ($p) => [
+                '@type' => 'Question',
+                'name' => $p[0],
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => $p[1]],
+            ], array_slice($pairs, 0, 10)),
+        ];
     }
 }

@@ -77,8 +77,8 @@ HTML,
 ],
 
 'number-picker' => [
-    'heading' => 'Number Picker – Random Number Wheel',
-    'meta_title' => 'Random Number Picker Wheel – Pick a Number 1-10 | PickerPlay',
+    'heading' => 'Random Number Generator – Number Picker Wheel',
+    'meta_title' => 'Random Number Generator – Free Number Picker Wheel | PickerPlay',
     'meta_description' => 'Spin the number picker wheel to get a random number. Perfect for giveaways, games, classrooms and lucky draws. Free, quick and easy.',
     'content' => <<<'HTML'
 <p class="lead">Need a random number – fast and fair?</p>

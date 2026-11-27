@@ -83,7 +83,7 @@ class SiteSettings
         'cookie_policy_url' => ['/page/privacy', true],
         'cookie_consent_mode' => ['1', true],        // Google Consent Mode v2: analytics/ads cookies wait for "Accept"
         // SEO / tracking
-        'meta_title' => ['PickerPlay – Random Name Picker Wheel & Spinner', true],
+        'meta_title' => ['Spin the Wheel – Random Name Picker Wheel | PickerPlay', true],
         'meta_description' => ['Spin the wheel to pick a random name, winner or decision. Free, fast, customizable wheel spinner with sounds, images, sharing and multiple wheels.', true],
         'og_image' => ['/brand/logo.webp', true],
         'google_analytics_id' => ['', true],
